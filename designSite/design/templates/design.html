@@ -1,385 +1,447 @@
 <html>
-  <head>
-    <title>Design - S-Din</title>
-    <link rel="shortcut icon" href="/static/img/favicon.png">
-    <link rel="stylesheet" href="/static/css/fontsize.css">
-    <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
-    <link rel="stylesheet" href="/static/css/design.css">
-    <link rel="stylesheet" href="/static/css/canvas.css">
-  </head>
-  <body>
-    <input id="fileupload" type="file" name="files[]" hidden>
-    {% csrf_token %}
-    <!-- Toolbar -->
-    <div class="ui fixed menu">
-      <div class="ui container">
-        <span class="item">
-          <a href="/"><img id="logo" src="/static/img/logo-black.png"></a>
-        </span>
-        <span class="item">
-          <a id="undo-button"><img src="/static/img/design/undo.png"></a>
-          <a id="redo-button"><img src="/static/img/design/redo.png"></a>
-          <a id="open-fav-win"><img src="/static/img/design/favorite.png"></a>
-          <a id="load-button"><img src="/static/img/design/load.png"></a>
-          <a id="save-button"><img src="/static/img/design/save.png"></a>
-          <a id="export-button"><img src="/static/img/design/export.png">
-          <a id="upload-button"><img src="/static/img/design/import.png"></a></a>
-        </span>
-        <span class="item">
-          <a id="drag-item"><img src="/static/img/design/pointer.png"></a>
-          <a id="drag-canvas"><img src="/static/img/design/move.png"></a>
-          <a id="delete-item"><img src="/static/img/design/delete.png"></a>
-        </span>
-        <span class="item">
-          <a id="zoom-in"><img src="/static/img/design/zoomin.png"></a>
-          <a id="zoom-out"><img src="/static/img/design/zoomout.png"></a>
-          <div class="ui compact floating selection dropdown" id="ratio-dropdown">
-            <i class="dropdown icon"></i>
-            <div class="default text">Ratio</div>
-          </div>
-        </span>
-        <div class="right menu">
-          <span class="item">
-            <h4 id="safety" class="ui green header">Low risk<img src="/static/img/design/safety-1.png"></h4>
-          </span>
-        </div>
-      </div>
-    </div>
 
-    <!-- Main canvas -->
-    <div id="canvas-box" design-id="{{ request.GET.id }}">
-      <div id="canvas"></div>
-    </div>
+<head>
+  <title>Design - S-Din</title>
+  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/css/design.css">
+  <link rel="stylesheet" href="/static/css/canvas.css">
+</head>
 
-    <!-- Part panel (right) -->
-    <div id="part-panel-dropper"></div>
-    <div id="part-panel" class="window">
-      <div class="nav">
-        <h5 class="ui header">Parts</h5>
-        <i id="part-panel-button" class="link icon angle double right"></i>
-      </div>
-      <div class="content">
-        <div id="search-parts-dropdown" class="ui fluid search selection dropdown">
+<body>
+  <input id="fileupload" type="file" name="files[]" hidden> {% csrf_token %}
+  <!-- Toolbar -->
+  <div class="ui fixed menu">
+    <div class="ui container">
+      <span class="item">
+        <a href="/">
+          <img id="logo" src="/static/img/logo-black.png">
+        </a>
+      </span>
+      <span class="item">
+        <a id="undo-button">
+          <img src="/static/img/design/undo.png">
+        </a>
+        <a id="redo-button">
+          <img src="/static/img/design/redo.png">
+        </a>
+        <a id="open-fav-win">
+          <img src="/static/img/design/favorite.png">
+        </a>
+        <a id="load-button">
+          <img src="/static/img/design/load.png">
+        </a>
+        <a id="save-button">
+          <img src="/static/img/design/save.png">
+        </a>
+        <a id="export-button">
+          <img src="/static/img/design/export.png">
+          <a id="upload-button">
+            <img src="/static/img/design/import.png">
+          </a>
+      </span>
+      <span class="item">
+        <a id="drag-item">
+          <img src="/static/img/design/pointer.png">
+        </a>
+        <a id="drag-canvas">
+          <img src="/static/img/design/move.png">
+        </a>
+        <a id="delete-item">
+          <img src="/static/img/design/delete.png">
+        </a>
+      </span>
+      <span class="item">
+        <a id="zoom-in">
+          <img src="/static/img/design/zoomin.png">
+        </a>
+        <a id="zoom-out">
+          <img src="/static/img/design/zoomout.png">
+        </a>
+        <div class="ui compact floating selection dropdown" id="ratio-dropdown">
           <i class="dropdown icon"></i>
-          <div class="default text">Search BBa...</div>
+          <div class="default text">Ratio</div>
         </div>
-        <div class="tab-context">
-          <div class="ui top attached tabular menu">
-            <div class="active item" data-tab="src-tab">Source circuit</div>
-          </div>
-          <div id="part-src-seg" class="ui bottom attached active tab segment" data-tab="src-tab">
-            <ul class="ui list" id="source-list"></ul>
-          </div>
-        </div>
-        <div class="tab-context">
-          <div class="ui top attached tabular menu">
-            <div class="active item" data-tab="info-tab">Part information</div>
-          </div>
-          <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
-            <img id="part-info-img" class="ui centered tiny image" src="/static/img/design/unknown.png" alt="">
-            <h5 id="part-info-name" class="ui center aligned header"></h5>
-			<div class="ui center aligned container">
-				<p id="part-type"></p>
-			</div>
-            <div class="ui divider"></div>
-            <div id="part-info-des">
-              <h5 class="ui header">Description:</h5>
-              <p></p>
-            </div>
-          </div>
-        </div>
+      </span>
+      <div class="right menu">
+        <span class="item">
+          <h4 id="safety" class="ui green header">Low risk
+            <img src="/static/img/design/safety-1.png">
+          </h4>
+        </span>
       </div>
     </div>
+  </div>
 
-    <!-- Favourite window (floating) -->
-    <div id="fav-win" class="window">
-      <div class="nav">
-        <h5 class="ui header">Favourite</h5>
-        <i id="fav-win-button" class="link icon remove"></i>
-      </div>
-      <div class="content">
-      </div>
+  <!-- Main canvas -->
+  <div id="canvas-box" design-id="{{ request.GET.id }}">
+    <div id="canvas"></div>
+  </div>
+
+  <!-- Part panel (right) -->
+  <div id="part-panel-dropper"></div>
+  <div id="part-panel" class="window">
+    <div class="nav">
+      <h5 class="ui header">Parts</h5>
+      <i id="part-panel-button" class="link icon angle double right"></i>
     </div>
-
-    <!-- Toolbox -->
-    <div id="toolbox">
-      <a id="add-part-button"><img src="/static/img/design/plus.png"></a>
-      <div id="connection-dropdown" class="ui dropdown">
-        <img id="connection-dropdown-button" src="/static/img/design/connection.png">
-        <div class="menu">
-          <div class="item" data-value="promotion">
-            <i class="blue right arrow icon"></i>
-            Add a promotion
-          </div>
-          <div class="item" data-value="inhibition">
-            <i class="red rotated minus icon"></i>
-            Add a inhibition
+    <div class="content">
+      <div id="search-parts-dropdown" class="ui fluid search selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="default text">Search BBa...</div>
+      </div>
+      <div class="tab-context">
+        <div class="ui top attached tabular menu">
+          <div class="active item" data-tab="src-tab">Source circuit</div>
+        </div>
+        <div id="part-src-seg" class="ui bottom attached active tab segment" data-tab="src-tab">
+          <ul class="ui list" id="source-list"></ul>
+        </div>
+      </div>
+      <div class="tab-context">
+        <div class="ui top attached tabular menu">
+          <div class="active item" data-tab="info-tab">Part information</div>
+        </div>
+        <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
+          <img id="part-info-img" class="ui centered tiny image" src="/static/img/design/unknown.png" alt="">
+          <h5 id="part-info-name" class="ui center aligned header"></h5>
+          <div class="ui center aligned container">
+            <p id="part-type"></p>
           </div>
           <div class="ui divider"></div>
-          <div class="item" data-value="delete">
-            <i class="red remove icon"></i>
-            Delete a connection
+          <div id="part-info-des">
+            <h5 class="ui header">Description:</h5>
+            <p></p>
           </div>
         </div>
       </div>
-      <a id="clear-all-button"><img src="/static/img/design/clearall.png"></a>
-      <a id="interactive-button"><img src="/static/img/design/interact.png"></a>
-      <a id="simulation-button"><img src="/static/img/design/simulate.png"></a>
     </div>
+  </div>
 
-    <!-- Component Parts -->
-    <div id ="components-menu" class="ui bottom fixed menu">
-        <a class="item"><img src="/static/img/design/other_dna.png"><i>DNA</i></a>
-        <a class="item"><img src="/static/img/design/promoter.png"><i>PRO</i></a>
-        <a class="item"><img src="/static/img/design/cds.png"><i>CDS</i></a>
-        <a class="item"><img src="/static/img/design/rbs.png"><i>RBS</i></a>
-        <a class="item"><img src="/static/img/design/terminator.png"><i>TER</i></a>
-        <a class="item"><img src="/static/img/design/rna.png"><i>RNA</i></a>
+  <!-- Favourite window (floating) -->
+  <div id="fav-win" class="window">
+    <div class="nav">
+      <h5 class="ui header">Favourite</h5>
+      <i id="fav-win-button" class="link icon remove"></i>
     </div>
-    
-    <!-- Configure component info -->
-    <div id="component-info-modal" class="ui tiny modal">
-      <div class="content">
-        <form id="component-info-form" class="ui form">
-          <div class="disabled field">
-            <label>Part role</label>
-            <input type="text" name="component-role" placeholder="part role" disabled="">
-          </div>
-          <div class="field">
-            <label>Display ID</label>
+    <div class="content">
+    </div>
+  </div>
+
+  <!-- Toolbox -->
+  <div id="toolbox">
+    <a id="add-part-button">
+      <img src="/static/img/design/plus.png">
+    </a>
+    <div id="connection-dropdown" class="ui dropdown">
+      <img id="connection-dropdown-button" src="/static/img/design/connection.png">
+      <div class="menu">
+        <div class="item" data-value="promotion">
+          <i class="blue right arrow icon"></i>
+          Add a promotion
+        </div>
+        <div class="item" data-value="inhibition">
+          <i class="red rotated minus icon"></i>
+          Add a inhibition
+        </div>
+        <div class="ui divider"></div>
+        <div class="item" data-value="delete">
+          <i class="red remove icon"></i>
+          Delete a connection
+        </div>
+      </div>
+    </div>
+    <a id="clear-all-button">
+      <img src="/static/img/design/clearall.png">
+    </a>
+    <a id="interactive-button">
+      <img src="/static/img/design/interact.png">
+    </a>
+    <a id="simulation-button">
+      <img src="/static/img/design/simulate.png">
+    </a>
+  </div>
+
+  <!-- Component Parts -->
+  <div id="components-menu" class="ui bottom fixed menu">
+    <a class="item" data-content="Add a DNA">
+        <img src="/static/img/design/other_dna.png">
+        <i>DNA</i>
+      </a>
+      <a class="item" data-content="Add a promoter">
+        <img src="/static/img/design/promoter.png">
+        <i>PRO</i>
+      </a>
+      <a class="item" data-content="Add a CDS">
+        <img src="/static/img/design/cds.png">
+        <i>CDS</i>
+      </a>
+      <a class="item" data-content="Add a RBS">
+        <img src="/static/img/design/rbs.png">
+        <i>RBS</i>
+      </a>
+      <a class="item" data-content="Add a terminator">
+        <img src="/static/img/design/terminator.png">
+        <i>TER</i>
+      </a>
+      <a class="item" data-content="Add a RNA">
+        <img src="/static/img/design/rna.png">
+        <i>RNA</i>
+      </a>
+  </div>
+
+  <!-- Configure component info -->
+  <div id="component-info-modal" class="ui tiny modal">
+    <div class="content">
+      <form id="component-info-form" class="ui form">
+        <div class="disabled field">
+          <label>Part role</label>
+          <input type="text" name="component-role" placeholder="part role" disabled="">
+        </div>
+        <div class="field">
+          <label>Display ID</label>
           <input type="text" name="component-id" placeholder="display id">
+        </div>
+        <div class="field">
+          <label>Name</label>
+          <input type="text" name="component-name">
+        </div>
+        <div class="disabled field">
+          <label>Version</label>
+          <input type="text" name="component-version" placeholder="1" disabled="">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea rows="2" id="component-description"></textarea>
+        </div>
+        <div class="field">
+          <label>DNA Sequence</label>
+          <textarea id="component-sequence"></textarea>
+        </div>
+      </form>
+      <button id="add-new-component" class="ui button">Save</button>
+    </div>
+  </div>
+
+  <!-- Creating new part modal -->
+  <div id="new-part-modal" class="ui tiny modal">
+    <div class="content">
+      <form class="ui form">
+        <div class="field">
+          <input type="text" name="name" id="part-name" placeholder="Part name">
+        </div>
+        <div class="field">
+          <textarea id="part-description" rows=2 placeholder="Part description"></textarea>
+        </div>
+        <div class="field">
+          <div class="ui floating selection dropdown" id="part-type-dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Part type</div>
           </div>
-          <div class="field">
-            <label>Name</label>
-            <input type="text" name="component-name">
+        </div>
+        <div class="field">
+          <div class="ui floating selection dropdown" id="part-safety-dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Part safety level</div>
           </div>
-          <div class="disabled field">
-            <label>Version</label>
-            <input type="text" name="component-version" placeholder="1" disabled="">
-          </div>
-          <div class="field">
-            <label>Description</label>
-            <textarea rows="2" id="component-description"></textarea>
-          </div>
-          <div class="field">
-            <label>DNA Sequence</label>
-            <textarea id="component-sequence"></textarea>
-          </div>
-        </form>
-        <button id="add-new-component" class="ui button">Save</button>
+        </div>
+        <div class="field">
+          <textarea name="part-sequence" id="part-sequence" placeholder="Part sequence"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="add-new-part" class="ui white button">Add this part to database!</div>
       </div>
     </div>
+  </div>
 
-    <!-- Creating new part modal -->
-    <div id="new-part-modal" class="ui tiny modal">
-      <div class="content">
-        <form class="ui form">
-          <div class="field">
-            <input type="text" name="name" id="part-name" placeholder="Part name">
-          </div>
-          <div class="field">
-            <textarea id="part-description" rows=2 placeholder="Part description"></textarea>
-          </div>
-          <div class="field">
-            <div class="ui floating selection dropdown" id="part-type-dropdown">
-              <i class="dropdown icon"></i>
-              <div class="default text">Part type</div>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui floating selection dropdown" id="part-safety-dropdown">
-              <i class="dropdown icon"></i>
-              <div class="default text">Part safety level</div>
-            </div>
-          </div>
-          <div class="field">
-            <textarea name="part-sequence" id="part-sequence" placeholder="Part sequence"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="actions">
-        <div class="ui one bottom attached big buttons">
-          <div id="add-new-part" class="ui white button">Add this part to database!</div>
-        </div>
-      </div>
+  <div class="ui page dimmer">
+    <div class="content">
+      <div class="ui text loader"></div>
     </div>
+  </div>
 
-    <div class="ui page dimmer">
-      <div class="content">
-        <div class="ui text loader"></div>
-      </div>
+  <!-- Clear all modal -->
+  <div id="clear-all-modal" class="ui basic modal">
+    <div class="ui icon header">
+      <i class="trash icon"></i>
+      Clear canvas
     </div>
-
-    <!-- Clear all modal -->
-    <div id="clear-all-modal" class="ui basic modal">
-      <div class="ui icon header">
-        <i class="trash icon"></i>
-        Clear canvas
-      </div>
-      <div class="content">
-        <p>This will <b>REMOVE ALL ITEMS</b> in the canvas, click Yes below to confirm.</p>
-      </div>
-      <div class="actions">
-        <div class="ui red basic cancel inverted button">
-          <i class="remove icon"></i>
-          No
-        </div>
-        <div class="ui green ok inverted button" id="real-clear-all-button">
-          <i class="checkmark icon"></i>
-          Yes
-        </div>
-      </div>
+    <div class="content">
+      <p>This will
+        <b>REMOVE ALL ITEMS</b> in the canvas, click Yes below to confirm.</p>
     </div>
-
-    <!-- Simulation result modal -->
-    <div id="simulation-modal" class="ui modal">
-      <div class="content">
-        <div class="simulation-result-container">
-          <canvas id="simulation-result"></canvas>
-        </div>
+    <div class="actions">
+      <div class="ui red basic cancel inverted button">
+        <i class="remove icon"></i>
+        No
       </div>
-      <div class="actions">
-        <div class="ui two bottom attached big buttons">
-          <div id="show-plasmid" class="ui white button">Generate plasmid</div>
-          <div id="add-new-part" class="ui blue cancel button">Confirm simulation result</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Save modal -->
-    <div id="save-modal" class="ui tiny modal">
-      <div class="content">
-        <form class="ui form">
-          <div class="field">
-            <input type="text" name="name" id="circuit-name" placeholder="Circuit name">
-          </div>
-          <div class="field">
-            <textarea id="circuit-description" rows=4 placeholder="Circuit description"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="actions">
-        <div class="ui one bottom attached big buttons">
-          <div id="save-circuit" class="ui white button">Save my new circuit!</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Load modal -->
-    <div id="load-modal" class="ui tiny modal">
-      <div class="content">
-      </div>
-      <div class="actions">
-        <div class="ui one bottom attached big buttons">
-          <div id="save-circuit" class="ui white button">Close</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- High risk modal -->
-    <div id="safety-modal" class="ui basic modal">
-      <div class="ui icon header">
+      <div class="ui green ok inverted button" id="real-clear-all-button">
         <i class="checkmark icon"></i>
-        You have finished your circuit, congratulations!
-      </div>
-      <div class="content">
-        <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in real world application.</p>
-      </div>
-      <div class="actions">
-        <div class="ui red basic cancel inverted button">
-          <i class="left chevron icon"></i>
-          Back to design
-        </div>
-        <div class="ui green ok inverted button" id="continue-save">
-          Continue to save
-          <i class="right chevron icon"></i>
-        </div>
+        Yes
       </div>
     </div>
+  </div>
 
-    <!-- Plasmid modal -->
-    <!--   from 2015 SYSU-Software C.O.R.E. -->
-    <div id="plasmid-modal" class="ui tiny modal">
-      <div ng-app="myApp" ng-controller="PlasmidCtrl">
-        <div class="content">
-          <div class="plasmid-container">
-            <plasmidapi name="api"></plasmidapi>
-            <plasmid id="pdemo" sequencelength="{[currentPlasmid.length]}" plasmidheight="420" plasmidwidth="500">
+  <!-- Simulation result modal -->
+  <div id="simulation-modal" class="ui modal">
+    <div class="content">
+      <div class="simulation-result-container">
+        <canvas id="simulation-result"></canvas>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui two bottom attached big buttons">
+        <div id="show-plasmid" class="ui white button">Generate plasmid</div>
+        <div id="add-new-part" class="ui blue cancel button">Confirm simulation result</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save modal -->
+  <div id="save-modal" class="ui tiny modal">
+    <div class="content">
+      <form class="ui form">
+        <div class="field">
+          <input type="text" name="name" id="circuit-name" placeholder="Circuit name">
+        </div>
+        <div class="field">
+          <textarea id="circuit-description" rows=4 placeholder="Circuit description"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="save-circuit" class="ui white button">Save my new circuit!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load modal -->
+  <div id="load-modal" class="ui tiny modal">
+    <div class="content">
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="save-circuit" class="ui white button">Close</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- High risk modal -->
+  <div id="safety-modal" class="ui basic modal">
+    <div class="ui icon header">
+      <i class="checkmark icon"></i>
+      You have finished your circuit, congratulations!
+    </div>
+    <div class="content">
+      <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in real world
+        application.</p>
+    </div>
+    <div class="actions">
+      <div class="ui red basic cancel inverted button">
+        <i class="left chevron icon"></i>
+        Back to design
+      </div>
+      <div class="ui green ok inverted button" id="continue-save">
+        Continue to save
+        <i class="right chevron icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plasmid modal -->
+  <!--   from 2015 SYSU-Software C.O.R.E. -->
+  <div id="plasmid-modal" class="ui tiny modal">
+    <div ng-app="myApp" ng-controller="PlasmidCtrl">
+      <div class="content">
+        <div class="plasmid-container">
+          <plasmidapi name="api"></plasmidapi>
+          <plasmid id="pdemo" sequencelength="{[currentPlasmid.length]}" plasmidheight="420" plasmidwidth="500">
             <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="120">
-            <tracklabel text="{[currentPlasmid.name]}" labelstyle='font-size:20px;font-weight:400'></tracklabel>
-            <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
+              <tracklabel text="{[currentPlasmid.name]}" labelstyle='font-size:20px;font-weight:400'></tracklabel>
+              <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
 
-            <!-- draw the plasmid bone markers and labels -->
-            <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4" arrowstartlength="-4" markerstyle="{[m.markerStyleIn]}">
-            <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}" showline="1" linevadjust="-5" lineclass="labelline" style='font-size:17px'></markerlabel>
-            </trackmarker>
+              <!-- draw the plasmid bone markers and labels -->
+              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4" arrowstartlength="-4"
+                markerstyle="{[m.markerStyleIn]}">
+                <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}" showline="1" linevadjust="-5"
+                  lineclass="labelline" style='font-size:17px'></markerlabel>
+              </trackmarker>
 
-            <!-- draw the marker regions -->
-            <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.markerStyleOut]}" wadjust="-5" vadjust="25"></trackmarker>
-            <trackscale interval="100" style='stroke:#999' ticksize="3"></trackscale>
+              <!-- draw the marker regions -->
+              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.markerStyleOut]}"
+                wadjust="-5" vadjust="25"></trackmarker>
+              <trackscale interval="100" style='stroke:#999' ticksize="3"></trackscale>
             </plasmidtrack>
 
             <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="110" width="10">
-            <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}" sequence="{[m.sequence]}" ng-mousedown="showSequence(m)">
-            <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
-            <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}" wadjust="-5" vadjust="-5"></trackmarker>
-            </trackmarker>
-            <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
+              <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}" sequence="{[m.sequence]}"
+                ng-mousedown="showSequence(m)">
+                <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
+                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}" wadjust="-5"
+                  vadjust="-5"></trackmarker>
+              </trackmarker>
+              <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
             </plasmidtrack>
-            </plasmid>
-            <div class="p" ng-hide="myHide" ng-model="myValue" style="padding: 10px; font-size: 1rem; line-height: 1.2rem; word-wrap: break-word">
-              {[myValue]}
-            </div>
-          </div>
-
-          <div class="plasmid-edit">
-            <form class="ui form">
-              <div class="field">
-                <select class="ui dropdown" ng-model="curPlaIndex" ng-options="plasmids.indexOf(a) as a.name for a in plasmids">
-                  <option value="">Choose a plasmid</option>
-                </select>
-              </div>
-              <div class="field">
-                <select class="ui dropdown" ng-model="curPartType" ng-options="x for x in partType">
-                  <option value="">Choose a part type </option>
-                </select>
-              </div>
-              <div class="field">
-                <input placeholder="Part name" id="plasmid-part-name" type="text" ng-model="curPartName">
-              </div>
-              <div class="field">
-                <input placeholder="Part begin" id="plasmid-part-begin" type="text" ng-model="currentPartBegin">
-              </div>
-              <div class="field">
-                <input placeholder="Part end" id="plasmid-part-end" type="text" ng-model="curPartEnd">
-              </div>
-            </form>
+          </plasmid>
+          <div class="p" ng-hide="myHide" ng-model="myValue" style="padding: 10px; font-size: 1rem; line-height: 1.2rem; word-wrap: break-word">
+            {[myValue]}
           </div>
         </div>
-        <div class="actions">
-          <div class="ui three bottom attached big buttons">
-            <div class="ui white button" ng-click="addNewPart()">ADD</div>
-            <div class="ui white button" ng-click="goBack()">BACK</div>
-            <div class="ui white button" ng-click="clearAllPart()">RESET</div>
-          </div>
+
+        <div class="plasmid-edit">
+          <form class="ui form">
+            <div class="field">
+              <select class="ui dropdown" ng-model="curPlaIndex" ng-options="plasmids.indexOf(a) as a.name for a in plasmids">
+                <option value="">Choose a plasmid</option>
+              </select>
+            </div>
+            <div class="field">
+              <select class="ui dropdown" ng-model="curPartType" ng-options="x for x in partType">
+                <option value="">Choose a part type </option>
+              </select>
+            </div>
+            <div class="field">
+              <input placeholder="Part name" id="plasmid-part-name" type="text" ng-model="curPartName">
+            </div>
+            <div class="field">
+              <input placeholder="Part begin" id="plasmid-part-begin" type="text" ng-model="currentPartBegin">
+            </div>
+            <div class="field">
+              <input placeholder="Part end" id="plasmid-part-end" type="text" ng-model="curPartEnd">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui three bottom attached big buttons">
+          <div class="ui white button" ng-click="addNewPart()">ADD</div>
+          <div class="ui white button" ng-click="goBack()">BACK</div>
+          <div class="ui white button" ng-click="clearAllPart()">RESET</div>
         </div>
       </div>
     </div>
+  </div>
 
-  </body>
-  <script src="/static/js/jquery.min.js"></script>
-  <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
-  <script src="/static/js/jquery.mousewheel.min.js"></script>
-  <script src="/static/semantic/dist/semantic.js"></script>
-  <script src="/static/semantic/dist/components/popup.min.js"></script>
-  <script src="/static/semantic/dist/components/tab.min.js"></script>
-  <script src="/static/js/jsplumb.js"></script>
-  <script src="/static/js/html2canvas.min.js"></script>
-  <script src="/static/js/html2canvas.svg.min.js"></script>
-  <script src="/static/js/Chart.min.js"></script>
-  <script src="/static/js/plasmid/angular.min.js"></script>
-  <script src="/static/js/plasmid/angularplasmid.min.js"></script>
-  <script src="/static/js/plasmid.js"></script>
-  <script src="/static/js/canvas.js"></script>
-  <script src="/static/js/design.js"></script>
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.mousewheel.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
+<script src="/static/js/jsplumb.js"></script>
+<script src="/static/js/html2canvas.min.js"></script>
+<script src="/static/js/html2canvas.svg.min.js"></script>
+<script src="/static/js/Chart.min.js"></script>
+<script src="/static/js/plasmid/angular.min.js"></script>
+<script src="/static/js/plasmid/angularplasmid.min.js"></script>
+<script src="/static/js/plasmid.js"></script>
+<script src="/static/js/canvas.js"></script>
+<script src="/static/js/design.js"></script>
+
 </html>
