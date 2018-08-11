@@ -35,9 +35,7 @@ $('#components-menu a').on('click', function (e) {
             $('#component-info-form div textarea').val("");
         }
     }).modal('show');
-}).popup({
-    // content: 'Add a component'
-});
+}).popup();
 
 $('#add-new-component').on('click', function (e) {
     let data = {
