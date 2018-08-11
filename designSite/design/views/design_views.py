@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 from django.shortcuts import render, redirect
 
 import json
@@ -542,6 +543,10 @@ def max_safety(request):
             'status': 0
         })
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 def plasmid_data(request):
-    with open('C:/Users/43787/Desktop/designSite/design/tools/plasmidData.json') as f:
+    
+    with open(os.path.join(BASE_DIR, '/tools/plasmidData.json')) as f:
         return JsonResponse({ 'data': json.load(f) })
