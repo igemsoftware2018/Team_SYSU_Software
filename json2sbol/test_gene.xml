@@ -4,6 +4,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:sbol="http://sbols.org/v2#"
    xmlns:sys-bio="http://sys-bio.org#">
+  <sbol:ComponentDefinition rdf:about="http://sys-bio.org/ComponentDefinition/I14029/1">
+    <dcterms:description>test</dcterms:description>
+    <sbol:displayId>I14029</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ComponentDefinition/I14029"/>
+    <sbol:sequence rdf:resource="http://sys-bio.org/Sequence/I14029/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
   <sbol:ComponentDefinition rdf:about="http://sys-bio.org/ComponentDefinition/I14030/1">
     <dcterms:description>test</dcterms:description>
     <sbol:displayId>I14030</sbol:displayId>
@@ -25,6 +33,22 @@
     <sbol:displayId>I14032</sbol:displayId>
     <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ComponentDefinition/I14032"/>
     <sbol:sequence rdf:resource="http://sys-bio.org/Sequence/I14032/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sys-bio.org/ComponentDefinition/I14033/1">
+    <dcterms:description>test</dcterms:description>
+    <sbol:displayId>I14033</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ComponentDefinition/I14033"/>
+    <sbol:sequence rdf:resource="http://sys-bio.org/Sequence/I14033/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://sys-bio.org/ComponentDefinition/I14034/1">
+    <dcterms:description>test</dcterms:description>
+    <sbol:displayId>I14034</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ComponentDefinition/I14034"/>
+    <sbol:sequence rdf:resource="http://sys-bio.org/Sequence/I14034/1"/>
     <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
     <sbol:version>1</sbol:version>
   </sbol:ComponentDefinition>
@@ -85,8 +109,88 @@
     <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
     <sbol:version>1</sbol:version>
   </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/1">
+    <sbol:displayId>combination_module</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/I14029/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14029/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>I14029</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14029"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/I14033/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14033/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>I14033</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14033"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/I14034/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14034/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>I14034</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14034"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination0/1">
+        <sbol:displayId>combination0</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination0/I14029/1">
+            <sbol:displayId>I14029</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14029/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/combination0/I14029"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination0/I14033/1">
+            <sbol:displayId>I14033</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14033/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/combination0/I14033"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination0/I14034/1">
+            <sbol:displayId>I14034</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14034/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/combination0/I14034"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/combination0"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000343"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ModuleDefinition>
   <sbol:ModuleDefinition rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/1">
     <sbol:displayId>inhbition_module</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14029/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14029/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>I14029</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14029"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
     <sbol:functionalComponent>
       <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14030/1">
         <sbol:access rdf:resource="http://sbols.org/v2#public"/>
@@ -108,63 +212,63 @@
       </sbol:FunctionalComponent>
     </sbol:functionalComponent>
     <sbol:functionalComponent>
-      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14032/1">
+      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14034/1">
         <sbol:access rdf:resource="http://sbols.org/v2#public"/>
-        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14032/1"/>
+        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14034/1"/>
         <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
-        <sbol:displayId>I14032</sbol:displayId>
-        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14032"/>
+        <sbol:displayId>I14034</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14034"/>
         <sbol:version>1</sbol:version>
       </sbol:FunctionalComponent>
     </sbol:functionalComponent>
     <sbol:interaction>
-      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14030_inhibition/1">
-        <sbol:displayId>I14031_I14030_inhibition</sbol:displayId>
+      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition0/1">
+        <sbol:displayId>inhibition0</sbol:displayId>
         <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14030_inhibition/I14030/1">
-            <sbol:displayId>I14030</sbol:displayId>
-            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14030/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14030_inhibition/I14030"/>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition0/I14029/1">
+            <sbol:displayId>I14029</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14029/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition0/I14029"/>
             <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
             <sbol:version>1</sbol:version>
           </sbol:Participation>
         </sbol:participation>
         <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14030_inhibition/I14031/1">
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition0/I14031/1">
             <sbol:displayId>I14031</sbol:displayId>
             <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14030_inhibition/I14031"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition0/I14031"/>
             <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000020"/>
             <sbol:version>1</sbol:version>
           </sbol:Participation>
         </sbol:participation>
-        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14030_inhibition"/>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition0"/>
         <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000169"/>
         <sbol:version>1</sbol:version>
       </sbol:Interaction>
     </sbol:interaction>
     <sbol:interaction>
-      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14032_inhibition/1">
-        <sbol:displayId>I14031_I14032_inhibition</sbol:displayId>
+      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition1/1">
+        <sbol:displayId>inhibition1</sbol:displayId>
         <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14032_inhibition/I14031/1">
-            <sbol:displayId>I14031</sbol:displayId>
-            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14032_inhibition/I14031"/>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition1/I14030/1">
+            <sbol:displayId>I14030</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14030/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition1/I14030"/>
+            <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition1/I14034/1">
+            <sbol:displayId>I14034</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14034/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition1/I14034"/>
             <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000020"/>
             <sbol:version>1</sbol:version>
           </sbol:Participation>
         </sbol:participation>
-        <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14032_inhibition/I14032/1">
-            <sbol:displayId>I14032</sbol:displayId>
-            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14032/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14032_inhibition/I14032"/>
-            <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
-            <sbol:version>1</sbol:version>
-          </sbol:Participation>
-        </sbol:participation>
-        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/I14031_I14032_inhibition"/>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/inhbition_module/inhibition1"/>
         <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000169"/>
         <sbol:version>1</sbol:version>
       </sbol:Interaction>
@@ -205,53 +309,53 @@
       </sbol:FunctionalComponent>
     </sbol:functionalComponent>
     <sbol:interaction>
-      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/I14030_I14031_promotion/1">
-        <sbol:displayId>I14030_I14031_promotion</sbol:displayId>
+      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/promotion0/1">
+        <sbol:displayId>promotion0</sbol:displayId>
         <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/I14030_I14031_promotion/I14030/1">
-            <sbol:displayId>I14030</sbol:displayId>
-            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14030/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14030_I14031_promotion/I14030"/>
-            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
-            <sbol:version>1</sbol:version>
-          </sbol:Participation>
-        </sbol:participation>
-        <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/I14030_I14031_promotion/I14031/1">
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/promotion0/I14031/1">
             <sbol:displayId>I14031</sbol:displayId>
             <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14031/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14030_I14031_promotion/I14031"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/promotion0/I14031"/>
             <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
             <sbol:version>1</sbol:version>
           </sbol:Participation>
         </sbol:participation>
-        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14030_I14031_promotion"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/promotion0/I14032/1">
+            <sbol:displayId>I14032</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14032/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/promotion0/I14032"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/promotion0"/>
         <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
         <sbol:version>1</sbol:version>
       </sbol:Interaction>
     </sbol:interaction>
     <sbol:interaction>
-      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/I14032_I14031_promotion/1">
-        <sbol:displayId>I14032_I14031_promotion</sbol:displayId>
+      <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/promotion1/1">
+        <sbol:displayId>promotion1</sbol:displayId>
         <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/I14032_I14031_promotion/I14031/1">
-            <sbol:displayId>I14031</sbol:displayId>
-            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14031/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14032_I14031_promotion/I14031"/>
-            <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
-            <sbol:version>1</sbol:version>
-          </sbol:Participation>
-        </sbol:participation>
-        <sbol:participation>
-          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/I14032_I14031_promotion/I14032/1">
-            <sbol:displayId>I14032</sbol:displayId>
-            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14032/1"/>
-            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14032_I14031_promotion/I14032"/>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/promotion1/I14030/1">
+            <sbol:displayId>I14030</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14030/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/promotion1/I14030"/>
             <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
             <sbol:version>1</sbol:version>
           </sbol:Participation>
         </sbol:participation>
-        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14032_I14031_promotion"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/promotion_module/promotion1/I14031/1">
+            <sbol:displayId>I14031</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/I14031/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/promotion1/I14031"/>
+            <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module/promotion1"/>
         <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
         <sbol:version>1</sbol:version>
       </sbol:Interaction>
@@ -259,6 +363,13 @@
     <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/promotion_module"/>
     <sbol:version>1</sbol:version>
   </sbol:ModuleDefinition>
+  <sbol:Sequence rdf:about="http://sys-bio.org/Sequence/I14029/1">
+    <sbol:displayId>I14029</sbol:displayId>
+    <sbol:elements>atcg</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/Sequence/I14029"/>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
   <sbol:Sequence rdf:about="http://sys-bio.org/Sequence/I14030/1">
     <sbol:displayId>I14030</sbol:displayId>
     <sbol:elements>atcg</sbol:elements>
@@ -278,6 +389,20 @@
     <sbol:elements>atcg</sbol:elements>
     <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
     <sbol:persistentIdentity rdf:resource="http://sys-bio.org/Sequence/I14032"/>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="http://sys-bio.org/Sequence/I14033/1">
+    <sbol:displayId>I14033</sbol:displayId>
+    <sbol:elements>atcg</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/Sequence/I14033"/>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="http://sys-bio.org/Sequence/I14034/1">
+    <sbol:displayId>I14034</sbol:displayId>
+    <sbol:elements>atcg</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="http://sys-bio.org/Sequence/I14034"/>
     <sbol:version>1</sbol:version>
   </sbol:Sequence>
 </rdf:RDF>
