@@ -26,6 +26,22 @@ The restriction of the json data is commentted in the head of the *json2sbol.py*
     "components": [
         {
             "role": "PRO",
+            "id": "I14034",
+            "name": "I14034",
+            "version": 1,
+            "description": "test",
+            "sequence": "atcg"
+        },
+        {
+            "role": "PRO",
+            "id": "I14033",
+            "name": "I14033",
+            "version": 1,
+            "description": "test",
+            "sequence": "atcg"
+        },
+        {
+            "role": "PRO",
             "id": "I14032",
             "name": "I14032",
             "version": 1,
@@ -44,6 +60,14 @@ The restriction of the json data is commentted in the head of the *json2sbol.py*
             "role": "TER",
             "id": "I14030",
             "name": "I14030",
+            "version": 1,
+            "description": "test",
+            "sequence": "atcg"
+        },
+        {
+            "role": "TER",
+            "id": "I14029",
+            "name": "I14029",
             "version": 1,
             "description": "test",
             "sequence": "atcg"
@@ -74,11 +98,20 @@ The restriction of the json data is commentted in the head of the *json2sbol.py*
     "inhibitions": [
         {
             "inhibitor": "I14031",
-            "other": "I14032"
+            "other": "I14029"
         },
         {
-            "inhibitor": "I14031",
+            "inhibitor": "I14034",
             "other": "I14030"
+        }
+    ],
+    "combinations": [
+        {
+            "reactants": [
+                "I14034",
+                "I14029",
+                "I14033"
+            ]
         }
     ]
 }
