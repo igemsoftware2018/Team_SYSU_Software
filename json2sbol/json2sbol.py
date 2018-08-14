@@ -55,7 +55,7 @@ data = json.load(test)
 components = {}
 for component in data['components']:
   temp = ComponentDefinition(component['id'])
-  temp.role = roles[component['role']]
+  temp.roles = roles[component['role']]
   temp.description = component['description']
   temp.sequence = Sequence(component['id'], component['sequence'])
   components[component['id']] = temp
@@ -106,7 +106,7 @@ if 'promotions' in data.keys():
     stimulator_participation.participant = pro_fcs[stimulatorName].identity
 
     other_participation = proInteraction.participations.create(otherName)
-    other_participation.roles = components[otherName].role
+    other_participation.roles = components[otherName].roles
     other_participation.participant = pro_fcs[otherName].identity
 
 # inhibition
@@ -140,7 +140,7 @@ if 'inhibitions' in data.keys():
     inhibitor_participation.participant = inh_fcs[inhibitorName].identity
 
     other_participation = inhInteraction.participations.create(otherName)
-    other_participation.roles = components[otherName].role
+    other_participation.roles = components[otherName].roles
     other_participation.participant = inh_fcs[otherName].identity
 
 # combination
@@ -150,6 +150,7 @@ if 'combinations' in data.keys():
 
   for index, combination in enumerate(data['combinations']):
     comInteraction = comModule.interactions.create('combination_' + str(index))
+    comInteraction.role = SBO_NONCOVALENT_BINDING
     for reactant in combination['reactants']:
       if ((reactant in com_fcs.keys()) == False):
         reactant_fc = comModule.functionalComponents.create(reactant)
