@@ -1,7 +1,7 @@
 from sbol import *
 import json
 
-filename = 'test'
+filename = 'test_gene'
 
 doc = Document()
 doc.read(filename + '.xml')
@@ -43,7 +43,13 @@ data = {
 
 # tranform componentDefinitions
 for x in doc:
-  if 'ComponentDefinition' in str(x):
+  # print(str(x))
+  if 'Activity' in str(x):
+    temp = doc.getActivity(str(x))
+    data['circuit']['name'] = temp.displayId
+    data['circuit']['id'] = temp.displayId
+    data['circuit']['description'] = temp.description
+  elif 'ComponentDefinition' in str(x):
     temp = doc.getComponentDefinition(str(x))
     component = {}
     line = {
