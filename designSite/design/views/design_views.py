@@ -548,5 +548,5 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def plasmid_data(request):
     
-    with open(os.path.join(BASE_DIR, '/tools/plasmidData.json')) as f:
+    with open(os.path.join(BASE_DIR, 'tools/plasmidData.json')) as f:
         return JsonResponse({ 'data': json.load(f) })
