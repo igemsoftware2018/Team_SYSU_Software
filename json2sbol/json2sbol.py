@@ -51,6 +51,11 @@ roles = {
 test = open("data.json", encoding='utf-8')
 data = json.load(test)
 
+activity = Activity(data['circuit']['name'])
+activity.displayId = data['circuit']['name']
+activity.description = data['circuit']['description']
+doc.addActivity(activity)
+
 # load components
 components = {}
 for component in data['components']:
