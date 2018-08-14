@@ -1,6 +1,4 @@
-# Json data to SBOL data
-
-The file *json2sbol.py* can transform a json data to sbol data following the json data restriction.
+# Data format transform
 
 ## Requirement
 
@@ -53,10 +51,25 @@ The file *json2sbol.py* can transform a json data to sbol data following the jso
 }
 ```
 
-## Testcase
+## Json data to SBOL data
+
+The file *json2sbol.py* can transform a json data to sbol data following the json data restriction.
+
+### Testcase
 
 Included in data.json file
 
-## Result
+### Result
 
-Print in the test_gene xml document
+Print in the test_gene.xml document
+
+## SBOL data to Json data
+
+### Testcase
+
+Assign the variable ```filename``` with the SBOL document name in the sbol2json.py file
+The file could be the testcase
+
+### Result
+
+Print in the console
