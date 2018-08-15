@@ -531,6 +531,10 @@ def max_safety(request):
         try:
             data = json.loads(request.GET['ids'])
             parts = list(map(lambda i: Parts.objects.get(id = i), data))
+            # TODO:
+            # 以下代码可以防止一个异常抛出。先检验parts是否为空。为空时返回-1,代表unknown
+            if parts == []:
+                return JsonResponse({ 'status': 1, 'max_safety': -1}) 
             max_safety_part = max(parts, key = lambda p: p.Safety)
             return JsonResponse({
                 'status': 1,
