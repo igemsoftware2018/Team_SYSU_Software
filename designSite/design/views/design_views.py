@@ -443,7 +443,7 @@ def circuit(request):
                     CircuitLines.objects.get(
                         Start = cids[x['start']],
                         End = cids[x['end']],
-                        Type = x['type']
+                        Type = x['type'] # TODO change promotion to stimulation
                     )
                 except:
                     CircuitLines.objects.create(
