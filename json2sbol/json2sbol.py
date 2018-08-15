@@ -21,7 +21,7 @@
 #   }],
 #   combinations: [{
 #     'reactants': [xxx, xxx, xxx] # id of the combination reactant
-#     'production': xxx # id of the production
+#     'product': xxx # id of the product
 #   }],
 #   circuit: {
 #     'id': xxx, # circuit id if it's already existing, -1 else
@@ -39,11 +39,11 @@ doc = Document()
 
 roles = {
   'DNA': SO_GENE,
-  'PRO': SO_PROMOTER,
+  'RNA': SO_SGRNA,
+  'promoter': SO_PROMOTER,
   'RBS': SO_RBS,
   'CDS': SO_CDS,
-  'TER': SO_TERMINATOR,
-  'RNA': SO_SGRNA
+  'terminator': SO_TERMINATOR
 }
 
 # data = json.loads(request.POST['data'])
@@ -89,14 +89,14 @@ if 'promotions' in data.keys():
     stimulatorName = promotion['stimulator']
     otherName = promotion['other']
     
-    if ((stimulatorName in pro_fcs.keys()) == False):
+    if not stimulatorName in pro_fcs.keys():
       stimulator_fc = proModule.functionalComponents.create(stimulatorName)
       stimulator_fc.definition = components[stimulatorName].identity
       stimulator_fc.access = SBOL_ACCESS_PUBLIC
       stimulator_fc.direction = SBOL_DIRECTION_IN_OUT
       pro_fcs[stimulatorName] = stimulator_fc
 
-    if ((otherName in pro_fcs.keys()) == False):
+    if not otherName in pro_fcs.keys():
       other_fc = proModule.functionalComponents.create(otherName)
       other_fc.definition = components[otherName].identity
       other_fc.access = SBOL_ACCESS_PUBLIC
@@ -123,14 +123,14 @@ if 'inhibitions' in data.keys():
     inhibitorName = inhibition['inhibitor']
     otherName = inhibition['other']
     
-    if ((inhibitorName in inh_fcs.keys()) == False):
+    if not inhibitorName in inh_fcs.keys():
       inhibitor_fc = inhModule.functionalComponents.create(inhibitorName)
       inhibitor_fc.definition = components[inhibitorName].identity
       inhibitor_fc.access = SBOL_ACCESS_PUBLIC
       inhibitor_fc.direction = SBOL_DIRECTION_IN_OUT
       inh_fcs[inhibitorName] = inhibitor_fc
 
-    if ((otherName in inh_fcs.keys()) == False):
+    if not otherName in inh_fcs.keys():
       other_fc = inhModule.functionalComponents.create(otherName)
       other_fc.definition = components[otherName].identity
       other_fc.access = SBOL_ACCESS_PUBLIC
@@ -157,7 +157,7 @@ if 'combinations' in data.keys():
     comInteraction = comModule.interactions.create('combination_' + str(index))
     comInteraction.role = SBO_NONCOVALENT_BINDING
     for reactant in combination['reactants']:
-      if ((reactant in com_fcs.keys()) == False):
+      if not reactant in com_fcs.keys():
         reactant_fc = comModule.functionalComponents.create(reactant)
         reactant_fc.definition = components[reactant].identity
         reactant_fc.access = SBOL_ACCESS_PUBLIC
@@ -166,6 +166,18 @@ if 'combinations' in data.keys():
       reactant_participation = comInteraction.participations.create(reactant)
       reactant_participation.roles = SBO_REACTANT
       reactant_participation.participant = com_fcs[reactant].identity
+    
+    product = combination['product']
+    if not product in com_fcs.keys():
+      product_fc = comModule.functionalComponents.create(product)
+      product_fc.definition = components[product].identity
+      product_fc.access = SBOL_ACCESS_PUBLIC
+      product_fc.direction = SBOL_DIRECTION_IN_OUT
+      com_fcs[product] = product_fc
+    product_participation = comInteraction.participations.create(product)
+    product_participation.roles = SBO_PRODUCT
+    product_participation.participant = com_fcs[product].identity
+    
 
 # create sbol document
 circuit_name = data['circuit']['name']

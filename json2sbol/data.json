@@ -105,6 +105,7 @@
         }
     ],
     "combinations": [{
-        "reactants": ["I14030", "I14032", "I14033"]
+        "reactants": ["I14030", "I14032", "I14033"],
+        "product": "I14029"
     }]
 }

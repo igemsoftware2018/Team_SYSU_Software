@@ -9,13 +9,13 @@ doc.read(filename + '.xml')
 so_dict = {
   'http://identifiers.org/so/SO:0000167': 'promoter',
   'http://identifiers.org/so/SO:0000057': 'operator',
-  'http://identifiers.org/so/SO:0000316': 'cds',
+  'http://identifiers.org/so/SO:0000316': 'CDS',
   'http://identifiers.org/so/SO:0000204': 'fivePrimeUtr',
   'http://identifiers.org/so/SO:0000141': 'terminator',
   'http://identifiers.org/so/SO:0000627': 'insulator',
   'http://identifiers.org/so/SO:0000296': 'originOfReplication',
   'http://identifiers.org/so/SO:0005850': 'primerBindingSite',
-  'http://identifiers.org/so/SO:0000139': 'ribosomeEntrySite',
+  'http://identifiers.org/so/SO:0000139': 'RBS',
   'http://identifiers.org/so/SO:0000704': 'gene',
   'http://identifiers.org/so/SO:0000234': 'mRNA',
   'http://identifiers.org/so/SO:0001687': 'restrictionEnzymeRecognitionSite',
@@ -156,7 +156,7 @@ data = {
     "name": "",
     "description": ""
   },
-  "promotions": [],
+  "stimulations": [],
   "inhibitions": [],
   "combinations": []
 }
@@ -217,16 +217,17 @@ for x in doc:
             pro[sbo_dict[part.roles[0]]] = part.displayId
           else:
             pro['other'] = part.displayId
-        data['promotions'].append(pro)
+        data['stimulations'].append(pro)
       elif sbo_dict[action.types[0]] == 'geneticInteraction':
         com = {
           'reactant': []
         }
         for part in action.participations:
           if part.roles[0] in sbo_dict.keys():
-            com[sbo_dict[part.roles[0]]].append(part.displayId)
-          else:
-            com['other'] = part.displayId
+            if sbo_dict[part.roles[0]] == 'reactant':
+              com['reactant'].append(part.displayId)
+            else:
+              com['product'] = part.displayId
         data['combinations'].append(com)
 
 data['circuit']['name'] = filename

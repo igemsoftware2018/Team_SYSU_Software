@@ -197,6 +197,16 @@
   <sbol:ModuleDefinition rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/1">
     <sbol:displayId>combination_module</sbol:displayId>
     <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/I14029/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14029/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>I14029</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14029"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
       <sbol:FunctionalComponent rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/I14030/1">
         <sbol:access rdf:resource="http://sbols.org/v2#public"/>
         <sbol:definition rdf:resource="http://sys-bio.org/ComponentDefinition/I14030/1"/>
@@ -229,6 +239,15 @@
     <sbol:interaction>
       <sbol:Interaction rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination_0/1">
         <sbol:displayId>combination_0</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination_0/I14029/1">
+            <sbol:displayId>I14029</sbol:displayId>
+            <sbol:participant rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/I14029/1"/>
+            <sbol:persistentIdentity rdf:resource="http://sys-bio.org/ModuleDefinition/combination_module/combination_0/I14029"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
         <sbol:participation>
           <sbol:Participation rdf:about="http://sys-bio.org/ModuleDefinition/combination_module/combination_0/I14030/1">
             <sbol:displayId>I14030</sbol:displayId>
