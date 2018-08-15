@@ -1,0 +1,35 @@
+<html>
+
+<head>
+  <title>Get SBOL</title>
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+</head>
+
+<body>
+
+  <input name="jsonData" type="text" placeholder="input the json data"> {% csrf_token %}
+  <button class="ui button" type="submit" id="button">Submit</button>
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script>
+  $('#button').on('click', function () {
+    data = { data: $('input[name="jsonData"]').val()};
+    console.log(data);
+    $.post('/api/sbol_doc', data, function(data) {
+      console.log(data);
+      let filename = "yours.xml"
+      var blob = new Blob([(new XMLSerializer).serializeToString(data)], { type: 'application/xml' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = filename;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+    });
+  });
+</script>
+
+</html>
