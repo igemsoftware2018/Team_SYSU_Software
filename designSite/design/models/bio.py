@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 class Parts(models.Model):
+    Role = models.CharField(max_length = 20, default = "sequenceFeature")
     Name = models.CharField(max_length = 50, unique = True, db_index = True)
     secondName = models.TextField(default="Unknow")
     Description = models.TextField()

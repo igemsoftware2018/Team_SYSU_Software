@@ -440,7 +440,7 @@ def circuit(request):
                     CircuitLines.objects.get(
                         Start = cids[x['start']],
                         End = cids[x['end']],
-                        Type = x['type']
+                        Type = x['type'] # TODO change promotion to stimulation
                     )
                 except:
                     CircuitLines.objects.create(
@@ -548,5 +548,5 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def plasmid_data(request):
     
-    with open(os.path.join(BASE_DIR, '/tools/plasmidData.json')) as f:
+    with open(os.path.join(BASE_DIR, 'tools/plasmidData.json')) as f:
         return JsonResponse({ 'data': json.load(f) })
