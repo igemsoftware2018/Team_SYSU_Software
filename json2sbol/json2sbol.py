@@ -31,6 +31,8 @@
 # }
 
 # import request
+# from django.http import HttpRequest
+import os
 import json
 from sbol import *
 
@@ -181,5 +183,13 @@ if 'combinations' in data.keys():
 
 # create sbol document
 circuit_name = data['circuit']['name']
-result = doc.write(circuit_name + '.xml')
+filename = circuit_name + '.xml'
+result = doc.write(filename)
 print(result)
+
+# response = HttpResponse(open(filename,"rb"),content_type="text/xml")
+
+# if os.path.exists(filename):
+#   os.remove(filename)
+
+# return response
