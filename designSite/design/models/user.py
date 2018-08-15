@@ -37,10 +37,10 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELD = ['org', 'igem']
 
-    def get_full_name():
+    def get_full_name(self):
         return "%s of %s" % self.email, self.org
 
-    def get_short_name():
+    def get_short_name(self):
         return self.email
 
     def __str__(self):

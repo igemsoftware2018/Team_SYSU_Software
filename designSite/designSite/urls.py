@@ -18,9 +18,17 @@ from django.urls import path
 from django.conf.urls import url
 from design.views import design_views
 
+import account.views
+
 urlpatterns = [
+    path('', account.views.index),
     path('admin/', admin.site.urls),
+    path('index/', account.views.index),
     path('design/', design_views.design),
+    path('interest/', account.views.interest),
+    url(r'^login/?$', account.views.login_view),
+    url(r'^logout/?$', account.views.logout_view),
+    url(r'^register/?$', account.views.register),
 ] + [
     # API urls
     url(r'api/get_favorite$', design_views.get_favorite),
@@ -37,3 +45,4 @@ urlpatterns = [
     url(r'api/plasmid_data$', design_views.plasmid_data),
     url(r'api/plasm_part$', design_views.plasm_part),
 ]
+
