@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 
 # from design.models import *
 from design.models.bio import *
+from design.models.user import *
 
 
 from design.tools.biode import CIR2ODE as cir2
