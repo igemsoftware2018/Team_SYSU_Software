@@ -15,6 +15,42 @@ import sys
 import time
 from os.path import join
 
+role_dict = {
+    'promoter': 'Promoter',
+    'Promoter': 'Promoter',
+    'RBS': 'RBS',
+    'CDS': 'CDS',
+    'terminator': 'Terminator',
+    'Terminator': 'Terminator',
+    'process': 'process',
+    'ther_DNA': 'sequenceFeature',
+    'other_DNA': 'sequenceFeature',
+    'complex': 'sequenceFeature',
+    'RNA': 'sequenceFeature',
+    'protein': 'sequenceFeature',
+    'protein-m': 'sequenceFeature',
+    'protein-l': 'sequenceFeature',
+    'protein-I': 'sequenceFeature',
+    'cell': 'sequenceFeature',
+    'chemical': 'sequenceFeature',
+    'material': 'sequenceFeature',
+    'light': 'sequenceFeature',
+    'Light': 'sequenceFeature',
+    'reporter': 'sequenceFeature',
+    'composite': 'sequenceFeature',
+    'generator': 'sequenceFeature',
+    'inverter': 'sequenceFeature',
+    'measurement': 'sequenceFeature',
+    'signalling': 'sequenceFeature',
+    'unknown': 'sequenceFeature'
+}
+
+interaction_type_dict = {
+    'normal': '',
+    'Promote': 'stimulation',
+    'Inhibit': 'inhibition'
+}
+
 # load parts data
 def get_parts_type(filename):
     l = filename.rindex("(")
@@ -31,6 +67,10 @@ def atomic_add(items):
     for a, b in items:
         a.add(b)
 
+# last year:
+# load parts info in folder 'parts'
+# type is included at the end of the filename with '()'
+# e.g: new_finalOther_Regulator(promoter) indicates type is promoter
 def load_parts(parts_floder_path):
     errors = 0
     print('Deleting all previous parts...')
@@ -61,7 +101,9 @@ def load_parts(parts_floder_path):
                         row[3] = 0
                     parts.append(Parts(
                         Name = row[0], Description = row[1],
-                        Length = int(row[2]), Type = part_type,
+                        # Done
+                        # Change Types to Role
+                        Length = int(row[2]), Role = role_dict[part_type], Type = part_type,
                         Part_rating = int(row[3]), Release_status = row[5],
                         Twins = row[6],Sample_status = row[7],
                         Part_results = row[8], Use = row[9],
@@ -187,6 +229,8 @@ def load_partsInteration(folderpath):
                     parts_interact.append(PartsInteract(
                         parent = parent_part,
                         child = child_part,
+                        # TODO
+                        # Type mapping
                         InteractType = interactType,
                         Score = score
                     ))
@@ -314,6 +358,7 @@ def load_Team_description(works_floder_path):
     atomic_save(works)
     print('Error: {0:6d}'.format(errors))
 
+# IEF is the score of the project
 def load_Team_IEF(works_floder_path):
     print('Loading Team_IEF value...')
     works = []
@@ -623,7 +668,10 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                                         print(name + ' not found.')
                                         p = Parts.objects.create(
                                                 Name = name,
-                                                Type = sheet.cell_value(row, 2),
+                                                # Done
+                                                # Change Type to Role
+                                                Role = role_dict[sheet.cell_value(row, 2)],
+                                                Type = sheet.ccell_value(row, 2),
                                                 Description = sheet.cell_value(row, 1))
                                         new_part_count += 1
                                     try:
@@ -650,6 +698,9 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                                     except:
                                         p = Parts.objects.create(
                                                 Name = sheet.cell_value(row, 1),
+                                                # Done
+                                                # Change type to role
+                                                Role = role_dict[sheet.cell_value(row, 2)],
                                                 Type = sheet.cell_value(row, 2))
                                     try:
                                         cp = CircuitParts.objects.create(
@@ -674,6 +725,9 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                                     except:
                                         p = Parts.objects.create(
                                                 Name = sheet.cell_value(row, 1),
+                                                # Done
+                                                # Change type to role
+                                                Role = role_dict[sheet.cell_value(row, 2)],
                                                 Type = sheet.cell_value(row, 2))
                                     try:
                                         cp = CircuitParts.objects.create(
@@ -716,14 +770,14 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                                         CircuitLines.objects.create(
                                             Start = cids[s],
                                             End = cids[int(e)],
-                                            Type = "promotion")
+                                            Type = "stimulation")
                                     else:
                                         e = e.split(',')
                                         for x in e:
                                             CircuitLines.objects.create(
                                                 Start = cids[s],
                                                 End = cids[int(x)],
-                                                Type = "promotion")
+                                                Type = "stimulation")
 
                                 except:
                                     pass
