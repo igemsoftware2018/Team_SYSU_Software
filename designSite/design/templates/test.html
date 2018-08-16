@@ -2,16 +2,48 @@
 
 <head>
   <title>Get SBOL</title>
+  <link rel="shortcut icon" href="/static/img/favicon.png">
   <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
 </head>
 
 <body>
 
-  <input name="jsonData" type="text" placeholder="input the json data"> {% csrf_token %}
-  <button class="ui button" type="submit" id="button">Submit</button>
+  <div>
+    <input name="jsonData" type="text" placeholder="input the json data"> {% csrf_token %}
+    <button class="ui button" type="submit" id="button">Submit</button>
+  </div>
+
+  <div>
+    <input name="sbolfile" type="file" hidden> {% csrf_token %}
+    <button class="ui button" id="upload">Upload</button>
+    <p id="data">Your json data from sbol doc</p>
+  </div>
 </body>
 <script src="/static/js/jquery.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
+
 <script>
+  $('#upload').on('click', function() {
+    $('input[name="sbolfile"]').trigger('click');
+  }).popup({
+    content: 'Import a sbol xml file'
+  });
+  let fileReader = new FileReader();
+  fileReader.onload = () => {
+    // console.log(fileReader.result);
+    let data = { data: fileReader.result};
+    $.post('/api/sbol_json', data, function(v) {
+      console.log(v["data"]);
+      $('#data').text(JSON.stringify(JSON.parse(v["data"]), null, '\t'));
+    });
+  };
+  $('input[name="sbolfile"]').on('change', function() {
+    let data = $('input[name="sbolfile"]')[0].files[0];
+    fileReader.readAsText(data)    
+  });
+
   $('#button').on('click', function () {
     data = { data: $('input[name="jsonData"]').val()};
     console.log(data);

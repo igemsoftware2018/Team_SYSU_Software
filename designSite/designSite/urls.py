@@ -46,5 +46,6 @@ urlpatterns = [
     url(r'api/plasmid_data$', design_views.plasmid_data),
     url(r'api/plasm_part$', design_views.plasm_part),
     url(r'api/sbol_doc$', design_views.get_sbol_doc),
+    url(r'api/sbol_json$', design_views.get_sbol_json),
 ]
 
