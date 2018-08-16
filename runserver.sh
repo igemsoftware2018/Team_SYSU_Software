@@ -1,1 +1,1 @@
-cd designSite && python3 manage.py runserver
+cd designSite && condapython manage.py runserver

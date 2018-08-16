@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^login/?$', account.views.login_view),
     url(r'^logout/?$', account.views.logout_view),
     url(r'^register/?$', account.views.register),
+    path('test/', design_views.test),
 ] + [
     # API urls
     url(r'api/get_favorite$', design_views.get_favorite),
@@ -45,5 +46,7 @@ urlpatterns = [
     url(r'api/max_safety$', design_views.max_safety),
     url(r'api/plasmid_data$', design_views.plasmid_data),
     url(r'api/plasm_part$', design_views.plasm_part),
+    url(r'api/sbol_doc$', design_views.get_sbol_doc),
+    url(r'api/sbol_json$', design_views.get_sbol_json),
 ]
 

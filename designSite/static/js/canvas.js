@@ -377,7 +377,12 @@ class SDinDesign {
                 },
                 drop: function() {
                     // TODO: fix selectedPart, updateSafety from other file
-                    that.insertPart(data, selectedPart, $(this).attr('dropper-id'));
+                    // VERY IMPORTANT
+                    // first, deep copy selectedPart to copySelectedPart
+                    // then insert the copy (instead of selectedPart itself)
+                    // this solve the error occurred when you delete the component at center.
+                    let copySelectedPart = $.extend(true, {}, selectedPart);
+                    that.insertPart(data, copySelectedPart, $(this).attr('dropper-id'));
                     that.maxSafety(updateSafety);
                 }
             });

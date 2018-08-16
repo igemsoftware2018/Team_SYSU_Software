@@ -7,11 +7,11 @@ doc = Document()
 doc.read(filename + '.xml')
 
 so_dict = {
-  'http://identifiers.org/so/SO:0000167': 'promoter',
+  'http://identifiers.org/so/SO:0000167': 'Promoter',
   'http://identifiers.org/so/SO:0000057': 'operator',
   'http://identifiers.org/so/SO:0000316': 'CDS',
   'http://identifiers.org/so/SO:0000204': 'fivePrimeUtr',
-  'http://identifiers.org/so/SO:0000141': 'terminator',
+  'http://identifiers.org/so/SO:0000141': 'Terminator',
   'http://identifiers.org/so/SO:0000627': 'insulator',
   'http://identifiers.org/so/SO:0000296': 'originOfReplication',
   'http://identifiers.org/so/SO:0005850': 'primerBindingSite',

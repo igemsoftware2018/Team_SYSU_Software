@@ -1,6 +1,6 @@
 {
     "components": [{
-            "role": "PRO",
+            "role": "Promoter",
             "id": "I14034",
             "name": "I14034",
             "version": 1,
@@ -24,7 +24,7 @@
             "sequence": "atcg"
         },
         {
-            "role": "TER",
+            "role": "Terminator",
             "id": "I14031",
             "name": "I14031",
             "version": 1,
@@ -32,7 +32,7 @@
             "sequence": "atcg"
         },
         {
-            "role": "TER",
+            "role": "Terminator",
             "id": "I14030",
             "name": "I14030",
             "version": 1,
@@ -40,7 +40,7 @@
             "sequence": "atcg"
         },
         {
-            "role": "TER",
+            "role": "Terminator",
             "id": "I14029",
             "name": "I14029",
             "version": 1,

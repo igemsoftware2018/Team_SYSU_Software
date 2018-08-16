@@ -1078,6 +1078,9 @@ $('#safety').popup({
 });
 
 function updateSafety(safety) {
+    /*
+     * safety == -1 表示unknown, 也列入安全的范畴。
+     */
     if (safety <= 1) {
         $('#safety').removeClass('red yellow').addClass('green')
             .html('Low risk<img src="/static/img/design/safety-1.png"></img>');
