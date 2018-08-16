@@ -23,9 +23,10 @@ import account.views
 urlpatterns = [
     path('', account.views.index),
     path('admin/', admin.site.urls),
-    path('index/', account.views.index),
+    # path('index/', account.views.index),
+    url(r'^index/?$', account.views.index),
     path('design/', design_views.design),
-    path('interest/', account.views.interest),
+    url(r'^interest/?$', account.views.interest),
     url(r'^login/?$', account.views.login_view),
     url(r'^logout/?$', account.views.logout_view),
     url(r'^register/?$', account.views.register),

@@ -26,45 +26,54 @@
   </body>
 
   <div class="ui active tiny modal" id="register-modal">
-    <div class="header">
-      Register
-    </div>
-    <div class="content">
-      <div class="ui center aligned container">
-        <form class="ui form" action="/register" method="POST">
-          {% csrf_token %}
-          <div class="field">
-            <input type="text" id="email" name="email" placeholder="Email">
+      {% if user.is_authenticated %}
+          <div class="content">
+            <div class="ui center aligned container">
+              <p>You've login.</p>
+            </div>
           </div>
-          <div class="field">
-            <input type="password" id="password" name="password" placeholder="Password">
+      {% else %}
+      <div class="header">
+          Register
+        </div>
+        <div class="content">
+          <div class="ui center aligned container">
+            <form class="ui form" action="/register" method="POST">
+              {% csrf_token %}
+              <div class="field">
+                <input type="text" id="email" name="email" placeholder="Email">
+              </div>
+              <div class="field">
+                <input type="password" id="password" name="password" placeholder="Password">
+              </div>
+              <div class="field">
+                <input type="password" id="password2"  placeholder="Confirm password">
+              </div>
+              <div class="field">
+                <input type="text" id="org" name="org" placeholder="Organization / Team">
+              </div>
+              <div class="field">
+                <input type="text" id="igem" name="igem" placeholder="iGEM Account Email">
+              </div>
+              <div class="ui {% if messages %}visible {% endif %}error message">
+                {% if messages %}
+                <ul class="list">
+                  {% for message in messages %}
+                  <li>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </form>
+            <br/>
+            <p class="small">If you register an account or log in S-Din, it indicates that you agree <a id="policy">our policies</a>.</p>
           </div>
-          <div class="field">
-            <input type="password" id="password2"  placeholder="Confirm password">
+        </div>
+          <div class="ui one bottom attached big buttons" id="button-group">
+            <div class="ui submit secondary button"id="next-button">Next</div>
           </div>
-          <div class="field">
-            <input type="text" id="org" name="org" placeholder="Organization / Team">
-          </div>
-          <div class="field">
-            <input type="text" id="igem" name="igem" placeholder="iGEM Account Email">
-          </div>
-          <div class="ui {% if messages %}visible {% endif %}error message">
-            {% if messages %}
-            <ul class="list">
-              {% for message in messages %}
-              <li>{{ message }}</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </div>
-        </form>
-        <br/>
-        <p class="small">If you register an account or log in S-Din, it indicates that you agree <a id="policy">our policies</a>.</p>
-      </div>
-    </div>
-      <div class="ui one bottom attached big buttons" id="button-group">
-        <div class="ui submit secondary button"id="next-button">Next</div>
-      </div>
+      {% endif %}
+    
   </div>
 
   <div class="ui tiny modal" id="policy-modal">

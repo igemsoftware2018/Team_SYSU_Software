@@ -1,1 +1,19 @@
-This is the index page.
+<html>
+
+<body>
+    {% if user.is_authenticated %}
+        You've log in.
+        <button id="logout">Logout</button>
+    {% else %}
+        You should log in first.
+        
+    {% endif %}
+</body>
+
+<script>
+    document.getElementById("logout").onclick = function (){
+        window.location.href = '/logout';
+    }
+</script>
+
+</html>

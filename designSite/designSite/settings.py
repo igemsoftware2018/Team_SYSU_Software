@@ -127,4 +127,11 @@ STATICFILES_DIRS = [
 # Login required redirect
 LOGIN_URL = '/login/'
 
+# No automatically add a slash at the end of URI
 APPEND_SLASH=False
+
+
+LOGIN_RIDIRECT_URL = '/'
+
+# Custom User
+AUTH_USER_MODEL = 'design.User'

@@ -27,6 +27,8 @@ def index(request):
     return render(request, 'index.html')
 
 def login_view(request):
+    if request.user.is_authenticated:
+        print("hahahahahah")
     if request.method == "POST":
         # Login action
         form = LoginForm(request.POST)
@@ -35,9 +37,9 @@ def login_view(request):
             password = form.cleaned_data['password']
             print(email, password)
             user = authenticate(username = email, password = password)
-            print("User:", user)
             if user is not None:
                 login(request, user)
+                print("Login successfully!")
                 messages.success(request, "Login successfully!")
                 next_url = request.POST.get('next')
                 if next_url:
@@ -75,7 +77,7 @@ def register(request):
                         )
                 login(request, user)
                 messages.success(request, "Register successfully!")
-                return redirect('/login')
+                return redirect('/index')
             except IntegrityError:
                 messages.error(request, "Email already exists!")
             except:
