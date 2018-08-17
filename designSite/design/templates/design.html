@@ -275,23 +275,32 @@
           <input type="text" name="name" id="part-name" placeholder="Part name">
         </div>
         <div class="field">
-          <textarea id="part-description" rows=2 placeholder="Part description"></textarea>
+            <textarea id="part-description" rows=2 placeholder="Part description"></textarea>
         </div>
         <div class="field">
-          <div class="ui floating selection dropdown" id="part-type-dropdown">
+          <div class="ui floating selection dropdown" id="part-role-dropdown">
             <i class="dropdown icon"></i>
-            <div class="default text">Part type</div>
+            <div class="default text">Part role</div>
           </div>
         </div>
         <div class="field">
-          <div class="ui floating selection dropdown" id="part-safety-dropdown">
-            <i class="dropdown icon"></i>
-            <div class="default text">Part safety level</div>
+            <div class="ui floating selection dropdown" id="part-type-dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Part type</div>
+            </div>
           </div>
-        </div>
+
+          <!-- Part safety level is not used -->
+          <!-- <div class="field">
+            <div class="ui floating selection dropdown" id="part-safety-dropdown">
+              <i class="dropdown icon"></i>
+              <div class="default text">Part safety level</div>
+            </div>
+          </div> -->
         <div class="field">
           <textarea name="part-sequence" id="part-sequence" placeholder="Part sequence"></textarea>
         </div>
+        
       </form>
     </div>
     <div class="actions">

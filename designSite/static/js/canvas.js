@@ -57,6 +57,17 @@ class SDinDesign {
             'unknown'
         ];
     }
+    static get partRoles() {
+        return [
+            'DNA',
+            'RNA',
+            'Promoter',
+            'RBS',
+            'CDS',
+            'Terminator',
+            'Other'
+        ]
+    }
     static isGene(part) {
         return $.inArray(part, [
             'CDS',

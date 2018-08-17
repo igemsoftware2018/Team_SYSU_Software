@@ -209,7 +209,9 @@ def part(request):
             new_part = Parts.objects.create(
                 Name = data['name'],
                 Description = data['description'],
-                Type = data['type']
+                Type = data['type'], 
+                Role = data['role'],
+                Sequence = data['sequence'],
             )
             for x in data['subparts']:
                 SubParts.objects.create(

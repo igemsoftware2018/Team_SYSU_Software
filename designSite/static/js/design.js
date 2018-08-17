@@ -190,6 +190,14 @@ $('#part-type-dropdown')
             selected: i === 0
         }))
     });
+$('#part-role-dropdown')
+    .dropdown({
+        values: SDinDesign.partRoles.map((x, i) => ({
+            name: x,
+            value: x,
+            selected: i === 0
+        }))
+    });
 $('#part-safety-dropdown')
     .dropdown({
         values: SDinDesign.partSafetyLevels.map((x, i) => ({
@@ -640,9 +648,11 @@ $('#add-part-button').on('click', function () {
 $('#add-new-part')
     .on('click', function () {
         let data = {
+            role: $('#part-role-dropdown').dropdown('get value'),
             name: $('#part-name').val(),
             description: $('#part-description').val(),
             type: $('#part-type-dropdown').dropdown('get value'),
+            sequence: $('#part-sequence').val(),
             subparts: []
         };
         $('#new-part-modal').modal('hide');
