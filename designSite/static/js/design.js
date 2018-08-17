@@ -17,6 +17,20 @@ fileReader.onload = () => {
     design.design = JSON.parse(fileReader.result);
 };
 
+$('.left.sidebar').first().sidebar('attach events', '#operation');
+
+$('#share-button').popup({
+    content: 'Share your design'
+});
+
+$('#analysis-button').popup({
+    content: 'Analysis your design'
+});
+
+$('#protocol-button').popup({
+    content: 'Add your Protocol'
+});
+
 $('#upload-button').on('click', function () {
     $('#fileupload').trigger('click');
 }).popup({

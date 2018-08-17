@@ -18,17 +18,11 @@
   <div class="ui fixed menu">
     <div class="ui container">
       <span class="item">
-        <a href="/">
-          <img id="logo" src="/static/img/logo-black.png">
+        <a id="operation">
+          <img src="/static/img/design/menu.png">
         </a>
       </span>
-      <span class="item">
-        <a id="undo-button">
-          <img src="/static/img/design/undo.png">
-        </a>
-        <a id="redo-button">
-          <img src="/static/img/design/redo.png">
-        </a>
+      <!-- <span class="item">
         <a id="open-fav-win">
           <img src="/static/img/design/favorite.png">
         </a>
@@ -42,9 +36,24 @@
           <img src="/static/img/design/export.png">
           <a id="upload-button">
             <img src="/static/img/design/import.png">
-          </a>
-      </span>
+        </a>
+        <a id="share-button">
+          <img src="/static/img/design/share.png">
+        </a>
+        <a id="analysis-button">
+          <img src="/static/img/design/simulate.png">
+        </a>
+        <a id="protocol-button">
+          <img src="/static/img/design/import.png">
+        </a>
+      </span> -->
       <span class="item">
+        <a id="undo-button">
+          <img src="/static/img/design/undo.png">
+        </a>
+        <a id="redo-button">
+          <img src="/static/img/design/redo.png">
+        </a>
         <a id="drag-item">
           <img src="/static/img/design/pointer.png">
         </a>
@@ -74,7 +83,38 @@
           </h4>
         </span>
       </div>
+      <span class="item">
+        <a href="/">
+          <img id="logo" src="/static/img/logo-black.png">
+        </a>
+      </span>
     </div>
+  </div>
+
+  <div class="ui labeled left inline vertical sidebar menu">
+    <a class="item" id="open-fav-win">
+      <img src="/static/img/design/favorite.png">
+    </a>
+    <a class="item" id="load-button">
+      <img src="/static/img/design/load.png">
+    </a>
+    <a class="item" id="save-button">
+      <img src="/static/img/design/save.png">
+    </a>
+    <a class="item" id="export-button">
+      <img src="/static/img/design/export.png">
+      <a class="item" id="upload-button">
+        <img src="/static/img/design/import.png">
+      </a>
+      <a class="item" id="share-button">
+        <img src="/static/img/design/share.png">
+      </a>
+      <a class="item" id="analysis-button">
+        <img src="/static/img/design/simulate.png">
+      </a>
+      <a class="item" id="protocol-button">
+        <img src="/static/img/design/import.png">
+      </a>
   </div>
 
   <!-- Main canvas -->
@@ -169,29 +209,29 @@
   <!-- Component Parts -->
   <div id="components-menu" class="ui bottom fixed menu">
     <a class="item" data-content="Add a DNA">
-        <img src="/static/img/design/other_dna.png">
-        <i>DNA</i>
-      </a>
-      <a class="item" data-content="Add a promoter">
-        <img src="/static/img/design/promoter.png">
-        <i>PRO</i>
-      </a>
-      <a class="item" data-content="Add a CDS">
-        <img src="/static/img/design/cds.png">
-        <i>CDS</i>
-      </a>
-      <a class="item" data-content="Add a RBS">
-        <img src="/static/img/design/rbs.png">
-        <i>RBS</i>
-      </a>
-      <a class="item" data-content="Add a terminator">
-        <img src="/static/img/design/terminator.png">
-        <i>TER</i>
-      </a>
-      <a class="item" data-content="Add a RNA">
-        <img src="/static/img/design/rna.png">
-        <i>RNA</i>
-      </a>
+      <img src="/static/img/design/other_dna.png">
+      <i>DNA</i>
+    </a>
+    <a class="item" data-content="Add a promoter">
+      <img src="/static/img/design/promoter.png">
+      <i>PRO</i>
+    </a>
+    <a class="item" data-content="Add a CDS">
+      <img src="/static/img/design/cds.png">
+      <i>CDS</i>
+    </a>
+    <a class="item" data-content="Add a RBS">
+      <img src="/static/img/design/rbs.png">
+      <i>RBS</i>
+    </a>
+    <a class="item" data-content="Add a terminator">
+      <img src="/static/img/design/terminator.png">
+      <i>TER</i>
+    </a>
+    <a class="item" data-content="Add a RNA">
+      <img src="/static/img/design/rna.png">
+      <i>RNA</i>
+    </a>
   </div>
 
   <!-- Configure component info -->
@@ -342,7 +382,8 @@
     </div>
     <div class="content">
       <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in real world
-        application.</p>
+        application.
+      </p>
     </div>
     <div class="actions">
       <div class="ui red basic cancel inverted button">
