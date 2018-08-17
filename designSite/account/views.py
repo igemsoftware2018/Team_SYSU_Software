@@ -26,9 +26,13 @@ def interest(request):
 def index(request):
     return render(request, 'index.html')
 
+
+@login_required
+def personal_index(request):
+    return render(request, 'personal_index.html')
+
+
 def login_view(request):
-    if request.user.is_authenticated:
-        print("hahahahahah")
     if request.method == "POST":
         # Login action
         form = LoginForm(request.POST)
@@ -62,6 +66,7 @@ def logout_view(request):
 @login_required
 def interest_view(request):
     return render(request, 'interest.html')
+
 
 def register(request):
     if request.method == "POST":
