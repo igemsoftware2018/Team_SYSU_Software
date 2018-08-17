@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
+from django.conf.urls import include
 from design.views import design_views
 
 import account.views
@@ -23,13 +24,13 @@ import account.views
 urlpatterns = [
     path('', account.views.index),
     path('admin/', admin.site.urls),
-    # path('index/', account.views.index),
     url(r'^index/?$', account.views.index),
-    path('design/', design_views.design),
+    url(r'^design/?$', design_views.design),
     url(r'^interest/?$', account.views.interest),
     url(r'^login/?$', account.views.login_view),
     url(r'^logout/?$', account.views.logout_view),
     url(r'^register/?$', account.views.register),
+    path('accounts/', include('account.urls')),
     path('test/', design_views.test),
 ] + [
     # API urls

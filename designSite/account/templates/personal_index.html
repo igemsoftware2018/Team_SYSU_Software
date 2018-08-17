@@ -1,8 +1,8 @@
 <html>
 
 <body>
-    This is the index page.
     {% if user.is_authenticated %}
+        <p>{{ user.email }}</p>
         You've log in.
         <button id="logout">Logout</button>
     {% else %}
