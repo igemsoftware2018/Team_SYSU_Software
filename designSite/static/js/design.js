@@ -44,26 +44,26 @@ $('#fileupload').on('change', function () {
     fileReader.readAsText($('#fileupload')[0].files[0]);
 });
 
-$('#components-menu a').on('click', function (e) {
-    let role = $(this).children("i").eq(0).text();
+$('#components-menu a').on('click', function () {
+    let role = $(this).children('i').eq(0).text();
     $('input[name="component-role"]').val(role);
     $('#component-info-modal').modal({
         onHide: function () {
-            $('#component-info-form div input').val("");
-            $('#component-info-form div textarea').val("");
+            $('#component-info-form div input').val('');
+            $('#component-info-form div textarea').val('');
         }
     }).modal('show');
 }).popup();
 
-$('#add-new-component').on('click', function (e) {
-    let data = {
+$('#add-new-component').on('click', function () {
+    /*let data = {
         role: $('input[name="component-role"]').val(),
         id: $('input[name="component-id"]').val(),
         name: $('input[name="component-name"]').val(),
         version: $('input[name="component-version"]').val(),
         description: $('#component-description').val(),
         sequence: $('#component-sequence').val()
-    };
+    };*/
     // console.log(data);
     $('#component-info-modal').modal('hide');
 });
@@ -96,10 +96,10 @@ $('#save-circuit').on('click', () => {
     $.post('/api/circuit', postData, (v) => {
         if (v.status === 1)
             $('.ui.dimmer:first .loader')
-            .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
+                .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
             $('.ui.dimmer:first .loader')
-            .text('Failed, closing...');
+                .text('Failed, closing...');
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
         }, 1000);
@@ -669,10 +669,10 @@ $('#add-new-part')
         }, (data) => {
             if (data.success === true)
                 $('.ui.dimmer:first .loader')
-                .text('Success, closing...');
+                    .text('Success, closing...');
             else
                 $('.ui.dimmer:first .loader')
-                .text('Failed, closing...');
+                    .text('Failed, closing...');
             setTimeout(() => {
                 $('.ui.dimmer:first').dimmer('hide');
             }, 1000);
@@ -974,7 +974,7 @@ $('#interactive-button')
         content: 'Check predicted interactions of parts.'
     });
 
-let tmp;
+//let tmp;
 
 $('#delete-item')
     .on('click', () => {
