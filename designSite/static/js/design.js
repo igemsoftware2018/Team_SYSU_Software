@@ -23,8 +23,12 @@ $('#share-button').popup({
     content: 'Share your design'
 });
 
-$('#analysis-button').popup({
-    content: 'Analysis your design'
+$('#sbol-json-button').popup({
+    content: 'Import a SBOL file as your design'
+});
+
+$('#json-sbol-button').popup({
+    content: 'Export your design as a SBOL file'
 });
 
 $('#protocol-button').popup({
@@ -606,17 +610,17 @@ function loadFavWin() {
 loadFavWin();
 
 // Toolbox
-$('#toolbox')
-    .on('mouseenter', function () {
-        $(this).css({
-            opacity: 0.9
-        });
-    })
-    .on('mouseleave', function () {
-        $(this).css({
-            opacity: 0.2
-        });
-    });
+// $('#toolbox')
+//     .on('mouseenter', function () {
+//         $(this).css({
+//             opacity: 0.9
+//         });
+//     })
+//     .on('mouseleave', function () {
+//         $(this).css({
+//             opacity: 0.2
+//         });
+//     });
 
 $('.ui.dimmer:first').dimmer({
     closable: false
@@ -627,13 +631,13 @@ function initPositionSize() {
     $('#fav-win').css({
         height: $(this).height()
     });
-    $('#toolbox').css({
-        bottom: 100,
-        left: ($('#canvas').width() - $('#toolbox').width()) / 2,
-    });
-    $('#toolbox>.content').css({
-        height: $('#toolbox>.content').outerHeight() + 1
-    });
+    // $('#toolbox').css({
+    //     bottom: 100,
+    //     left: ($('#canvas').width() - $('#toolbox').width()) / 2,
+    // });
+    // $('#toolbox>.content').css({
+    //     height: $('#toolbox>.content').outerHeight() + 1
+    // });
 }
 initPositionSize();
 

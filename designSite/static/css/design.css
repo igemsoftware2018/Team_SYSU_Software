@@ -134,33 +134,38 @@
 
 /* Toolbox */
 #toolbox {
-  position: absolute;
-  border-radius: 10px;
-  background-color: #404040;
-  z-index: 15;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  opacity: 0.3;
-  transition: opacity 0.2s ease, left 0.2s ease;
+  background-color: #e2e7ea;
+  /* padding: 0.5rem 1rem 0.5rem 1rem; */
+  border: none;
+  opacity: 1;
 }
-#toolbox a, #toolbox div {
-  margin-right: 1rem;
+
+#toolbox a>img, #toolbox div>img {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 #toolbox div>img.active {
   filter: drop-shadow(0px 0px 5px rgb(255, 255, 255));
 }
-#toolbox a:last-child {
+/* #connection-dropdown-button {
+  max-height: 35px;
+} */
+/* #toolbox a:last-child {
   margin-right: 0;
-}
-#toolbox img {
+} */
+/* #toolbox img {
   width: 2.5rem;
   height: 2.5rem;
   cursor: pointer;
-}
-#toolbox>i {
+} */
+/* #toolbox>i {
   margin: 0 0.1rem;
   font-size: 3rem;
   line-height: 1;
-}
+} */
 
 body {
   overflow: hidden;

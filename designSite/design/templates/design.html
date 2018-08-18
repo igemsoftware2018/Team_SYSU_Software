@@ -5,7 +5,7 @@
 <head>
   <title>Design - S-Din</title>
 
-  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <!-- <link rel="shortcut icon" href="/static/img/favicon.png"> -->
   <link rel="stylesheet" href="/static/css/fontsize.css">
   <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
   <link rel="stylesheet" href="/static/css/design.css">
@@ -22,31 +22,7 @@
           <img src="/static/img/design/menu.png">
         </a>
       </span>
-      <!-- <span class="item">
-        <a id="open-fav-win">
-          <img src="/static/img/design/favorite.png">
-        </a>
-        <a id="load-button">
-          <img src="/static/img/design/load.png">
-        </a>
-        <a id="save-button">
-          <img src="/static/img/design/save.png">
-        </a>
-        <a id="export-button">
-          <img src="/static/img/design/export.png">
-          <a id="upload-button">
-            <img src="/static/img/design/import.png">
-        </a>
-        <a id="share-button">
-          <img src="/static/img/design/share.png">
-        </a>
-        <a id="analysis-button">
-          <img src="/static/img/design/simulate.png">
-        </a>
-        <a id="protocol-button">
-          <img src="/static/img/design/import.png">
-        </a>
-      </span> -->
+
       <span class="item">
         <a id="undo-button">
           <img src="/static/img/design/undo.png">
@@ -60,10 +36,54 @@
         <a id="drag-canvas">
           <img src="/static/img/design/move.png">
         </a>
-        <a id="delete-item">
-          <img src="/static/img/design/delete.png">
+        <a id="clear-all-button">
+          <img src="/static/img/design/clearall.png">
         </a>
       </span>
+
+      <div id="toolbox" class="ui menu">
+        <span class="item">
+          <a id="add-part-button">
+            <img src="/static/img/design/plus.png">
+          </a>
+        
+          <div id="connection-dropdown" class="ui dropdown">
+            <img id="connection-dropdown-button" src="/static/img/design/connection.png">
+            <div class="menu">
+              <div class="item" data-value="promotion">
+                <i class="blue right arrow icon"></i>
+                Add a promotion
+              </div>
+              <div class="item" data-value="inhibition">
+                <i class="red rotated minus icon"></i>
+                Add a inhibition
+              </div>
+              <div class="ui divider"></div>
+              <div class="item" data-value="delete">
+                <i class="red remove icon"></i>
+                Delete a connection
+              </div>
+            </div>
+          </div>
+
+          <a id="delete-item">
+            <img src="/static/img/design/delete.png">
+          </a>
+
+          <a id="interactive-button">
+            <img src="/static/img/design/interact.png">
+          </a>
+
+          <a id="simulation-button">
+            <img src="/static/img/design/simulate.png">
+          </a>
+
+          <a id="protocol-button">
+            <img src="/static/img/design/import.png">
+          </a>
+        </span>
+      </div>
+
       <span class="item">
         <a id="zoom-in">
           <img src="/static/img/design/zoomin.png">
@@ -76,6 +96,7 @@
           <div class="default text">Ratio</div>
         </div>
       </span>
+
       <div class="right menu">
         <span class="item">
           <h4 id="safety" class="ui green header">Low risk
@@ -103,18 +124,19 @@
     </a>
     <a class="item" id="export-button">
       <img src="/static/img/design/export.png">
-      <a class="item" id="upload-button">
-        <img src="/static/img/design/import.png">
-      </a>
-      <a class="item" id="share-button">
-        <img src="/static/img/design/share.png">
-      </a>
-      <a class="item" id="analysis-button">
-        <img src="/static/img/design/simulate.png">
-      </a>
-      <a class="item" id="protocol-button">
-        <img src="/static/img/design/import.png">
-      </a>
+    </a>
+    <a class="item" id="upload-button">
+      <img src="/static/img/design/import.png">
+    </a>
+    <a class="item" id="share-button">
+      <img src="/static/img/design/share.png">
+    </a>
+    <a class="item" id="sbol-json-button">
+      <img src="/static/img/design/import.png">
+    </a>
+    <a class="item" id="json-sbol-button">
+      <img src="/static/img/design/export.png">
+    </a>
   </div>
 
   <!-- Main canvas -->
@@ -170,40 +192,6 @@
     </div>
     <div class="content">
     </div>
-  </div>
-
-  <!-- Toolbox -->
-  <div id="toolbox">
-    <a id="add-part-button">
-      <img src="/static/img/design/plus.png">
-    </a>
-    <div id="connection-dropdown" class="ui dropdown">
-      <img id="connection-dropdown-button" src="/static/img/design/connection.png">
-      <div class="menu">
-        <div class="item" data-value="promotion">
-          <i class="blue right arrow icon"></i>
-          Add a promotion
-        </div>
-        <div class="item" data-value="inhibition">
-          <i class="red rotated minus icon"></i>
-          Add a inhibition
-        </div>
-        <div class="ui divider"></div>
-        <div class="item" data-value="delete">
-          <i class="red remove icon"></i>
-          Delete a connection
-        </div>
-      </div>
-    </div>
-    <a id="clear-all-button">
-      <img src="/static/img/design/clearall.png">
-    </a>
-    <a id="interactive-button">
-      <img src="/static/img/design/interact.png">
-    </a>
-    <a id="simulation-button">
-      <img src="/static/img/design/simulate.png">
-    </a>
   </div>
 
   <!-- Component Parts -->
