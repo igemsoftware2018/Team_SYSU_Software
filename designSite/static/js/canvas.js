@@ -25,6 +25,8 @@
  *
  */
 
+/* global updateSafety selectedPart setPartPanel */
+/* exported SDinDesign */
 class SDinDesign {
     static get partSafetyLevels() {
         return [
@@ -66,7 +68,7 @@ class SDinDesign {
             'CDS',
             'Terminator',
             'Other'
-        ]
+        ];
     }
     static isGene(part) {
         return $.inArray(part, [
@@ -347,7 +349,6 @@ class SDinDesign {
             .appendTo(device)
             .addClass('bone');
 
-        let that = this;
         if (this._option.addable) {
         // Creating dropper for adding subparts
             for (let i = 0; i <= data.parts.length; ++i) {
@@ -681,8 +682,8 @@ class SDinDesign {
         let n = parts.length;
         let res = Array(n).fill(0).map(() => Array(n).fill(0));
         let partName = parts.map((p) => p.name);
-        design.lines.forEach((v, i) => {
-            let type = v.type;
+        design.lines.forEach((v, _) => {
+            let type = v.type; // eslint-disable-line no-unused-vars
             // Backtrace CDS
             let start = this.traceCDS(partDic[v.start], design.lines, partDic);
             let end = this.traceCDS(partDic[v.end], design.lines, partDic);
