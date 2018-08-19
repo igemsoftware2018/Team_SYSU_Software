@@ -24,23 +24,116 @@ $('#protocol-button').popup({
 });
 
 // Upload file
-let fileReader = new FileReader();
-fileReader.onload = () => {
-    // TODO: transform new json to old json
-    design.design = JSON.parse(fileReader.result);
-};
+function new_to_old(data) {
+    var Lines = [],
+        Devices = [],
+        Parts = [];
+    var cid_dict = {};
+    $.each(data.components, function (index, component) {
+        cid_dict[component.name] = design._nextPartCid;
+        design._nextPartCid = design._nextPartCid + 1;
+        $.ajax({
+            type: 'GET',
+            url: '/api/parts?name=' + component.name,
+            async: false,
+            success: function (res) {
+                console.log(res);
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/part?id=' + res.parts[0].id,
+                    async: false,
+                    success: function (res2) {
+                        let temp = {
+                            id: res.parts[0].id,
+                            cid: cid_dict[component.name],
+                            name: component.name,
+                            description: component.description,
+                            type: res2.type,
+                            X: 0,
+                            Y: 0
+                        };
+                        Parts.push(temp);
+                    }
+                });
+            }
+        });
+    });
+    $.each(data.stimulations, function (index, stimulation) {
+        let temp = {
+            start: cid_dict[stimulation.stimulator],
+            end: cid_dict[stimulation.other],
+            type: 'stimulation'
+        };
+        Lines.push(temp);
+    });
+    $.each(data.inhibitions, function (index, inhibition) {
+        let temp = {
+            start: cid_dict[inhibition.stimulator],
+            end: cid_dict[inhibition.other],
+            type: 'inhibition'
+        };
+        Lines.push(temp);
+    });
+    $.each(data.lines, function (index, line) {
+        let Subparts = [];
+        let x = -214;
+        let y = -180;
+        $.each(line.structure, function (index, x) {
+            Subparts.push(cid_dict[x]);
+        });
+        let temp = {
+            subparts: Subparts,
+            X: x,
+            Y: y + index * 110
+        }
+        Devices.push(temp);
+    });
+    let result = {
+        id: -1,
+        combines: [],
+        lines: Lines,
+        devices: Devices,
+        parts: Parts
+    };
+    return result;
+}
 
+let JsonFileReader = new FileReader();
+JsonFileReader.onload = () => {
+    // TODO: transform new json to old json
+    design.design = JSON.parse(JsonFileReader.result);
+};
+let sbolFileReader = new FileReader();
+sbolFileReader.onload = () => {
+    // console.log(sbolFileReader.result);
+    let data = {
+        data: sbolFileReader.result
+    };
+    $.post('/api/sbol_json', data, function (v) {
+        console.log(v["data"]);
+        // $('#data').text(JSON.stringify(JSON.parse(v["data"]), null, '\t'));
+        let temp = new_to_old(JSON.parse(v["data"]));
+        console.log(temp);
+        design.design = temp;
+    });
+};
 $('#upload-button').on('click', function () {
     $('#fileupload').trigger('click');
 }).popup({
     content: 'Import a JSON file as design.'
 });
 $('#fileupload').on('change', function () {
-    fileReader.readAsText($('#fileupload')[0].files[0]);
+    JsonFileReader.readAsText($('#fileupload')[0].files[0]);
 });
 // TODO: transform sbol to new json, new json to old json
-$('#sbol-json-button').popup({
+$('#sbol-json-button').on('click', function () {
+    $('#sbolfileupload').trigger('click');
+}).popup({
     content: 'Import a SBOL file as your design'
+});
+$('#sbolfileupload').on('change', function() {
+    let data = $('input[name="sbolfiles[]"]')[0].files[0];
+    sbolFileReader.readAsText(data);
 });
 
 //export file
@@ -129,24 +222,27 @@ $('#export-button').on('click', () => {
     content: 'Export your design as a JSON.'
 });
 
-// TODO: transform old json to new json and download sbol file
-$('#json-sbol-button').on('click', function() {
-    let data = { data : JSON.stringify(old_to_new(design.design))};
+$('#json-sbol-button').on('click', function () {
+    let data = {
+        data: JSON.stringify(old_to_new(design.design))
+    };
     console.log(data);
-    $.post('/api/sbol_doc', data, function(res) {
+    $.post('/api/sbol_doc', data, function (res) {
         console.log(res);
         let filename = "yours.xml";
-        var blob = new Blob([(new XMLSerializer).serializeToString(res)], { type: 'application/xml' });
+        var blob = new Blob([(new XMLSerializer).serializeToString(res)], {
+            type: 'application/xml'
+        });
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = filename;
-  
+
         document.body.appendChild(link);
-  
+
         link.click();
-  
+
         document.body.removeChild(link);
-      });
+    });
 }).popup({
     content: 'Export your design as a SBOL file'
 });

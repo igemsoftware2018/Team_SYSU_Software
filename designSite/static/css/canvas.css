@@ -26,6 +26,10 @@ div.SDinDesign-subpartDropper {
   stroke: blue;
   fill: blue;
 }
+.stimulation-connection>path {
+  stroke: blue;
+  fill: blue;
+}
 .inhibition-connection>path {
   stroke: red;
   fill: red;

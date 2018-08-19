@@ -466,7 +466,7 @@ class SDinDesign {
 
         // Arrow
         let arrowSetting;
-        if (data.type === 'promotion' || data.type === 'combine')
+        if (data.type === 'promotion' || data.type === 'combine' || data.type === 'stimulation')
             arrowSetting = ['Arrow', { foldback: 0.01, width: 15, location: 1 }];
         else
             arrowSetting = ['Diamond', { foldback: 1, width: 30, length: 1, location: 1 }];
@@ -635,7 +635,7 @@ class SDinDesign {
 
     traceCDS(p, lines, partDic) {
         if (p.type !== 'CDS')
-            return [{ cid: p.cid, type: 'promotion' }];
+            return [{ cid: p.cid, type: 'stimulation' }]; //promotion
         let ans = lines.reduce((a, l) => {
             if (l.start === p.cid)
                 a.push(partDic[l.end]);
@@ -671,7 +671,7 @@ class SDinDesign {
             newLines.push({
                 start: p.cid,
                 end: maxCid,
-                type: 'promotion'
+                type: 'stimulation' // promotion
             });
         });
         design.lines = design.lines.concat(newLines);

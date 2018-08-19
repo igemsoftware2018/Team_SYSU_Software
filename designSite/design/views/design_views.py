@@ -461,7 +461,7 @@ def circuit(request):
                     CircuitLines.objects.get(
                         Start = cids[x['start']],
                         End = cids[x['end']],
-                        Type = x['type'] # TODO change promotion to stimulation
+                        Type = x['type']
                     )
                 except:
                     CircuitLines.objects.create(
@@ -930,12 +930,17 @@ def get_sbol_json(request):
                     line_comp = {}
                     for comp in temp.components:
                         line_comp[str(comp)] = doc.getComponentDefinition(comp.definition).displayId
-                    for index, constraint in enumerate(temp.sequenceConstraints):
-                        if (index == 0):
-                            line['structure'].append(line_comp[constraint.subject])
-                            line['structure'].append(line_comp[constraint.object])
-                        else:
-                            line['structure'].append(line_comp[constraint.object])
+                    if temp.sequenceConstraints:
+                        for index, constraint in enumerate(temp.sequenceConstraints):
+                            if (index == 0):
+                                line['structure'].append(line_comp[constraint.subject])
+                                line['structure'].append(line_comp[constraint.object])
+                            else:
+                                line['structure'].append(line_comp[constraint.object])
+                    else:
+                        for comp in temp.components:
+                            line['structure'].append(doc.getComponentDefinition(comp.definition).displayId)
+
                     data['lines'].append(line)
             elif 'ModuleDefinition' in str(x):
                 temp = doc.getModuleDefinition(str(x))

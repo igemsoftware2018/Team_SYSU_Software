@@ -14,6 +14,7 @@
 
 <body>
   <input id="fileupload" type="file" name="files[]" hidden> {% csrf_token %}
+  <input id="sbolfileupload" type="file" name="sbolfiles[]" hidden> {% csrf_token %}
   <!-- Toolbar -->
   <div class="ui fixed menu">
     <div class="ui container">
@@ -50,9 +51,9 @@
           <div id="connection-dropdown" class="ui dropdown">
             <img id="connection-dropdown-button" src="/static/img/design/connection.png">
             <div class="menu">
-              <div class="item" data-value="promotion">
+              <div class="item" data-value="stimulation">
                 <i class="blue right arrow icon"></i>
-                Add a promotion
+                Add a stimulation
               </div>
               <div class="item" data-value="inhibition">
                 <i class="red rotated minus icon"></i>
