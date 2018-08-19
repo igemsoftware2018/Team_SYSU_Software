@@ -235,7 +235,9 @@ def part(request):
                 'id': part.id,
                 'name': part.Name,
                 'description': part.Description,
-                'type': part.Type}
+                'type': part.Type,
+                'sequence': part.Sequence,
+                'role': part.Role}
             sub_query = SubParts.objects.filter(parent = part)
             part_dict['subparts'] = [{
                 'id': x.child.id,
@@ -582,7 +584,8 @@ def get_sbol_doc(request):
             'Promoter': SO_PROMOTER,
             'RBS': SO_RBS,
             'CDS': SO_CDS,
-            'Terminator': SO_TERMINATOR
+            'Terminator': SO_TERMINATOR,
+            'sequenceFeature': 'http://identifiers.org/so/SO:0000110',
         }
 
         activity = Activity(data['circuit']['name'])
@@ -593,11 +596,11 @@ def get_sbol_doc(request):
         # load components
         components = {}
         for component in data['components']:
-            temp = ComponentDefinition(component['id'])
+            temp = ComponentDefinition(component['name'])
             temp.roles = roles[component['role']]
             temp.description = component['description']
-            temp.sequence = Sequence(component['id'], component['sequence'])
-            components[component['id']] = temp
+            temp.sequence = Sequence(component['name'], component['sequence'])
+            components[component['name']] = temp
             doc.addComponentDefinition(temp)
 
         # load line structure
@@ -614,14 +617,14 @@ def get_sbol_doc(request):
         inh_fcs = {}
         com_fcs = {}
 
-        # promotion
-        if 'promotions' in data.keys():
-            proModule = ModuleDefinition('promotion_module')
+        # stimulation
+        if 'stimulations' in data.keys():
+            proModule = ModuleDefinition('stimulation_module')
             doc.addModuleDefinition(proModule)
 
-            for index, promotion in enumerate(data['promotions']):
-                stimulatorName = promotion['stimulator']
-                otherName = promotion['other']
+            for index, stimulation in enumerate(data['stimulations']):
+                stimulatorName = stimulation['stimulator']
+                otherName = stimulation['other']
                 
                 if not stimulatorName in pro_fcs.keys():
                     stimulator_fc = proModule.functionalComponents.create(stimulatorName)
@@ -637,7 +640,7 @@ def get_sbol_doc(request):
                     other_fc.direction = SBOL_DIRECTION_IN_OUT
                     pro_fcs[otherName] = other_fc
 
-                proInteraction = proModule.interactions.create('promotion_' + str(index))
+                proInteraction = proModule.interactions.create('stimulation_' + str(index))
                 proInteraction.types = SBO_STIMULATION
 
                 stimulator_participation = proInteraction.participations.create(stimulatorName)

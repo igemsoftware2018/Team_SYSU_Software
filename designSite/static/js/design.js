@@ -12,28 +12,23 @@ if (designId !== '') {
 } else
     design = new SDinDesign('#canvas');
 
-let fileReader = new FileReader();
-fileReader.onload = () => {
-    design.design = JSON.parse(fileReader.result);
-};
-
 $('.left.sidebar').first().sidebar('attach events', '#operation');
 
+// TODO: share button
 $('#share-button').popup({
     content: 'Share your design'
 });
-
-$('#sbol-json-button').popup({
-    content: 'Import a SBOL file as your design'
-});
-
-$('#json-sbol-button').popup({
-    content: 'Export your design as a SBOL file'
-});
-
+// TODO: protocol button
 $('#protocol-button').popup({
     content: 'Add your Protocol'
 });
+
+// Upload file
+let fileReader = new FileReader();
+fileReader.onload = () => {
+    // TODO: transform new json to old json
+    design.design = JSON.parse(fileReader.result);
+};
 
 $('#upload-button').on('click', function () {
     $('#fileupload').trigger('click');
@@ -42,6 +37,118 @@ $('#upload-button').on('click', function () {
 });
 $('#fileupload').on('change', function () {
     fileReader.readAsText($('#fileupload')[0].files[0]);
+});
+// TODO: transform sbol to new json, new json to old json
+$('#sbol-json-button').popup({
+    content: 'Import a SBOL file as your design'
+});
+
+//export file
+function old_to_new(old) {
+    var Components = [];
+    var Lines = [];
+    var Stimulations = [];
+    var Inhibitions = [];
+    var part_dict = {};
+    $.each(old.parts, function (index, part) {
+        $.ajax({
+            type: 'GET',
+            url: '/api/part?id=' + part.id,
+            async: false,
+            success: function (res) {
+                let Role = res.role;
+                let Sequence = res.sequence;
+                let temp = {
+                    role: Role,
+                    id: part.id,
+                    name: part.name,
+                    version: '1',
+                    description: part.description,
+                    sequence: Sequence
+                };
+                Components.push(temp);
+            }
+        });
+        part_dict[part.cid] = part.name;
+    });
+    $.each(old.devices, function (index, device) {
+        let temp = {
+            name: 'gene_' + index,
+            structure: []
+        };
+        $.each(device.subparts, function (index, subpart) {
+            temp.structure.push(part_dict[subpart]);
+        });
+        Lines.push(temp);
+    });
+    $.each(old.lines, function (index, line) {
+        if (line.type == 'inhibition') {
+            let temp = {
+                'inhibitor': part_dict[line.start],
+                'other': part_dict[line.end]
+            };
+            Inhibitions.push(temp);
+        } else if (line.type == 'promotion' || line.type == 'stimulation') {
+            let temp = {
+                'stimulator': part_dict[line.start],
+                'other': part_dict[line.end]
+            };
+            Stimulations.push(temp);
+        }
+    });
+    let data = {
+        components: Components,
+        lines: Lines,
+        stimulations: Stimulations,
+        inhibitions: Inhibitions,
+        circuit: {
+            id: old.id,
+            name: old.name === undefined ? 'unnamed' : old.name,
+            description: ''
+        }
+    };
+    return data;
+}
+
+function createJsonDownload(fileName, content) {
+    let aLink = $('<a></a>');
+    aLink
+        .attr('download', fileName)
+        .attr('href', `data:application/json;base64,${btoa(JSON.stringify(content))}`);
+    aLink[0].click();
+}
+$('#export-button').on('click', () => {
+    let filename;
+    if (design.name === undefined || design.name === '')
+        filename = 'unnamed_design.json';
+    else
+        filename = `${design.name}.json`;
+    // TODO: transform old json to new json
+    createJsonDownload(filename, design.design);
+}).popup({
+    content: 'Export your design as a JSON.'
+});
+
+// TODO: transform old json to new json and download sbol file
+$('#json-sbol-button').on('click', function() {
+    let data = { data : JSON.stringify(old_to_new(design.design))};
+    console.log(data);
+    $.post('/api/sbol_doc', data, function(res) {
+        console.log(res);
+        let filename = "yours.xml";
+        var blob = new Blob([(new XMLSerializer).serializeToString(res)], { type: 'application/xml' });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename;
+  
+        document.body.appendChild(link);
+  
+        link.click();
+  
+        document.body.removeChild(link);
+      });
+}).popup({
+    content: 'Export your design as a SBOL file'
 });
 
 $('#components-menu a').on('click', function () {
@@ -96,10 +203,10 @@ $('#save-circuit').on('click', () => {
     $.post('/api/circuit', postData, (v) => {
         if (v.status === 1)
             $('.ui.dimmer:first .loader')
-                .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
+            .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
             $('.ui.dimmer:first .loader')
-                .text('Failed, closing...');
+            .text('Failed, closing...');
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
         }, 1000);
@@ -669,23 +776,16 @@ $('#add-new-part')
         }, (data) => {
             if (data.success === true)
                 $('.ui.dimmer:first .loader')
-                    .text('Success, closing...');
+                .text('Success, closing...');
             else
                 $('.ui.dimmer:first .loader')
-                    .text('Failed, closing...');
+                .text('Failed, closing...');
             setTimeout(() => {
                 $('.ui.dimmer:first').dimmer('hide');
             }, 1000);
         });
     });
 
-function createJsonDownload(fileName, content) {
-    let aLink = $('<a></a>');
-    aLink
-        .attr('download', fileName)
-        .attr('href', `data:application/json;base64,${btoa(JSON.stringify(content))}`);
-    aLink[0].click();
-}
 
 function createPngDownload(fileName, canvas) {
     let aLink = $('<a></a>');
@@ -694,16 +794,6 @@ function createPngDownload(fileName, canvas) {
         .attr('href', canvas.toDataURL('image/png'));
     aLink[0].click();
 }
-$('#export-button').on('click', () => {
-    let filename;
-    if (design.name === undefined || design.name === '')
-        filename = 'unnamed_design.json';
-    else
-        filename = `${design.name}.json`;
-    createJsonDownload(filename, design.design);
-}).popup({
-    content: 'Export your design as a JSON.'
-});
 
 $('#save-button')
     .on('click', function () {});

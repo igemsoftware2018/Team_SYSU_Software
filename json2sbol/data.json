@@ -86,7 +86,7 @@
         "name": "test_gene",
         "description": "test circuit"
     },
-    "promotions": [{
+    "stimulations": [{
             "stimulator": "I14032",
             "other": "I14031"
         },
