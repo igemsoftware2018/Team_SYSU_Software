@@ -30,7 +30,7 @@ urlpatterns = [
     path('login/', account.views.login_view),
     path('register/', account.views.register),
     url(r'^logout/?$', account.views.logout_view),
-    path('accounts/', include('account.urls')),
+    path('account/', include('account.urls')),
     path('test/', design_views.test),
 ] + [
     # API urls

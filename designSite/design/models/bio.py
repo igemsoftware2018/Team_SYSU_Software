@@ -4,6 +4,13 @@ from __future__ import unicode_literals
 from django.db import models
 
 class Parts(models.Model):
+
+    # User who add this part.
+    Username = models.CharField(max_length = 32, default="Unknown")
+    
+    # Is this a public part?
+    IsPublic = models.BooleanField(default = True)
+
     Role = models.CharField(max_length = 20, default = "sequenceFeature")
     Name = models.CharField(max_length = 50, unique = True, db_index = True)
     secondName = models.TextField(default="Unknow")

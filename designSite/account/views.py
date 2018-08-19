@@ -43,7 +43,6 @@ def login_view(request):
             user = authenticate(username = username, password = password)
             if user is not None:
                 login(request, user)
-                print("Login successfully!")
                 messages.success(request, "Login successfully!")
                 next_url = request.POST.get('next')
                 if next_url:

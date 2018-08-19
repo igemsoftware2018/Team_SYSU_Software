@@ -7,6 +7,7 @@ from sbol import *
 
 import json
 from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
 
 # from design.models import *
 from design.models.bio import *
@@ -33,6 +34,7 @@ All response contains a status in json
 
 # Basic design views
 
+@login_required
 def design(request):
     return render(request, 'design.html')
 
@@ -125,7 +127,7 @@ def part_favorite(request):
 
 
 # Part related views
-
+@login_required
 def parts(request):
     '''
     GET method with param:
@@ -142,10 +144,14 @@ def parts(request):
         return JsonResponse({ 'success': False })
 
     query_set = Parts.objects.filter(Name__contains = query_name)
-    parts = [{
-        'id': x.id,
-        'name': x.Name} for x in query_set]
-    parts = parts[:50]
+
+    parts = []
+    for x in query_set:
+        if x.IsPublic == 0 or x.Useranme == request.user.username:
+            parts.append({'id': x.id, 'name': "%s (%s)" % (x.Name, x.Username)})
+        if len(parts) > 50: 
+            break
+
 
     return JsonResponse({
         'success': True,
@@ -172,7 +178,7 @@ def plasm_part(request):
             'seq': 'No sequence found! Try another part name.'
         })
 
-
+@login_required
 def part(request):
     '''
     GET method with param:
@@ -205,8 +211,11 @@ def part(request):
     '''
     if request.method == 'POST':
         try:
+            username = request.user.username
             data = json.loads(request.POST['data'])
             new_part = Parts.objects.create(
+                Username = username,
+                IsPublic = False,
                 Name = data['name'],
                 Description = data['description'],
                 Type = data['type'], 
@@ -226,7 +235,6 @@ def part(request):
             return JsonResponse({
                 'success': False
             })
-
     else:
         try:
             query_id = request.GET.get('id')
