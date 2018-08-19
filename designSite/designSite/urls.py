@@ -27,9 +27,9 @@ urlpatterns = [
     url(r'^index/?$', account.views.index),
     url(r'^design/?$', design_views.design),
     url(r'^interest/?$', account.views.interest),
-    url(r'^login/?$', account.views.login_view),
+    path('login/', account.views.login_view),
+    path('register/', account.views.register),
     url(r'^logout/?$', account.views.logout_view),
-    url(r'^register/?$', account.views.register),
     path('accounts/', include('account.urls')),
     path('test/', design_views.test),
 ] + [

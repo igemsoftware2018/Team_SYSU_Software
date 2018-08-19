@@ -25,6 +25,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
+    username = models.CharField(max_length = 32, unique = True)
     email = models.CharField(max_length = 32, unique = True)
     org = models.CharField(max_length = 100)
     igem = models.CharField(max_length = 100)
@@ -34,7 +35,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     # Fields
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELD = ['org', 'igem']
 
     def get_full_name(self):

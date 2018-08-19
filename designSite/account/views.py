@@ -37,10 +37,10 @@ def login_view(request):
         # Login action
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            print(email, password)
-            user = authenticate(username = email, password = password)
+            print(username, password)
+            user = authenticate(username = username, password = password)
             if user is not None:
                 login(request, user)
                 print("Login successfully!")
@@ -70,16 +70,16 @@ def interest_view(request):
 
 def register(request):
     if request.method == "POST":
-        print("REQUEST:")
-        print(request)
         form = RegisterForm(request.POST)
         if form.is_valid():
             try:
-                user = User.objects.create_user(email = form.cleaned_data["email"],
-                        password = form.cleaned_data["password"],
-                        org = form.cleaned_data["org"],
-                        igem = form.cleaned_data["igem"]
-                        )
+                user = User.objects.create_user(
+                    username = form.cleaned_data['username'],
+                    email = form.cleaned_data["email"],
+                    password = form.cleaned_data["password"],
+                    org = form.cleaned_data["org"],
+                    igem = form.cleaned_data["igem"]
+                )
                 login(request, user)
                 messages.success(request, "Register successfully!")
                 return redirect('/index')

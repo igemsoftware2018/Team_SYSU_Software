@@ -15,11 +15,11 @@
   </div>
   <div class="content">
     <div class="ui center aligned container">
-      <form class="ui form" id="login-form" method="POST" action="/login">
+      <form class="ui form" id="login-form" method="POST" action="/login/">
         {% if request.GET.next %}
         <input type="text" name="next" value="{{ request.GET.next }}" hidden> {% endif %} {% csrf_token %}
         <div class="field">
-          <input type="text" id="email" name="email" placeholder="Email">
+          <input type="text" id="username" name="username" placeholder="Username">
         </div>
         <div class="field">
           <input type="password" id="password" name="password" placeholder="Password">

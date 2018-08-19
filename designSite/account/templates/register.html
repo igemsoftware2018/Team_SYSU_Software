@@ -38,8 +38,11 @@
         </div>
         <div class="content">
           <div class="ui center aligned container">
-            <form class="ui form" action="/register" method="POST">
+            <form class="ui form" action="/register/" method="POST">
               {% csrf_token %}
+              <div class="field">
+                <input type="text" id="username" name="username" placeholder="Username">
+              </div>
               <div class="field">
                 <input type="text" id="email" name="email" placeholder="Email">
               </div>

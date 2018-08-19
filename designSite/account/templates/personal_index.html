@@ -2,6 +2,8 @@
 
 <body>
     {% if user.is_authenticated %}
+        <p>{{ user.username }}</p>
+        <br>
         <p>{{ user.email }}</p>
         You've log in.
         <button id="logout">Logout</button>

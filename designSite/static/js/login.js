@@ -1,13 +1,13 @@
 $('#login-form')
     .form({
         fields: {
-            email: ['email', 'empty'],
+            username: ['empty'],
             password: ['empty']
         }
     });
 $('#register-button')
     .on('click', function() {
-        window.location.href = '/register';
+        window.location.href = '/register/';
     });
 $('#login-button')
     .on('click', function() {
