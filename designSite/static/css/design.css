@@ -5,22 +5,27 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .menu a.active>img {
   filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.7));
   transition: all 0.2s ease;
 }
+
 #operation>img {
   margin-right: 0;
 }
+
 #logo {
   height: 1.75rem;
   width: auto
 }
+
 #safety>img {
   margin-left: 1rem;
   height: 2rem;
   width: 2rem;
 }
+
 .window {
   position: absolute;
   border: 1px solid grey;
@@ -28,14 +33,18 @@
   background-color: #edf3fa;
   z-index: 10;
 }
-.window>.nav, .window>.content {
+
+.window>.nav,
+.window>.content {
   width: 100%;
 }
+
 .window>.nav {
   padding: 0.5rem;
   height: 2rem;
   border-bottom: 1px solid;
 }
+
 .window>.nav>i {
   position: absolute;
   top: 0.5rem;
@@ -43,32 +52,39 @@
   font-size: 1rem;
   line-height: 1rem;
 }
+
 .window>.content {
   padding: 1rem;
   height: 100%;
 }
 
 /* Part panel */
+
 #part-panel {
   width: 300px;
   top: 100px;
   right: 20px;
   font-size: 1rem;
 }
+
 #part-info-des {
   max-height: 150px;
   overflow-y: auto;
 }
+
 .ui.tabular.menu>.item {
   background-color: #c6daec;
   cursor: pointer;
 }
+
 .ui.tabular.menu>.item:not(.active):hover {
   background-color: #b6cadc;
 }
+
 .tab-context {
   margin-top: 1rem;
 }
+
 #part-panel-dropper {
   position: absolute;
   right: 0;
@@ -79,19 +95,23 @@
 }
 
 /* Favourite window */
+
 #fav-win>.content {
   max-height: calc(100% - 3rem);
   overflow-y: auto;
 }
+
 #fav-win {
   width: 400px;
   top: 200px;
   right: 400px;
   max-height: 600px;
 }
+
 .fav-part-seg {
   cursor: pointer;
 }
+
 #fav-win>.content>.ui.segment>.combine-circuit-button {
   background-color: #eee;
   width: 2rem;
@@ -105,11 +125,13 @@
   text-align: center;
   transition: opacity 0.2s ease;
 }
+
 #fav-win>.content>.ui.segment>.combine-circuit-button>i {
   margin-right: 0;
   pointer-event: none;
-  animation: 
+  /* animation: */
 }
+
 #fav-win>.content>.ui.segment>.remove-part-fav {
   background-color: #eee;
   width: 2rem;
@@ -123,9 +145,11 @@
   text-align: center;
   transition: opacity 0.2s ease;
 }
+
 #fav-win>.content>.ui.segment p {
   margin: 0 0 0 3rem;
 }
+
 #fav-win>.content>.ui.segment img {
   width: 4rem;
   height: auto;
@@ -133,6 +157,7 @@
 }
 
 /* Toolbox */
+
 #toolbox {
   background-color: white;
   /* padding: 0.5rem 1rem 0.5rem 1rem; */
@@ -140,27 +165,33 @@
   opacity: 1;
 }
 
-#toolbox a>img, #toolbox div>img {
+#toolbox a>img,
+#toolbox div>img {
   width: 1.75rem;
   height: 1.75rem;
   margin-right: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 #toolbox div>img.active {
   filter: drop-shadow(0px 0px 5px rgb(255, 255, 255));
 }
+
 /* #connection-dropdown-button {
   max-height: 35px;
 } */
+
 /* #toolbox a:last-child {
   margin-right: 0;
 } */
+
 /* #toolbox img {
   width: 2.5rem;
   height: 2.5rem;
   cursor: pointer;
 } */
+
 /* #toolbox>i {
   margin: 0 0.1rem;
   font-size: 3rem;
@@ -170,18 +201,22 @@
 body {
   overflow: hidden;
 }
-div.ui.fixed.menu {
-  background-color: white; /*menu background color*/
-}
+
+/* div.ui.fixed.menu {
+  background-color: white; menu background color
+} */
+
 div.ui.fixed.menu>div.ui.container {
   margin-left: 3rem !important;
   margin-right: 3rem !important;
   width: 100%;
   height: 3rem;
 }
+
 .item>i.icon {
   margin: 0 0.25rem !important;
 }
+
 div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
   margin-left: 0.25rem;
 }
@@ -190,18 +225,22 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
   font-size: 1rem;
   width: 100%;
   height: 100%;
-  padding-top: 4.5rem;
+  /* padding-top: 4.5rem; */
   transition: all 0.2s ease;
 }
+
 .canvas {
-  background-color: white;
+  background-color: #9cabd4;
   position: relative;
   overflow: hidden;
+  /* opacity: 0.7; */
 }
+
 #canvas {
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-color: #9cabd4;
+  /* opacity: 0.7; */
 }
 
 #part-src-seg {
@@ -210,9 +249,11 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
 #part-src-divider {
   margin-bottom: 4px;
 }
+
 #part-src-more {
   float: right;
 }
@@ -220,6 +261,7 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
 .ui-resizable-handle {
   position: absolute;
 }
+
 .ui-resizable-w {
   cursor: w-resize;
   height: 100%;
@@ -227,6 +269,7 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
   top: 0;
   left: 0;
 }
+
 .ui-resizable-s {
   cursor: s-resize;
   height: 1rem;
@@ -234,6 +277,7 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
   bottom: 0;
   left: 0;
 }
+
 .ui-resizable-sw {
   cursor: sw-resize;
   height: 1rem;
@@ -249,62 +293,82 @@ div.part-helper {
   text-align: center;
   opacity: 0.7;
 }
+
 div.part-helper>div.ui.image>img {
   width: 100%;
   height: auto;
 }
+
 #load-modal .ui.segment {
   cursor: pointer;
 }
+
 #load-modal p {
   margin-bottom: 0em;
 }
+
 .modal:not(.basic) {
   border-radius: 1em;
 }
-.modal:not(.basic) .header, .modal:not(.basic) .content, .modal:not(.basic) .actions{
+
+.modal:not(.basic) .header,
+.modal:not(.basic) .content,
+.modal:not(.basic) .actions {
   border: 0 !important;
   background-color: #44afe4 !important;
 }
+
 .modal:not(.basic) .content:nth-child(2) {
   padding-top: 0;
 }
+
 .ui.bottom.attached.big.buttons {
   margin: 0;
 }
+
 .ui.white.button {
   background-color: white;
   color: #444;
 }
+
 .ui.white.button:hover {
   background-color: #eeeeee;
 }
+
 .ui.white.button:active {
   background-color: #dddddd;
 }
-.modal:not(.basic)>.actions{
+
+.modal:not(.basic)>.actions {
   padding: 0;
 }
-.modal:not(.basic) .header, .modal:not(.basic) label {
+
+.modal:not(.basic) .header,
+.modal:not(.basic) label {
   color: white !important;
 }
+
 #simulation-modal .content {
   background-color: white !important;
 }
+
 .simulation-result-container {
   background-color: white;
   padding: 1em;
   border-radius: 5px;
 }
+
 .plasmid-container {
   background-color: white;
   border-top-left-radius: 0.2rem;
   border-top-right-radius: 0.2em;
   text-align: center;
 }
+
 .plasmid-edit {
   padding: 1rem;
 }
+
 .plasmid-edit>form {
   margin-bottom: 0;
 }
@@ -317,4 +381,37 @@ div.part-helper>div.ui.image>img {
 .ui.vertical.menu img {
   width: 1.75rem;
   height: 1.75rem;
+}
+
+#toolbox,
+div.ui.fixed.menu,
+.ui.vertical.menu {
+  background-color: #4a4392;
+  /* opacity: 0.75; */
+}
+
+#fav-win,
+#part-panel,
+#part-src-seg,
+#part-info-tab,
+.ui.top.attached.tabular.menu div {
+  background-color: #667ec5;
+}
+
+.ui.top.attached.tabular.menu .active.item,
+#fav-win div h5,
+#part-info-tab div h5,
+#part-info-tab div p,
+#part-type,
+#part-info-name {
+  color: white;
+}
+
+.SDinDesign-device.jtk-draggable.ui-droppable,
+.pusher {
+  background-color: #9cabd4 !important;
+}
+
+.SDinDesign-part p {
+  color: white;
 }
