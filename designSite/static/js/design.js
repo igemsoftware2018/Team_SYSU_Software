@@ -68,7 +68,7 @@ function new_to_old(data) {
     });
     $.each(data.inhibitions, function (index, inhibition) {
         let temp = {
-            start: cid_dict[inhibition.stimulator],
+            start: cid_dict[inhibition.inhibitor],
             end: cid_dict[inhibition.other],
             type: 'inhibition'
         };
@@ -101,7 +101,7 @@ function new_to_old(data) {
 let JsonFileReader = new FileReader();
 JsonFileReader.onload = () => {
     // TODO: transform new json to old json
-    design.design = JSON.parse(JsonFileReader.result);
+    design.design = JSON.parse(new_to_old(JsonFileReader.result));
 };
 let sbolFileReader = new FileReader();
 sbolFileReader.onload = () => {
@@ -217,7 +217,7 @@ $('#export-button').on('click', () => {
     else
         filename = `${design.name}.json`;
     // TODO: transform old json to new json
-    createJsonDownload(filename, design.design);
+    createJsonDownload(filename, old_to_new(design.design));
 }).popup({
     content: 'Export your design as a JSON.'
 });

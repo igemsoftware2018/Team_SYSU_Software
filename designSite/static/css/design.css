@@ -134,7 +134,7 @@
 
 /* Toolbox */
 #toolbox {
-  background-color: #e2e7ea;
+  background-color: white;
   /* padding: 0.5rem 1rem 0.5rem 1rem; */
   border: none;
   opacity: 1;
@@ -171,7 +171,7 @@ body {
   overflow: hidden;
 }
 div.ui.fixed.menu {
-  background-color: #e2e7ea; /*menu background color*/
+  background-color: white; /*menu background color*/
 }
 div.ui.fixed.menu>div.ui.container {
   margin-left: 3rem !important;
@@ -311,5 +311,10 @@ div.part-helper>div.ui.image>img {
 
 .ui.vertical.menu {
   /* padding-top: 4.5rem; */
-  width: 4rem;
+  width: 5rem;
+}
+
+.ui.vertical.menu img {
+  width: 1.75rem;
+  height: 1.75rem;
 }
