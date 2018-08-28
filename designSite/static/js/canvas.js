@@ -125,6 +125,23 @@ class SDinDesign {
         return newSize;
     }
 
+    static refreshMount() {
+        /*
+        this function refresh all parts' callback function of "click",
+        "select" and "over".
+
+        it firstly click all the (context switching) button in the top bar.
+        then click the current context button.
+        */
+
+        /* global currentMode */
+        /* global simpleModes */
+        let __currentMode = currentMode;
+        for (let modeButton in simpleModes) {
+            simpleModes[modeButton].click();
+        }
+        simpleModes[__currentMode].click();
+    }
     parseOption(option) {
         // define default
         this._option = {
@@ -396,6 +413,8 @@ class SDinDesign {
                     let copySelectedPart = $.extend(true, {}, selectedPart);
                     that.insertPart(data, copySelectedPart, $(this).attr('dropper-id'));
                     that.maxSafety(updateSafety);
+
+                    SDinDesign.refreshMount(); //< see comment of this function
                 }
             });
     }
@@ -804,6 +823,8 @@ class SDinDesign {
                 }
                 that.redrawDesign();
                 that.maxSafety(updateSafety);
+
+                SDinDesign.refreshMount(); //< see comment of this function
             }
         });
     }

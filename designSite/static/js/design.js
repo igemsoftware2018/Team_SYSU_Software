@@ -872,10 +872,10 @@ $('#add-new-part')
         }, (data) => {
             if (data.success === true)
                 $('.ui.dimmer:first .loader')
-                .text('Success, closing...');
+                    .text('Success, closing...');
             else
                 $('.ui.dimmer:first .loader')
-                .text('Failed, closing...');
+                    .text('Failed, closing...');
             setTimeout(() => {
                 $('.ui.dimmer:first').dimmer('hide');
             }, 1000);
@@ -901,14 +901,17 @@ $('#image-button').on('click', function () {
 });
 
 let currentMode;
-const modes = {
+const simpleModes = {
     modifyItem: $('#drag-item'),
     dragCanvas: $('#drag-canvas'),
     deleteItem: $('#delete-item'),
     inspectItem: $('#inspect-item'),
+};
+const modes = $.extend({
     addConnection: $('#connection-dropdown-button'),
     chooseInteractive: $('#interactive-button')
-};
+}, simpleModes);
+
 let newConnectionType, newConnectionStep;
 let newConnectionSource, newConnectionTarget;
 let previewConnection = {};
