@@ -980,3 +980,12 @@ def get_sbol_json(request):
             'status': 1,
             'data': jsonData
         })
+
+def get_search_targets(request):
+    if request.method == 'POST':
+        data = json.loads(request.POST['data'])
+        print(data)
+        return JsonResponse({
+            'success': True,
+        })
+    

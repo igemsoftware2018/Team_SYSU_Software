@@ -173,9 +173,7 @@
         <i class="dropdown icon"></i>
         <div class="default text">Search BBa...</div>
       </div>
-      <div id="advanced-search">
-          <a>Advanced Search</a>
-      </div>
+      <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div>
     
 
       <!-- Source circuit part has been redesigned -->
@@ -259,18 +257,22 @@
     <div class="content">
       <form class="ui form">
         <div class="field">
-          <input type="text" name="name" id="part-name" placeholder="Part name">
+          <label>Name</label>
+          <input type="text" name="name" id="part-name" placeholder="Part Name">
         </div>
         <div class="field">
-            <textarea id="part-description" rows=2 placeholder="Part description"></textarea>
+            <label>Description</label>
+            <textarea id="part-description" rows=2 placeholder="Description"></textarea>
         </div>
         <div class="field">
+          <label>Role</label>
           <div class="ui floating selection dropdown" id="part-role-dropdown">
             <i class="dropdown icon"></i>
             <div class="default text">Part role</div>
           </div>
         </div>
         <div class="field">
+            <label>Type</label>
             <div class="ui floating selection dropdown" id="part-type-dropdown">
               <i class="dropdown icon"></i>
               <div class="default text">Part type</div>
@@ -284,7 +286,8 @@
             </div>
           </div> -->
         <div class="field">
-          <textarea name="part-sequence" id="part-sequence" placeholder="Part sequence"></textarea>
+          <label>Part Sequence</label>
+          <textarea name="part-sequence" id="part-sequence" placeholder="Part Sequence"></textarea>
         </div>
         
       </form>
@@ -351,7 +354,35 @@
   <!-- Advanced Search Modal -->
   <div id="advanced-search-modal" class="ui tiny modal">
     <div class="content">
-      You got it
+      <h5 class="ui white header">Advanced Search</h5>
+      <div class="ui celled relaxed list">
+        <div class="item">
+          <div class="ui master checkbox">
+            <input type="checkbox" name="All" checked>
+            <label>All</label>
+          </div>
+          <div class="list" id="search-targets">
+            <div class="item">
+              <div class="ui child checkbox">
+                <input type="checkbox" name="type1">
+                <label>CBS</label>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui child checkbox">
+                <input type="checkbox" name="type2">
+                <label>Type2</label>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui child checkbox">
+                <input type="checkbox" name="type3">
+                <label>Type3</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

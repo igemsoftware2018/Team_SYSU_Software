@@ -14,6 +14,8 @@ if (designId !== '') {
 
 $('.left.sidebar').first().sidebar('attach events', '#operation');
 
+$('#advanced-search-modal .checkbox').checkbox('set checked');
+
 // TODO: share button
 $('#share-button').popup({
     content: 'Share your design'
@@ -22,6 +24,8 @@ $('#share-button').popup({
 $('#protocol-button').popup({
     content: 'Add your Protocol'
 });
+
+
 
 // Upload file
 function new_to_old(data) {
@@ -609,8 +613,11 @@ function uncollapsed() {
             right: '0.5em'
         });
 }
-let selectedPart;
-let selectedPartHelper = $('<div></div>');
+
+
+
+
+
 $('#search-parts-dropdown').dropdown({
     apiSettings: {
         url: '/api/parts?name={query}',
@@ -631,10 +638,82 @@ $('#search-parts-dropdown').dropdown({
     content: 'Search for a part (Case Sensitive)'
 });
 
-// $('#advanced-search').onclick(function () {
-//     console.log("here");
-//     $('#advanced-search-modal').modal('show');
-// });
+
+// Advanced Searching
+
+$('#advanced-search-button').click(function () {
+    $('#advanced-search-modal').modal('show');
+});
+
+
+$('.list .master.checkbox')
+    .checkbox({
+        // check all children
+        onChecked: function() {
+            var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
+            $childCheckbox.checkbox('check');
+        },
+        // uncheck all children
+        onUnchecked: function() {
+            var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
+            $childCheckbox.checkbox('uncheck');
+        }
+    })
+$('.list .child.checkbox')
+    .checkbox({
+        // Fire on load to set parent value
+        fireOnInit: true,
+        // Change parent state on each child checkbox change
+        onChange: function() {
+            var 
+                $listGroup      = $(this).closest('.list'),
+                $parentCheckbox = $listGroup.closest('.item').children('.checkbox'),
+                $checkbox       = $listGroup.find('.checkbox'),
+                allChecked      = true,
+                allUnchecked    = true,
+                searchTarget    = [];
+            // check to see if all other siblings are checked or unchecked
+            // and update the search target
+            $checkbox.each(function() {
+                if( $(this).checkbox('is checked') ) {
+                    allUnchecked = false;
+                    searchTarget.push(1);
+                }
+                else {
+                    allChecked = false;
+                    searchTarget.push(0);
+                }
+            });
+            // set parent checkbox state, but dont trigger its onChange callback
+            if (allChecked) {
+                $parentCheckbox.checkbox('set checked');
+            }
+            else if (allUnchecked) {
+                $parentCheckbox.checkbox('set unchecked');
+            }
+            else {
+                $parentCheckbox.checkbox('set indeterminate');
+            }
+            var postData = {
+                data: JSON.stringify(searchTarget),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            }
+            // Send the current search target to backend
+            $.ajax({
+                type: 'POST',
+                url: "api/search_targets",
+                data: postData,
+                success: function(data){
+                    console.log(data);
+                }
+            })
+        }
+    })
+
+
+
+let selectedPart;
+let selectedPartHelper = $('<div></div>');
 
 function setPartPanel(id) {
     if (selectedPart !== undefined && selectedPart.id === id) {
