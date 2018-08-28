@@ -658,19 +658,21 @@ function setPartPanel(id) {
         selectedPartHelper
             .children('div')
             .children('img').attr('src', `/static/img/design/${data.type.toLowerCase()}.png`);
-        $('#part-info-des>p')
-            .text(data.description);
-        $('#source-list').html('');
-        data.works.forEach((w) => {
-            $('#source-list')
-                .append(`<li><a href="/work?id=${w.id}">${w.year}-${w.teamname}</li></a>`);
-        });
-        data.papers.forEach((p) => {
-            $('#source-list')
-                .append(`<li><a href="/paper?id=${p.id}">${p.title}</li></a>`);
-        });
+        $('#part-info-des>p').text(data.description);
+        $('#show-part-src-seg-button').show();
     });
 }
+$('#show-part-src-seg-button').on('click', function (){
+    console.log("Here");
+    $('#source-circuit-modal').modal('show');
+    $('#source-list').html('');
+    selectedPart.works.forEach((w) => {
+        $('#source-list').append(`<li><a href="/work?id=${w.id}">${w.year}-${w.teamname}</li></a>`);
+    });
+    selectedPart.papers.forEach((p) => {
+        $('#source-list').append(`<li><a href="/paper?id=${p.id}">${p.title}</li></a>`);
+    })
+})
 selectedPartHelper
     .addClass('part-helper')
     .append('<b></b>')

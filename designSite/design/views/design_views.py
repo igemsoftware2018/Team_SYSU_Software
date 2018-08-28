@@ -149,7 +149,7 @@ def parts(request):
     for x in query_set:
         if x.IsPublic == 1:
             parts.append({'id': x.id, 'name': "%s" % (x.Name)})
-        elif x.Useranme == request.user.username:
+        elif x.Username == request.user.username:
             parts.append({'id': x.id, 'name': "%s (%s)" % (x.Name, x.Username)})
         if len(parts) > 50: 
             break

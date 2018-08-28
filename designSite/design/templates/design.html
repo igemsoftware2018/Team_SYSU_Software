@@ -3,7 +3,7 @@
 <html>
 
 <head>
-  <title>Design - S-Din</title>
+  <title>Designer</title>
 
   <!-- <link rel="shortcut icon" href="/static/img/favicon.png"> -->
   <link rel="stylesheet" href="/static/css/fontsize.css">
@@ -167,14 +167,16 @@
         <i class="dropdown icon"></i>
         <div class="default text">Search BBa...</div>
       </div>
-      <div class="tab-context">
+
+
+      <!-- <div class="tab-context">
         <div class="ui top attached tabular menu">
           <div class="active item" data-tab="src-tab">Source circuit</div>
         </div>
         <div id="part-src-seg" class="ui bottom attached active tab segment" data-tab="src-tab">
           <ul class="ui list" id="source-list"></ul>
         </div>
-      </div>
+      </div> -->
       <div class="tab-context">
         <div class="ui top attached tabular menu">
           <div class="active item" data-tab="info-tab">Part information</div>
@@ -189,6 +191,7 @@
           <div id="part-info-des">
             <h5 class="ui header">Description:</h5>
             <p></p>
+            <div class="mini ui button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source Circuit</div>
           </div>
         </div>
       </div>
@@ -314,6 +317,21 @@
       <div class="ui text loader"></div>
     </div>
   </div>
+
+  <!-- Source Circuit Modal-->
+  <div id="source-circuit-modal" class="ui tiny modal">
+
+    <div class="content">
+      <div>
+        <h5 class="ui white header">Source Circuit</h5>
+      </div>
+      <!-- <div id="part-src-seg" class="ui bottom attached active segment"></div> -->
+      <div class="ui bottom attached active segment">
+        <ul class="ui list" id="source-list"></ul>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Clear all modal -->
   <div id="clear-all-modal" class="ui basic modal">
