@@ -401,6 +401,7 @@ div.ui.fixed.menu,
 }
 
 .ui.top.attached.tabular.menu .active.item,
+div h5,
 #fav-win div h5,
 #part-info-tab div h5,
 #part-info-tab div p,
@@ -416,4 +417,12 @@ div.ui.fixed.menu,
 
 .SDinDesign-part p {
   color: white;
+}
+
+.ui.divider {
+  border: 1px solid rgba(34,36,38,.15) !important;
+}
+
+#chassis-dropdown {
+  width: 100%;
 }

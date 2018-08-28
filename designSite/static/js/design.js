@@ -334,6 +334,10 @@ $('#load-button').on('click', () => {
             $.get(`/api/circuit?id=${id}`, (value) => {
                 $('.ui.dimmer:first').dimmer('hide');
                 design.design = value;
+                // console.log(value);
+                $('#chassis-dropdown').dropdown(
+                    'set selected', value.chassis
+                );
             });
         });
         $('#load-modal').modal('show');
@@ -464,6 +468,25 @@ $('#redo-button').on('click', function () {
 });
 
 // Part panel
+$('#chassis-dropdown').dropdown( {
+    values: [{
+        name: 'Escherichia Coli',
+        value: 'Escherichia Coli',
+        selected: true
+    },{
+        name: 'Pichia pstoris',
+        value: 'Pichia pstoris'
+    },{
+        name: 'Saccharomyces cerevisiae',
+        value: 'Saccharomyces cerevisiae'
+    }],
+    onChange: function(value) {
+        // console.log(value);
+        design.setChassis(value);
+    }
+}).popup({
+    content: "Choose your chassis."
+});
 $('#part-panel')
     .resizable('option', 'minWidth', 200);
 $('#part-panel-button')
@@ -1283,6 +1306,9 @@ $('#clear-all-button')
 $('#real-clear-all-button')
     .on('click', () => {
         design.clearAll();
+        $('#chassis-dropdown').dropdown(
+            'set selected', 'Escherichia Coli'
+        );
     });
 
 $('#simulation-button')

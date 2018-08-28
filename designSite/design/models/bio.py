@@ -50,11 +50,16 @@ class PartsInteract(models.Model):
     def __str__(self):
         return "%s contains %s" % (self.parent.Name, self.child.Name)
 
+class Chassis(models.Model):
+    name = models.CharField(max_length = 40, unique = True)
+    def __str__(self):
+        return "%s" % (self.name)
+
 class Circuit(models.Model):
     Name = models.CharField(max_length = 50, unique = False)
     Description = models.CharField(max_length = 100)
     Author = models.ForeignKey('User', on_delete = models.CASCADE, null = True)
-
+    Chassis = models.ForeignKey('Chassis', on_delete = models.DO_NOTHING, null=True)
     def __str__(self):
         return "%s" % self.Name
 

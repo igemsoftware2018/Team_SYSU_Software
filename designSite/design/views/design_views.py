@@ -41,89 +41,88 @@ def design(request):
 def test(request):
     return render(request, 'test.html')
 
-# Favorites related views
+# Comment Favorites related views
+# def get_favorite(request):
+#     '''
+#     GET method with no param
+#     return json:
+#         'circuits': [{
+#             'id': xxx,
+#             'Name': xxx,
+#             'Description': xxx,
+#             'Author': xxx(id)
+#         }]
+#     '''
+#     query_set = UserFavorite.objects.filter(user = request.user)
+#     favorites_circuit = [{
+#         'id': x.circuit.id,
+#         'name': x.circuit.Name,
+#         'description': x.circuit.Description,
+#         'author': x.circuit.Author.id if x.circuit.Author != None else None
+#         } for x in query_set]
+#     query_set = FavoriteParts.objects.filter(user = request.user)
+#     favorites_part = [{
+#         'id': x.part.id,
+#         'name': x.part.secondName,
+#         'BBa': x.part.Name,
+#         'type': x.part.Type,
+#         'safety': x.part.Safety
+#         } for x in query_set]
+#     return JsonResponse({
+#         'status': 1,
+#         'circuits': favorites_circuit,
+#         'parts': favorites_part
+#     })
 
-def get_favorite(request):
-    '''
-    GET method with no param
-    return json:
-        'circuits': [{
-            'id': xxx,
-            'Name': xxx,
-            'Description': xxx,
-            'Author': xxx(id)
-        }]
-    '''
-    query_set = UserFavorite.objects.filter(user = request.user)
-    favorites_circuit = [{
-        'id': x.circuit.id,
-        'name': x.circuit.Name,
-        'description': x.circuit.Description,
-        'author': x.circuit.Author.id if x.circuit.Author != None else None
-        } for x in query_set]
-    query_set = FavoriteParts.objects.filter(user = request.user)
-    favorites_part = [{
-        'id': x.part.id,
-        'name': x.part.secondName,
-        'BBa': x.part.Name,
-        'type': x.part.Type,
-        'safety': x.part.Safety
-        } for x in query_set]
-    return JsonResponse({
-        'status': 1,
-        'circuits': favorites_circuit,
-        'parts': favorites_part
-    })
+# def tag_favorite(request):
+#     '''
+#     POST method with json:
+#         'circuit_id': xxx, # id of circuit, make sure this circuit is saved
+#         'tag': 0 for cancel favorite, 1 for tag favorite
+#     return json:
+#         status: 0 or 1
+#     '''
+#     if request.method == 'POST':
+#         data = json.loads(request.POST['data'])
+#         try:
+#             circuit = Circuit.objects.get(pk = data['circuit_id'])
+#             if data['tag'] == 1:
+#                 if not UserFavorite.objects.filter(user = request.user, circuit = circuit).exists():
+#                     UserFavorite.objects.create(circuit = circuit, user = request.user)
+#             else:
+#                 UserFavorite.objects.get(user = request.user, circuit = circuit).delete()
+#             return JsonResponse({
+#                 'success': True
+#             })
+#         except:
+#             return JsonResponse({
+#                 'success': False
+#             })
 
-def tag_favorite(request):
-    '''
-    POST method with json:
-        'circuit_id': xxx, # id of circuit, make sure this circuit is saved
-        'tag': 0 for cancel favorite, 1 for tag favorite
-    return json:
-        status: 0 or 1
-    '''
-    if request.method == 'POST':
-        data = json.loads(request.POST['data'])
-        try:
-            circuit = Circuit.objects.get(pk = data['circuit_id'])
-            if data['tag'] == 1:
-                if not UserFavorite.objects.filter(user = request.user, circuit = circuit).exists():
-                    UserFavorite.objects.create(circuit = circuit, user = request.user)
-            else:
-                UserFavorite.objects.get(user = request.user, circuit = circuit).delete()
-            return JsonResponse({
-                'success': True
-            })
-        except:
-            return JsonResponse({
-                'success': False
-            })
-
-def part_favorite(request):
-    '''
-    POST method with json:
-        'part_id': xxx, # id of part
-        'tag': 0 for cancel favorite, 1 for tag favorite
-    return json:
-        status: 0 or 1
-    '''
-    if request.method == 'POST':
-        data = json.loads(request.POST['data'])
-        try:
-            part = Parts.objects.get(pk = data['part_id'])
-            if data['tag'] == 1:
-                if not FavoriteParts.objects.filter(user = request.user, part = part).exists():
-                    FavoriteParts.objects.create(part = part, user = request.user)
-            else:
-                FavoriteParts.objects.get(user = request.user, part = part).delete()
-            return JsonResponse({
-                'success': True
-            })
-        except:
-            return JsonResponse({
-                'success': False
-            })
+# def part_favorite(request):
+#     '''
+#     POST method with json:
+#         'part_id': xxx, # id of part
+#         'tag': 0 for cancel favorite, 1 for tag favorite
+#     return json:
+#         status: 0 or 1
+#     '''
+#     if request.method == 'POST':
+#         data = json.loads(request.POST['data'])
+#         try:
+#             part = Parts.objects.get(pk = data['part_id'])
+#             if data['tag'] == 1:
+#                 if not FavoriteParts.objects.filter(user = request.user, part = part).exists():
+#                     FavoriteParts.objects.create(part = part, user = request.user)
+#             else:
+#                 FavoriteParts.objects.get(user = request.user, part = part).delete()
+#             return JsonResponse({
+#                 'success': True
+#             })
+#         except:
+#             return JsonResponse({
+#                 'success': False
+#             })
 
 
 # Part related views
@@ -347,7 +346,8 @@ def circuit(request):
         ],
         combines: {
             x: [x, x, x], # combines dict, x is cid
-        }
+        },
+        chassis: xxx
 
     POST method with json:
     {
@@ -371,7 +371,8 @@ def circuit(request):
         ],
         combines: {
             x: [x, x, x] # see above api
-        }
+        },
+        chassis: "xxx",
         circuit: {
             'id': xxx, # circuit id if it's already existing, -1 else
             'name': xxx,
@@ -403,6 +404,7 @@ def circuit(request):
                 'Y': x.Y} for x in devices_query]
             combines_query = CircuitCombines.objects.filter(Circuit = query_id)
             combines = {x.Father.id: [i.id for i in x.Sons.all()] for x in combines_query}
+            chassis = circuit.Chassis.name
             return JsonResponse({
                 'status': 1,
                 'id': query_id,
@@ -411,7 +413,8 @@ def circuit(request):
                 'parts': parts,
                 'lines': lines,
                 'devices': devices,
-                'combines': combines})
+                'combines': combines,
+                'chassis': chassis})
         except:
             traceback.print_exc()
             return JsonResponse({
@@ -420,6 +423,7 @@ def circuit(request):
         try:
             data = json.loads(request.POST['data'])
             new = data['circuit']['id'] == -1
+            chassis = Chassis.objects.get(name = data['chassis'])
             try:
                 circuit = Circuit.objects.get(pk = data['circuit']['id'])
                 logger.error(str(data['circuit']))
@@ -434,13 +438,15 @@ def circuit(request):
                 circuit = Circuit.objects.create(
                         Name = data['circuit']['name'],
                         Description = data['circuit']['description'],
-                        Author = request.user)
+                        Author = request.user,
+                        Chassis = chassis)
             else:
                 # existing circuit
                 circuit = Circuit.objects.get(pk = data['circuit']['id'])
                 circuit.Name = data['circuit']['name']
                 circuit.Description = data['circuit']['description']
                 circuit.Author = request.user
+                circuit.Chassis = chassis
                 circuit.save()
                 # delete existing circuit part, device
                 for x in CircuitParts.objects.filter(Circuit = circuit):

@@ -173,7 +173,8 @@ class SDinDesign {
             devices: [],
             lines: [],
             parts: [],
-            id: -1
+            id: -1,
+            chassis: "Escherichia Coli"
         },
         option = {}
     ) {
@@ -217,6 +218,7 @@ class SDinDesign {
     get design() {
         let data = {
             id: this._id,
+            chassis: this._design.chassis,
             lines: this._design.lines,
             combines: [],
             devices: this._design.devices.map((v) => ({
@@ -240,6 +242,7 @@ class SDinDesign {
         this.name = design.name;
         this.description = design.description;
         this._design = this.convertFormat(design);
+        this._design.chassis = design.chassis;
 
         $.each(this._design.devices, (_, device) => { this.addDevice(device); });
         $.each(this._design.parts, (_, part) => { this.addPart(part, 1, undefined); });
@@ -333,6 +336,11 @@ class SDinDesign {
         let t = this.design;
         this.design = this._history[++this._historyPointer].data;
         this._history[this._historyPointer].data = t;
+    }
+
+    setChassis(data) {
+        // console.log(data);
+        this._design.chassis = data;
     }
 
     addDevice(data) {
