@@ -905,6 +905,7 @@ const modes = {
     modifyItem: $('#drag-item'),
     dragCanvas: $('#drag-canvas'),
     deleteItem: $('#delete-item'),
+    inspectItem: $('#inspect-item'),
     addConnection: $('#connection-dropdown-button'),
     chooseInteractive: $('#interactive-button')
 };
@@ -957,6 +958,70 @@ $('#drag-canvas')
     })
     .popup({
         content: 'Drag and move canvas. (Ctrl)'
+    });
+$('#inspect-item')
+    .on('click', () => {
+        selectMode('inspectItem');
+    })
+    .on('select', () => {
+        design.unHighlightDevice($('.SDinDesign-device, .SDinDesign-part'));
+        $('.SDinDesign-device').off('click');
+        $('.SDinDesign-part')
+            .off('mouseenter')
+            .on('mouseenter', function() {
+                design.highlightDevice($(this), 0.4);
+            })
+            .off('mouseleave')
+            .on('mouseleave', function() {
+                design.unHighlightDevice($(this));
+            })
+            .off('click')
+            .on('click', function () {
+                let data = design.getData(this);
+                console.log(data);
+                let itemModal = $('#inspect-item-modal');
+                itemModal.modal('show');
+                // TODO: type and role is (incorrectly) the same here.
+                // change it when "type and role" is fixed.
+                itemModal
+                    .find('input[name=component-role]')
+                    .val(data['part']['type']);
+                itemModal
+                    .find('input[name=component-id]')
+                    .val(data['part']['name']);
+                itemModal
+                    .find('input[name=component-name]')
+                    .val(data['part']['name']);
+                itemModal
+                    .find('textarea[name=component-description]')
+                    .val(data['part']['description']);
+                $.ajax('/api/plasm_part', {
+                    data: {
+                        name: data['part']['name']
+                    },
+                    success: (data)=>{
+                        console.log(data);
+                        itemModal
+                            .find('textarea[name=component-sequence]')
+                            .val(data['seq']);
+                    }
+                });
+            });
+    })
+    .on('deselect', () => {
+        $('.SDinDesign-device, #canvas>.SDinDesign-part')
+            .off('click')
+            .on('click', function () {
+                SDinDesign.preventClickOnDrag(design, $(this));
+            });
+        $('.SDinDesign-device>.SDinDesign-part')
+            .off('mouseenter')
+            .off('mouseleave')
+            .off('click')
+        design.unHighlightDevice($('.SDinDesign-part, .SDinDesign-device'));
+    })
+    .popup({
+        content: 'Inspect Item'
     });
 $('#connection-dropdown')
     .dropdown({
