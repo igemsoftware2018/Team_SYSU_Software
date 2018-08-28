@@ -25,7 +25,7 @@
  *
  */
 
-/* global updateSafety selectedPart setPartPanel */
+/* global selectedPart setPartPanel */
 /* exported SDinDesign */
 class SDinDesign {
     static get partSafetyLevels() {
@@ -125,6 +125,23 @@ class SDinDesign {
         return newSize;
     }
 
+    static refreshMount() {
+        /*
+        this function refresh all parts' callback function of "click",
+        "select" and "over".
+
+        it firstly click all the (context switching) button in the top bar.
+        then click the current context button.
+        */
+
+        /* global currentMode */
+        /* global simpleModes */
+        let __currentMode = currentMode;
+        for (let modeButton in simpleModes) {
+            simpleModes[modeButton].click();
+        }
+        simpleModes[__currentMode].click();
+    }
     parseOption(option) {
         // define default
         this._option = {
@@ -231,7 +248,7 @@ class SDinDesign {
         this.redrawDesign();
 
         // TODO: fix updateSafety from other file
-        this.maxSafety(updateSafety);
+        // this.maxSafety(updateSafety);
     }
     combine(design) {
         this.recordHistory(`Combined design ID=${design.id}.`);
@@ -249,7 +266,7 @@ class SDinDesign {
         this.redrawDesign();
 
         // TODO: fix updateSafety from other file
-        this.maxSafety(updateSafety);
+        // this.maxSafety(updateSafety);
     }
     convertFormat(design) {
         let tmp = design.parts.reduce((t, p) => { t[p.cid] = p; return t; }, {});
@@ -395,7 +412,9 @@ class SDinDesign {
                     // this solve the error occurred when you delete the component at center.
                     let copySelectedPart = $.extend(true, {}, selectedPart);
                     that.insertPart(data, copySelectedPart, $(this).attr('dropper-id'));
-                    that.maxSafety(updateSafety);
+
+                    SDinDesign.refreshMount(); //< see comment of this function
+                    // that.maxSafety(updateSafety);
                 }
             });
     }
@@ -803,7 +822,9 @@ class SDinDesign {
                     that.addPart(partData, 1, this._canvas);
                 }
                 that.redrawDesign();
-                that.maxSafety(updateSafety);
+
+                SDinDesign.refreshMount(); //< see comment of this function
+                // that.maxSafety(updateSafety);
             }
         });
     }
@@ -839,13 +860,13 @@ class SDinDesign {
         }
     }
 
-    // get maximum safety
+    // comment get maximum safety
     //   quite a workaround
     //   need restruct
-    maxSafety(callback) {
-        let getData = {
-            ids: JSON.stringify(this.design.parts.map((v) => v.id))
-        };
-        $.get('/api/max_safety', getData ,(v) => callback(v.max_safety));
-    }
+    // maxSafety(callback) {
+    //     let getData = {
+    //         ids: JSON.stringify(this.design.parts.map((v) => v.id))
+    //     };
+    //     $.get('/api/max_safety', getData ,(v) => callback(v.max_safety));
+    // }
 }

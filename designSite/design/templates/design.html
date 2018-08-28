@@ -104,13 +104,13 @@
         </div>
       </span>
 
-      <div class="right menu">
+      <!-- <div class="right menu">
         <span class="item">
           <h4 id="safety" class="ui green header">Low risk
             <img src="/static/img/design/safety-1.png">
           </h4>
         </span>
-      </div>
+      </div> -->
 
 <!-- Temporarily comment the logo -->
       <!-- <span class="item">
@@ -119,9 +119,7 @@
         </a>
       </span> -->
 
-
-
-      <span class="item">
+      <span id="logo" class="item">
         <a href="/account/">
           <p>Account</p>
         </a>
@@ -130,9 +128,10 @@
   </div>
 
   <div class="ui labeled left inline vertical sidebar menu">
-    <a class="item" id="open-fav-win">
+    <!-- Comment favourite -->
+    <!-- <a class="item" id="open-fav-win">
       <img src="/static/img/design/favorite.png">
-    </a>
+    </a> -->
     <a class="item" id="load-button">
       <img src="/static/img/design/load.png">
     </a>
@@ -209,15 +208,15 @@
     </div>
   </div>
 
-  <!-- Favourite window (floating) -->
-  <div id="fav-win" class="window">
+  <!-- Comment Favourite window (floating) -->
+  <!-- <div id="fav-win" class="window">
     <div class="nav">
       <h5 class="ui header">Favourite</h5>
       <i id="fav-win-button" class="link icon remove"></i>
     </div>
     <div class="content">
     </div>
-  </div>
+  </div> -->
 
   <!-- Configure component info -->
   <div id="component-info-modal" class="ui tiny modal">
@@ -361,28 +360,19 @@
             <input type="checkbox" name="All" checked>
             <label>All</label>
           </div>
-          <div class="list" id="search-targets">
-            <div class="item">
-              <div class="ui child checkbox">
-                <input type="checkbox" name="type1">
-                <label>CBS</label>
-              </div>
-            </div>
-            <div class="item">
-              <div class="ui child checkbox">
-                <input type="checkbox" name="type2">
-                <label>Type2</label>
-              </div>
-            </div>
-            <div class="item">
-              <div class="ui child checkbox">
-                <input type="checkbox" name="type3">
-                <label>Type3</label>
-              </div>
-            </div>
+          <div class="list">
+              {% for item in type_list %}
+                <div class="item">
+                  <div class="ui child checkbox">
+                  <input type="checkbox" name="{{ item }}">
+                  <label>{{ item }}</label>
+                  </div>
+                </div>
+              {% endfor %}
           </div>
         </div>
       </div>
+      <p style="color:white"></p>
     </div>
   </div>
 

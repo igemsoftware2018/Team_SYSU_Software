@@ -34,9 +34,16 @@ All response contains a status in json
 
 # Basic design views
 
+
+type_list = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
+    'light', 'protein', 'process', 'RNA', 'protein-m', 'protein-l',
+    'complex', 'other_DNA', 'composite', 'generator', 'reporter',
+    'inverter', 'signalling', 'measurement', 'unknown']
+
 @login_required
 def design(request):
-    return render(request, 'design.html')
+    context = {'type_list': type_list}
+    return render(request, 'design.html', context)
 
 def test(request):
     return render(request, 'test.html')
@@ -147,6 +154,8 @@ def parts(request):
 
     parts = []
     for x in query_set:
+        if search_target[type_list.index(str(x.Type))] == 0:
+            continue
         if x.IsPublic == 1:
             parts.append({'id': x.id, 'name': "%s" % (x.Name)})
         elif x.Username == request.user.username:
@@ -539,36 +548,37 @@ def simulation(request):
         })
     return 0
 
-def max_safety(request):
-    '''
-    GET /api/max_safety
-    param:
-        ids: array of int (as part id)
-    return:
-        maximum safety in these parts
-    '''
-    if request.method == 'GET':
-        try:
-            data = json.loads(request.GET['ids'])
-            parts = list(map(lambda i: Parts.objects.get(id = i), data))
-            # TODO:
-            # 以下代码可以防止一个异常抛出。先检验parts是否为空。为空时返回-1,代表unknown
-            if parts == []:
-                return JsonResponse({ 'status': 1, 'max_safety': -1}) 
-            max_safety_part = max(parts, key = lambda p: p.Safety)
-            return JsonResponse({
-                'status': 1,
-                'max_safety': max_safety_part.Safety
-            })
-        except:
-            traceback.print_exc()
-            return JsonResponse({
-                'status': 0
-            })
-    else:
-        return JsonResponse({
-            'status': 0
-        })
+# Comment safety
+# def max_safety(request):
+#     '''
+#     GET /api/max_safety
+#     param:
+#         ids: array of int (as part id)
+#     return:
+#         maximum safety in these parts
+#     '''
+#     if request.method == 'GET':
+#         try:
+#             data = json.loads(request.GET['ids'])
+#             parts = list(map(lambda i: Parts.objects.get(id = i), data))
+#             # TODO:
+#             # 以下代码可以防止一个异常抛出。先检验parts是否为空。为空时返回-1,代表unknown
+#             if parts == []:
+#                 return JsonResponse({ 'status': 1, 'max_safety': -1}) 
+#             max_safety_part = max(parts, key = lambda p: p.Safety)
+#             return JsonResponse({
+#                 'status': 1,
+#                 'max_safety': max_safety_part.Safety
+#             })
+#         except:
+#             traceback.print_exc()
+#             return JsonResponse({
+#                 'status': 0
+#             })
+#     else:
+#         return JsonResponse({
+#             'status': 0
+#         })
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -983,9 +993,16 @@ def get_sbol_json(request):
 
 def get_search_targets(request):
     if request.method == 'POST':
-        data = json.loads(request.POST['data'])
-        print(data)
-        return JsonResponse({
-            'success': True,
-        })
+        try:
+            global search_target
+            search_target = json.loads(request.POST['data'])
+            print(search_target)
+            return JsonResponse({
+                'success': True,
+            })
+        except:
+            return JsonResponse({
+                'success': False,
+                'error': "Someting wrong!"
+            })
     

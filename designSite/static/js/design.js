@@ -3,6 +3,10 @@
 /* eslint-disable no-console */
 /* global SDinDesign, Chart, html2canvas */
 
+
+
+
+
 let designId = $('#canvas-box').attr('design-id');
 let design;
 if (designId !== '') {
@@ -14,7 +18,7 @@ if (designId !== '') {
 
 $('.left.sidebar').first().sidebar('attach events', '#operation');
 
-$('#advanced-search-modal .checkbox').checkbox('set checked');
+
 
 // TODO: share button
 $('#share-button').popup({
@@ -646,6 +650,10 @@ $('#advanced-search-button').click(function () {
 });
 
 
+// Initialize the checkboxes
+$('#advanced-search-modal .checkbox').checkbox('set checked');
+
+
 $('.list .master.checkbox')
     .checkbox({
         // check all children
@@ -659,29 +667,28 @@ $('.list .master.checkbox')
             $childCheckbox.checkbox('uncheck');
         }
     })
+
+
+let flag = 0;
 $('.list .child.checkbox')
     .checkbox({
         // Fire on load to set parent value
         fireOnInit: true,
         // Change parent state on each child checkbox change
         onChange: function() {
-            var 
+            let 
                 $listGroup      = $(this).closest('.list'),
                 $parentCheckbox = $listGroup.closest('.item').children('.checkbox'),
                 $checkbox       = $listGroup.find('.checkbox'),
                 allChecked      = true,
-                allUnchecked    = true,
-                searchTarget    = [];
+                allUnchecked    = true;
             // check to see if all other siblings are checked or unchecked
-            // and update the search target
             $checkbox.each(function() {
                 if( $(this).checkbox('is checked') ) {
                     allUnchecked = false;
-                    searchTarget.push(1);
                 }
                 else {
                     allChecked = false;
-                    searchTarget.push(0);
                 }
             });
             // set parent checkbox state, but dont trigger its onChange callback
@@ -694,21 +701,38 @@ $('.list .child.checkbox')
             else {
                 $parentCheckbox.checkbox('set indeterminate');
             }
-            var postData = {
-                data: JSON.stringify(searchTarget),
-                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-            }
-            // Send the current search target to backend
-            $.ajax({
-                type: 'POST',
-                url: "api/search_targets",
-                data: postData,
-                success: function(data){
-                    console.log(data);
+
+
+            // Debounce
+            flag = (flag + 1) % 101;
+            let current_flag = (flag + 1) % 101;
+
+            setTimeout(() => {
+                if (current_flag == flag){
+                    let searchTarget = [];
+                    $checkbox.each(function() {
+                        searchTarget.push($(this).checkbox('is checked') ? 1 : 0);
+                    })
+                    let postData = {
+                        data: JSON.stringify(searchTarget),
+                        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: "api/search_targets",
+                        data: postData,
+                        success: function(data){
+                            if (data['success'] == true)
+                                console.log('success');
+                            else
+                                $('#advanced-search-modal p').text(data['error']);
+                        }
+                    })
                 }
-            })
+            }, 2000);
         }
     })
+
 
 
 
