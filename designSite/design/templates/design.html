@@ -31,14 +31,24 @@
         <a id="redo-button">
           <img src="/static/img/design/redo.png">
         </a>
+        <a id="clear-all-button">
+          <img src="/static/img/design/clearall.png">
+        </a>
+      </span>
+
+      <span class="item">
         <a id="drag-item">
           <img src="/static/img/design/pointer.png">
         </a>
         <a id="drag-canvas">
           <img src="/static/img/design/move.png">
         </a>
-        <a id="clear-all-button">
-          <img src="/static/img/design/clearall.png">
+        <a id="delete-item">
+          <img src="/static/img/design/delete.png">
+        </a>
+        <a id="inspect-item">
+          <!-- TODO: change this image please -->
+          <img src="/static/img/design/delete.png" /> 
         </a>
       </span>
 
@@ -66,10 +76,6 @@
               </div>
             </div>
           </div>
-
-          <a id="delete-item">
-            <img src="/static/img/design/delete.png">
-          </a>
 
           <a id="interactive-button">
             <img src="/static/img/design/interact.png">
@@ -290,8 +296,7 @@
               <i class="dropdown icon"></i>
               <div class="default text">Part type</div>
             </div>
-          </div>
-
+        </div>
           <!-- Part safety level is not used -->
           <!-- <div class="field">
             <div class="ui floating selection dropdown" id="part-safety-dropdown">
@@ -309,6 +314,38 @@
       <div class="ui one bottom attached big buttons">
         <div id="add-new-part" class="ui white button">Add this part to database!</div>
       </div>
+    </div>
+  </div>
+
+  <!-- click and get part's detail modal -->
+  <div id="inspect-item-modal" class="ui tiny modal">
+    <div class="content">
+      <form id="inspect-item-form" class="ui form">
+        <div class="disabled field">
+          <label>Part role</label>
+          <input type="text" name="component-role" placeholder="part role" disabled="">
+        </div>
+        <div class="disabled field">
+          <label>Display ID</label>
+          <input type="text" name="component-id" placeholder="display id">
+        </div>
+        <div class="disabled field">
+          <label>Name</label>
+          <input type="text" name="component-name">
+        </div>
+        <div class="disabled field">
+          <label>Version</label>
+          <input type="text" name="component-version" placeholder="1" disabled="">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea rows="6" name="component-description"></textarea>
+        </div>
+        <div class="field">
+          <label>DNA Sequence</label>
+          <textarea name="component-sequence"></textarea>
+        </div>
+      </form>
     </div>
   </div>
 
