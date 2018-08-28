@@ -809,10 +809,17 @@ $('#inspect-item')
                 itemModal
                     .find('textarea[name=component-description]')
                     .val(data['part']['description']);
-                itemModal
-                    .find('textarea[name=component-sequence]')
-                    .val('4');
-
+                $.ajax('/api/plasm_part', {
+                    data: {
+                        name: data['part']['name']
+                    },
+                    success: (data)=>{
+                        console.log(data);
+                        itemModal
+                            .find('textarea[name=component-sequence]')
+                            .val(data['seq']);
+                    }
+                });
             });
     })
     .on('deselect', () => {
