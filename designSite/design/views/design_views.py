@@ -34,9 +34,16 @@ All response contains a status in json
 
 # Basic design views
 
+
+type_list = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
+    'light', 'protein', 'process', 'RNA', 'protein-m', 'protein-l',
+    'complex', 'other_DNA', 'composite', 'generator', 'reporter',
+    'inverter', 'signalling', 'measurement', 'unknown']
+
 @login_required
 def design(request):
-    return render(request, 'design.html')
+    context = {'type_list': type_list}
+    return render(request, 'design.html', context)
 
 def test(request):
     return render(request, 'test.html')
@@ -146,6 +153,8 @@ def parts(request):
 
     parts = []
     for x in query_set:
+        if search_target[type_list.index(str(x.Type))] == 0:
+            continue
         if x.IsPublic == 1:
             parts.append({'id': x.id, 'name': "%s" % (x.Name)})
         elif x.Username == request.user.username:
@@ -987,3 +996,19 @@ def get_sbol_json(request):
             'status': 1,
             'data': jsonData
         })
+
+def get_search_targets(request):
+    if request.method == 'POST':
+        try:
+            global search_target
+            search_target = json.loads(request.POST['data'])
+            print(search_target)
+            return JsonResponse({
+                'success': True,
+            })
+        except:
+            return JsonResponse({
+                'success': False,
+                'error': "Someting wrong!"
+            })
+    

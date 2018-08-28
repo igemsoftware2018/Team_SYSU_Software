@@ -3,6 +3,10 @@
 /* eslint-disable no-console */
 /* global SDinDesign, Chart, html2canvas */
 
+
+
+
+
 let designId = $('#canvas-box').attr('design-id');
 let design;
 if (designId !== '') {
@@ -14,6 +18,8 @@ if (designId !== '') {
 
 $('.left.sidebar').first().sidebar('attach events', '#operation');
 
+
+
 // TODO: share button
 $('#share-button').popup({
     content: 'Share your design'
@@ -22,6 +28,8 @@ $('#share-button').popup({
 $('#protocol-button').popup({
     content: 'Add your Protocol'
 });
+
+
 
 // Upload file
 function new_to_old(data) {
@@ -632,8 +640,11 @@ function uncollapsed() {
             right: '0.5em'
         });
 }
-let selectedPart;
-let selectedPartHelper = $('<div></div>');
+
+
+
+
+
 $('#search-parts-dropdown').dropdown({
     apiSettings: {
         url: '/api/parts?name={query}',
@@ -653,6 +664,103 @@ $('#search-parts-dropdown').dropdown({
 }).popup({
     content: 'Search for a part (Case Sensitive)'
 });
+
+
+// Advanced Searching
+
+$('#advanced-search-button').click(function () {
+    $('#advanced-search-modal').modal('show');
+});
+
+
+// Initialize the checkboxes
+$('#advanced-search-modal .checkbox').checkbox('set checked');
+
+
+$('.list .master.checkbox')
+    .checkbox({
+        // check all children
+        onChecked: function() {
+            var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
+            $childCheckbox.checkbox('check');
+        },
+        // uncheck all children
+        onUnchecked: function() {
+            var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
+            $childCheckbox.checkbox('uncheck');
+        }
+    })
+
+
+let flag = 0;
+$('.list .child.checkbox')
+    .checkbox({
+        // Fire on load to set parent value
+        fireOnInit: true,
+        // Change parent state on each child checkbox change
+        onChange: function() {
+            let 
+                $listGroup      = $(this).closest('.list'),
+                $parentCheckbox = $listGroup.closest('.item').children('.checkbox'),
+                $checkbox       = $listGroup.find('.checkbox'),
+                allChecked      = true,
+                allUnchecked    = true;
+            // check to see if all other siblings are checked or unchecked
+            $checkbox.each(function() {
+                if( $(this).checkbox('is checked') ) {
+                    allUnchecked = false;
+                }
+                else {
+                    allChecked = false;
+                }
+            });
+            // set parent checkbox state, but dont trigger its onChange callback
+            if (allChecked) {
+                $parentCheckbox.checkbox('set checked');
+            }
+            else if (allUnchecked) {
+                $parentCheckbox.checkbox('set unchecked');
+            }
+            else {
+                $parentCheckbox.checkbox('set indeterminate');
+            }
+
+
+            // Debounce
+            flag = (flag + 1) % 101;
+            let current_flag = (flag + 1) % 101;
+
+            setTimeout(() => {
+                if (current_flag == flag){
+                    let searchTarget = [];
+                    $checkbox.each(function() {
+                        searchTarget.push($(this).checkbox('is checked') ? 1 : 0);
+                    })
+                    let postData = {
+                        data: JSON.stringify(searchTarget),
+                        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: "api/search_targets",
+                        data: postData,
+                        success: function(data){
+                            if (data['success'] == true)
+                                console.log('success');
+                            else
+                                $('#advanced-search-modal p').text(data['error']);
+                        }
+                    })
+                }
+            }, 2000);
+        }
+    })
+
+
+
+
+let selectedPart;
+let selectedPartHelper = $('<div></div>');
 
 function setPartPanel(id) {
     if (selectedPart !== undefined && selectedPart.id === id) {
@@ -686,7 +794,6 @@ function setPartPanel(id) {
     });
 }
 $('#show-part-src-seg-button').on('click', function (){
-    console.log("Here");
     $('#source-circuit-modal').modal('show');
     $('#source-list').html('');
     selectedPart.works.forEach((w) => {
@@ -756,86 +863,86 @@ $('#part-panel')
 
 
 // Favourite window
-// $('#fav-win')
-//     .resizable('option', 'minWidth', 350);
-// $('#fav-win-button').on('click', function () {
-//     $('#fav-win').fadeOut({
-//         duration: 200
-//     });
-// }).popup({
-//     content: 'Close collection window.'
-// });
-// $('#open-fav-win').on('click', () => {
-//     $('#fav-win').fadeToggle({
-//         duration: 200
-//     });
-// }).popup({
-//     content: 'Toggle collection window.'
-// });
+$('#fav-win')
+    .resizable('option', 'minWidth', 350);
+$('#fav-win-button').on('click', function () {
+    $('#fav-win').fadeOut({
+        duration: 200
+    });
+}).popup({
+    content: 'Close collection window.'
+});
+$('#open-fav-win').on('click', () => {
+    $('#fav-win').fadeToggle({
+        duration: 200
+    });
+}).popup({
+    content: 'Toggle collection window.'
+});
 
-// function loadFavWin() {
-//     $('#fav-win>.content').html('');
-//     $.get('/api/get_favorite', (data) => {
-//         if (data.status !== 1)
-//             return;
-//         data.circuits.forEach((v) => {
-//             let data = `
-//                 <div class="ui segment fav-cir-seg">
-//                   <div class="combine-circuit-button" data-id=${v.id}><i class="plus icon"></i></div>
-//                   <p><b>${v.name}</b> by <b>${v.author}</b></p>
-//                   <p><b>Description:</b> ${v.description}</p>
-//                 </div>`;
-//             $('#fav-win>.content').append(data);
-//         });
-//         data.parts.forEach((v) => {
-//             let safety = SDinDesign.partSafetyLevels[v.safety];
-//             if (safety === undefined)
-//                 safety = 'Unknown risk';
-//             let data = `
-//                 <div class="ui segment fav-part-seg" data-id=${v.id}>
-//                   <div class="remove-part-fav" data-id="${v.id}"><i class="remove icon"></i></div>
-//                   <img src="/static/img/design/${v.type.toLowerCase()}.png"></img>
-//                   <p><b>BBa:</b> ${v.BBa}</p>
-//                   <p><b>Name:</b> ${v.name}</p>
-//                   <p><b>Safety level:</b> ${safety}</p>
-//                 </div>`;
-//             $('#fav-win>.content').append(data);
-//         });
-//         $('.fav-part-seg').off('click').on('click', function () {
-//             $(this).transition({
-//                 animation: 'pulse',
-//                 duration: '0.2s'
-//             });
-//             setPartPanel($(this).data('id'));
-//         }).popup({
-//             content: 'Click to pick this part into part panel!'
-//         });
-//         $('.remove-part-fav').off('click').on('click', function () {
-//             let postData = {
-//                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val(),
-//                 data: JSON.stringify({
-//                     part_id: $(this).data('id'),
-//                     tag: 0
-//                 })
-//             };
-//             $.post('/api/part_favorite', postData, (data) => {
-//                 if (data.success !== true)
-//                     return;
-//                 loadFavWin();
-//             });
-//         }).popup({
-//             content: 'Remove this part from your favorite'
-//         });
-//         $('.combine-circuit-button').off('click').on('click', function () {
-//             $.get(`/api/circuit?id=${$(this).data('id')}`, (value) => {
-//                 design.combine(value);
-//             });
-//         }).popup({
-//             content: 'Add this circuit into your design!'
-//         });
-//     });
-// }
-// loadFavWin();
+function loadFavWin() {
+    $('#fav-win>.content').html('');
+    $.get('/api/get_favorite', (data) => {
+        if (data.status !== 1)
+            return;
+        data.circuits.forEach((v) => {
+            let data = `
+                <div class="ui segment fav-cir-seg">
+                  <div class="combine-circuit-button" data-id=${v.id}><i class="plus icon"></i></div>
+                  <p><b>${v.name}</b> by <b>${v.author}</b></p>
+                  <p><b>Description:</b> ${v.description}</p>
+                </div>`;
+            $('#fav-win>.content').append(data);
+        });
+        data.parts.forEach((v) => {
+            let safety = SDinDesign.partSafetyLevels[v.safety];
+            if (safety === undefined)
+                safety = 'Unknown risk';
+            let data = `
+                <div class="ui segment fav-part-seg" data-id=${v.id}>
+                  <div class="remove-part-fav" data-id="${v.id}"><i class="remove icon"></i></div>
+                  <img src="/static/img/design/${v.type.toLowerCase()}.png"></img>
+                  <p><b>BBa:</b> ${v.BBa}</p>
+                  <p><b>Name:</b> ${v.name}</p>
+                  <p><b>Safety level:</b> ${safety}</p>
+                </div>`;
+            $('#fav-win>.content').append(data);
+        });
+        $('.fav-part-seg').off('click').on('click', function () {
+            $(this).transition({
+                animation: 'pulse',
+                duration: '0.2s'
+            });
+            setPartPanel($(this).data('id'));
+        }).popup({
+            content: 'Click to pick this part into part panel!'
+        });
+        $('.remove-part-fav').off('click').on('click', function () {
+            let postData = {
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val(),
+                data: JSON.stringify({
+                    part_id: $(this).data('id'),
+                    tag: 0
+                })
+            };
+            $.post('/api/part_favorite', postData, (data) => {
+                if (data.success !== true)
+                    return;
+                loadFavWin();
+            });
+        }).popup({
+            content: 'Remove this part from your favorite'
+        });
+        $('.combine-circuit-button').off('click').on('click', function () {
+            $.get(`/api/circuit?id=${$(this).data('id')}`, (value) => {
+                design.combine(value);
+            });
+        }).popup({
+            content: 'Add this circuit into your design!'
+        });
+    });
+}
+loadFavWin();
 
 // Toolbox
 // $('#toolbox')
@@ -856,9 +963,9 @@ $('.ui.dimmer:first').dimmer({
 
 function initPositionSize() {
     stickPartPanel();
-    // $('#fav-win').css({
-    //     height: $(this).height()
-    // });
+    $('#fav-win').css({
+        height: $(this).height()
+    });
     // $('#toolbox').css({
     //     bottom: 100,
     //     left: ($('#canvas').width() - $('#toolbox').width()) / 2,
@@ -897,10 +1004,10 @@ $('#add-new-part')
         }, (data) => {
             if (data.success === true)
                 $('.ui.dimmer:first .loader')
-                    .text('Success, closing...');
+                .text('Success, closing...');
             else
                 $('.ui.dimmer:first .loader')
-                    .text('Failed, closing...');
+                .text('Failed, closing...');
             setTimeout(() => {
                 $('.ui.dimmer:first').dimmer('hide');
             }, 1000);
@@ -926,17 +1033,14 @@ $('#image-button').on('click', function () {
 });
 
 let currentMode;
-const simpleModes = {
+const modes = {
     modifyItem: $('#drag-item'),
     dragCanvas: $('#drag-canvas'),
     deleteItem: $('#delete-item'),
     inspectItem: $('#inspect-item'),
-};
-const modes = $.extend({
     addConnection: $('#connection-dropdown-button'),
     chooseInteractive: $('#interactive-button')
-}, simpleModes);
-
+};
 let newConnectionType, newConnectionStep;
 let newConnectionSource, newConnectionTarget;
 let previewConnection = {};
@@ -1376,46 +1480,46 @@ $('#simulation-button')
         content: 'Run simulation on the design.'
     });
 
-// let safetyPopupContent;
-// $('#safety').popup({
-//     position: 'bottom right',
-//     variation: 'wide popup',
-//     content: 'safety',
-//     onShow: function () {
-//         console.log(safetyPopupContent);
-//         this.html(safetyPopupContent);
-//     }
-// });
+let safetyPopupContent;
+$('#safety').popup({
+    position: 'bottom right',
+    variation: 'wide popup',
+    content: 'safety',
+    onShow: function () {
+        console.log(safetyPopupContent);
+        this.html(safetyPopupContent);
+    }
+});
 
-// function updateSafety(safety) {
-//     /*
-//      * safety == -1 表示unknown, 也列入安全的范畴。
-//      */
-//     if (safety <= 1) {
-//         $('#safety').removeClass('red yellow').addClass('green')
-//             .html('Low risk<img src="/static/img/design/safety-1.png"></img>');
-//     } else if (safety === 2) {
-//         $('#safety').removeClass('red green').addClass('yellow')
-//             .html('Moderate risk<img src="/static/img/design/safety-2.png"></img>');
-//     } else if (safety === 3) {
-//         $('#safety').removeClass('yellow green').addClass('red')
-//             .html('High risk<img src="/static/img/design/safety-3.png"></img>');
-//     }
+function updateSafety(safety) {
+    /*
+     * safety == -1 表示unknown, 也列入安全的范畴。
+     */
+    if (safety <= 1) {
+        $('#safety').removeClass('red yellow').addClass('green')
+            .html('Low risk<img src="/static/img/design/safety-1.png"></img>');
+    } else if (safety === 2) {
+        $('#safety').removeClass('red green').addClass('yellow')
+            .html('Moderate risk<img src="/static/img/design/safety-2.png"></img>');
+    } else if (safety === 3) {
+        $('#safety').removeClass('yellow green').addClass('red')
+            .html('High risk<img src="/static/img/design/safety-3.png"></img>');
+    }
 
-//     if (safety === 3) {
-//         safetyPopupContent = `
-//             <div class="header">Warning!</div>
-//             <div class="content">Please check your design again in case of
-//                 using any potential risky part! We don't recommend you to
-//                 use parts with high risk ground. Change them into safe parts?</div>`;
-//         $('#safety').popup('show');
-//     } else {
-//         $('#safety').popup('hide');
-//         safetyPopupContent = `
-//             <div class="header">Safe!</div>
-//             <div class="content">Your design is now under an acceptable safety level.</div>`;
-//     }
-// }
+    if (safety === 3) {
+        safetyPopupContent = `
+            <div class="header">Warning!</div>
+            <div class="content">Please check your design again in case of
+                using any potential risky part! We don't recommend you to
+                use parts with high risk ground. Change them into safe parts?</div>`;
+        $('#safety').popup('show');
+    } else {
+        $('#safety').popup('hide');
+        safetyPopupContent = `
+            <div class="header">Safe!</div>
+            <div class="content">Your design is now under an acceptable safety level.</div>`;
+    }
+}
 
 $('#show-plasmid').on('click', function () {
     $('#plasmid-modal').modal('show');
@@ -1430,4 +1534,4 @@ $(window)
     });
 
 selectMode('modifyItem');
-// updateSafety();
+updateSafety();
