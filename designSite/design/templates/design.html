@@ -3,7 +3,7 @@
 <html>
 
 <head>
-  <title>Design - S-Din</title>
+  <title>Designer</title>
 
   <!-- <link rel="shortcut icon" href="/static/img/favicon.png"> -->
   <link rel="stylesheet" href="/static/css/fontsize.css">
@@ -104,13 +104,13 @@
         </div>
       </span>
 
-      <div class="right menu">
+      <!-- <div class="right menu">
         <span class="item">
           <h4 id="safety" class="ui green header">Low risk
             <img src="/static/img/design/safety-1.png">
           </h4>
         </span>
-      </div>
+      </div> -->
 
 <!-- Temporarily comment the logo -->
       <!-- <span class="item">
@@ -119,9 +119,7 @@
         </a>
       </span> -->
 
-
-
-      <span class="item">
+      <span id="logo" class="item">
         <a href="/account/">
           <p>Account</p>
         </a>
@@ -130,9 +128,10 @@
   </div>
 
   <div class="ui labeled left inline vertical sidebar menu">
-    <a class="item" id="open-fav-win">
+    <!-- Comment favourite -->
+    <!-- <a class="item" id="open-fav-win">
       <img src="/static/img/design/favorite.png">
-    </a>
+    </a> -->
     <a class="item" id="load-button">
       <img src="/static/img/design/load.png">
     </a>
@@ -173,14 +172,16 @@
         <i class="dropdown icon"></i>
         <div class="default text">Search BBa...</div>
       </div>
-      <div class="tab-context">
+
+
+      <!-- <div class="tab-context">
         <div class="ui top attached tabular menu">
           <div class="active item" data-tab="src-tab">Source circuit</div>
         </div>
         <div id="part-src-seg" class="ui bottom attached active tab segment" data-tab="src-tab">
           <ul class="ui list" id="source-list"></ul>
         </div>
-      </div>
+      </div> -->
       <div class="tab-context">
         <div class="ui top attached tabular menu">
           <div class="active item" data-tab="info-tab">Part information</div>
@@ -195,21 +196,22 @@
           <div id="part-info-des">
             <h5 class="ui header">Description:</h5>
             <p></p>
+            <div class="mini ui button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source Circuit</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Favourite window (floating) -->
-  <div id="fav-win" class="window">
+  <!-- Comment Favourite window (floating) -->
+  <!-- <div id="fav-win" class="window">
     <div class="nav">
       <h5 class="ui header">Favourite</h5>
       <i id="fav-win-button" class="link icon remove"></i>
     </div>
     <div class="content">
     </div>
-  </div>
+  </div> -->
 
   <!-- Component Parts -->
   <!-- <div id="components-menu" class="ui bottom fixed menu">
@@ -351,6 +353,21 @@
       <div class="ui text loader"></div>
     </div>
   </div>
+
+  <!-- Source Circuit Modal-->
+  <div id="source-circuit-modal" class="ui tiny modal">
+
+    <div class="content">
+      <div>
+        <h5 class="ui white header">Source Circuit</h5>
+      </div>
+      <!-- <div id="part-src-seg" class="ui bottom attached active segment"></div> -->
+      <div class="ui bottom attached active segment">
+        <ul class="ui list" id="source-list"></ul>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Clear all modal -->
   <div id="clear-all-modal" class="ui basic modal">
