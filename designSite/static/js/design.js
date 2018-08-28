@@ -631,6 +631,11 @@ $('#search-parts-dropdown').dropdown({
     content: 'Search for a part (Case Sensitive)'
 });
 
+// $('#advanced-search').onclick(function () {
+//     console.log("here");
+//     $('#advanced-search-modal').modal('show');
+// });
+
 function setPartPanel(id) {
     if (selectedPart !== undefined && selectedPart.id === id) {
         $('#part-info-tab').transition({
@@ -663,7 +668,6 @@ function setPartPanel(id) {
     });
 }
 $('#show-part-src-seg-button').on('click', function (){
-    console.log("Here");
     $('#source-circuit-modal').modal('show');
     $('#source-list').html('');
     selectedPart.works.forEach((w) => {
