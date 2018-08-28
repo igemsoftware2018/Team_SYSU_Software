@@ -16,15 +16,17 @@
 }
 
 #logo {
-  height: 1.75rem;
-  width: auto
+  margin-left: auto;
+  /* height: 1.75rem;
+  width: auto */
 }
 
-#safety>img {
+/* Comment the safety */
+/* #safety>img {
   margin-left: 1rem;
   height: 2rem;
   width: 2rem;
-}
+} */
 
 .window {
   position: absolute;

@@ -733,86 +733,86 @@ $('#part-panel')
 
 
 // Favourite window
-$('#fav-win')
-    .resizable('option', 'minWidth', 350);
-$('#fav-win-button').on('click', function () {
-    $('#fav-win').fadeOut({
-        duration: 200
-    });
-}).popup({
-    content: 'Close collection window.'
-});
-$('#open-fav-win').on('click', () => {
-    $('#fav-win').fadeToggle({
-        duration: 200
-    });
-}).popup({
-    content: 'Toggle collection window.'
-});
+// $('#fav-win')
+//     .resizable('option', 'minWidth', 350);
+// $('#fav-win-button').on('click', function () {
+//     $('#fav-win').fadeOut({
+//         duration: 200
+//     });
+// }).popup({
+//     content: 'Close collection window.'
+// });
+// $('#open-fav-win').on('click', () => {
+//     $('#fav-win').fadeToggle({
+//         duration: 200
+//     });
+// }).popup({
+//     content: 'Toggle collection window.'
+// });
 
-function loadFavWin() {
-    $('#fav-win>.content').html('');
-    $.get('/api/get_favorite', (data) => {
-        if (data.status !== 1)
-            return;
-        data.circuits.forEach((v) => {
-            let data = `
-                <div class="ui segment fav-cir-seg">
-                  <div class="combine-circuit-button" data-id=${v.id}><i class="plus icon"></i></div>
-                  <p><b>${v.name}</b> by <b>${v.author}</b></p>
-                  <p><b>Description:</b> ${v.description}</p>
-                </div>`;
-            $('#fav-win>.content').append(data);
-        });
-        data.parts.forEach((v) => {
-            let safety = SDinDesign.partSafetyLevels[v.safety];
-            if (safety === undefined)
-                safety = 'Unknown risk';
-            let data = `
-                <div class="ui segment fav-part-seg" data-id=${v.id}>
-                  <div class="remove-part-fav" data-id="${v.id}"><i class="remove icon"></i></div>
-                  <img src="/static/img/design/${v.type.toLowerCase()}.png"></img>
-                  <p><b>BBa:</b> ${v.BBa}</p>
-                  <p><b>Name:</b> ${v.name}</p>
-                  <p><b>Safety level:</b> ${safety}</p>
-                </div>`;
-            $('#fav-win>.content').append(data);
-        });
-        $('.fav-part-seg').off('click').on('click', function () {
-            $(this).transition({
-                animation: 'pulse',
-                duration: '0.2s'
-            });
-            setPartPanel($(this).data('id'));
-        }).popup({
-            content: 'Click to pick this part into part panel!'
-        });
-        $('.remove-part-fav').off('click').on('click', function () {
-            let postData = {
-                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val(),
-                data: JSON.stringify({
-                    part_id: $(this).data('id'),
-                    tag: 0
-                })
-            };
-            $.post('/api/part_favorite', postData, (data) => {
-                if (data.success !== true)
-                    return;
-                loadFavWin();
-            });
-        }).popup({
-            content: 'Remove this part from your favorite'
-        });
-        $('.combine-circuit-button').off('click').on('click', function () {
-            $.get(`/api/circuit?id=${$(this).data('id')}`, (value) => {
-                design.combine(value);
-            });
-        }).popup({
-            content: 'Add this circuit into your design!'
-        });
-    });
-}
-loadFavWin();
+// function loadFavWin() {
+//     $('#fav-win>.content').html('');
+//     $.get('/api/get_favorite', (data) => {
+//         if (data.status !== 1)
+//             return;
+//         data.circuits.forEach((v) => {
+//             let data = `
+//                 <div class="ui segment fav-cir-seg">
+//                   <div class="combine-circuit-button" data-id=${v.id}><i class="plus icon"></i></div>
+//                   <p><b>${v.name}</b> by <b>${v.author}</b></p>
+//                   <p><b>Description:</b> ${v.description}</p>
+//                 </div>`;
+//             $('#fav-win>.content').append(data);
+//         });
+//         data.parts.forEach((v) => {
+//             let safety = SDinDesign.partSafetyLevels[v.safety];
+//             if (safety === undefined)
+//                 safety = 'Unknown risk';
+//             let data = `
+//                 <div class="ui segment fav-part-seg" data-id=${v.id}>
+//                   <div class="remove-part-fav" data-id="${v.id}"><i class="remove icon"></i></div>
+//                   <img src="/static/img/design/${v.type.toLowerCase()}.png"></img>
+//                   <p><b>BBa:</b> ${v.BBa}</p>
+//                   <p><b>Name:</b> ${v.name}</p>
+//                   <p><b>Safety level:</b> ${safety}</p>
+//                 </div>`;
+//             $('#fav-win>.content').append(data);
+//         });
+//         $('.fav-part-seg').off('click').on('click', function () {
+//             $(this).transition({
+//                 animation: 'pulse',
+//                 duration: '0.2s'
+//             });
+//             setPartPanel($(this).data('id'));
+//         }).popup({
+//             content: 'Click to pick this part into part panel!'
+//         });
+//         $('.remove-part-fav').off('click').on('click', function () {
+//             let postData = {
+//                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val(),
+//                 data: JSON.stringify({
+//                     part_id: $(this).data('id'),
+//                     tag: 0
+//                 })
+//             };
+//             $.post('/api/part_favorite', postData, (data) => {
+//                 if (data.success !== true)
+//                     return;
+//                 loadFavWin();
+//             });
+//         }).popup({
+//             content: 'Remove this part from your favorite'
+//         });
+//         $('.combine-circuit-button').off('click').on('click', function () {
+//             $.get(`/api/circuit?id=${$(this).data('id')}`, (value) => {
+//                 design.combine(value);
+//             });
+//         }).popup({
+//             content: 'Add this circuit into your design!'
+//         });
+//     });
+// }
+// loadFavWin();
 
 // Toolbox
 // $('#toolbox')
@@ -833,9 +833,9 @@ $('.ui.dimmer:first').dimmer({
 
 function initPositionSize() {
     stickPartPanel();
-    $('#fav-win').css({
-        height: $(this).height()
-    });
+    // $('#fav-win').css({
+    //     height: $(this).height()
+    // });
     // $('#toolbox').css({
     //     bottom: 100,
     //     left: ($('#canvas').width() - $('#toolbox').width()) / 2,
@@ -1347,46 +1347,46 @@ $('#simulation-button')
         content: 'Run simulation on the design.'
     });
 
-let safetyPopupContent;
-$('#safety').popup({
-    position: 'bottom right',
-    variation: 'wide popup',
-    content: 'safety',
-    onShow: function () {
-        console.log(safetyPopupContent);
-        this.html(safetyPopupContent);
-    }
-});
+// let safetyPopupContent;
+// $('#safety').popup({
+//     position: 'bottom right',
+//     variation: 'wide popup',
+//     content: 'safety',
+//     onShow: function () {
+//         console.log(safetyPopupContent);
+//         this.html(safetyPopupContent);
+//     }
+// });
 
-function updateSafety(safety) {
-    /*
-     * safety == -1 表示unknown, 也列入安全的范畴。
-     */
-    if (safety <= 1) {
-        $('#safety').removeClass('red yellow').addClass('green')
-            .html('Low risk<img src="/static/img/design/safety-1.png"></img>');
-    } else if (safety === 2) {
-        $('#safety').removeClass('red green').addClass('yellow')
-            .html('Moderate risk<img src="/static/img/design/safety-2.png"></img>');
-    } else if (safety === 3) {
-        $('#safety').removeClass('yellow green').addClass('red')
-            .html('High risk<img src="/static/img/design/safety-3.png"></img>');
-    }
+// function updateSafety(safety) {
+//     /*
+//      * safety == -1 表示unknown, 也列入安全的范畴。
+//      */
+//     if (safety <= 1) {
+//         $('#safety').removeClass('red yellow').addClass('green')
+//             .html('Low risk<img src="/static/img/design/safety-1.png"></img>');
+//     } else if (safety === 2) {
+//         $('#safety').removeClass('red green').addClass('yellow')
+//             .html('Moderate risk<img src="/static/img/design/safety-2.png"></img>');
+//     } else if (safety === 3) {
+//         $('#safety').removeClass('yellow green').addClass('red')
+//             .html('High risk<img src="/static/img/design/safety-3.png"></img>');
+//     }
 
-    if (safety === 3) {
-        safetyPopupContent = `
-            <div class="header">Warning!</div>
-            <div class="content">Please check your design again in case of
-                using any potential risky part! We don't recommend you to
-                use parts with high risk ground. Change them into safe parts?</div>`;
-        $('#safety').popup('show');
-    } else {
-        $('#safety').popup('hide');
-        safetyPopupContent = `
-            <div class="header">Safe!</div>
-            <div class="content">Your design is now under an acceptable safety level.</div>`;
-    }
-}
+//     if (safety === 3) {
+//         safetyPopupContent = `
+//             <div class="header">Warning!</div>
+//             <div class="content">Please check your design again in case of
+//                 using any potential risky part! We don't recommend you to
+//                 use parts with high risk ground. Change them into safe parts?</div>`;
+//         $('#safety').popup('show');
+//     } else {
+//         $('#safety').popup('hide');
+//         safetyPopupContent = `
+//             <div class="header">Safe!</div>
+//             <div class="content">Your design is now under an acceptable safety level.</div>`;
+//     }
+// }
 
 $('#show-plasmid').on('click', function () {
     $('#plasmid-modal').modal('show');
@@ -1401,4 +1401,4 @@ $(window)
     });
 
 selectMode('modifyItem');
-updateSafety();
+// updateSafety();
