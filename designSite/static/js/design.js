@@ -166,7 +166,7 @@ function new_to_old(data) {
             subparts: Subparts,
             X: x,
             Y: y + index * 110
-        }
+        };
         Devices.push(temp);
     });
     let result = {
@@ -191,9 +191,9 @@ sbolFileReader.onload = () => {
         data: sbolFileReader.result
     };
     $.post('/api/sbol_json', data, function (v) {
-        console.log(v["data"]);
+        console.log(v['data']);
         // $('#data').text(JSON.stringify(JSON.parse(v["data"]), null, '\t'));
-        let temp = new_to_old(JSON.parse(v["data"]));
+        let temp = new_to_old(JSON.parse(v['data']));
         console.log(temp);
         design.design = temp;
     });
@@ -310,7 +310,7 @@ $('#json-sbol-button').on('click', function () {
     console.log(data);
     $.post('/api/sbol_doc', data, function (res) {
         console.log(res);
-        let filename = "yours.xml";
+        let filename = 'yours.xml';
         var blob = new Blob([(new XMLSerializer).serializeToString(res)], {
             type: 'application/xml'
         });
@@ -380,10 +380,10 @@ $('#save-circuit').on('click', () => {
     $.post('/api/circuit', postData, (v) => {
         if (v.status === 1)
             $('.ui.dimmer:first .loader')
-            .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
+                .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
             $('.ui.dimmer:first .loader')
-            .text('Failed, closing...');
+                .text('Failed, closing...');
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
         }, 1000);
@@ -566,7 +566,7 @@ $('#chassis-dropdown').dropdown( {
         design.setChassis(value);
     }
 }).popup({
-    content: "Choose your chassis."
+    content: 'Choose your chassis.'
 });
 $('#part-panel')
     .resizable('option', 'minWidth', 200);
@@ -762,7 +762,7 @@ $('.list .master.checkbox')
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('uncheck');
         }
-    })
+    });
 
 
 let flag = 0;
@@ -808,14 +808,14 @@ $('.list .child.checkbox')
                     let searchTarget = [];
                     $checkbox.each(function() {
                         searchTarget.push($(this).checkbox('is checked') ? 1 : 0);
-                    })
+                    });
                     let postData = {
                         data: JSON.stringify(searchTarget),
                         csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-                    }
+                    };
                     $.ajax({
                         type: 'POST',
-                        url: "api/search_targets",
+                        url: 'api/search_targets',
                         data: postData,
                         success: function(data){
                             if (data['success'] == true)
@@ -823,11 +823,11 @@ $('.list .child.checkbox')
                             else
                                 $('#advanced-search-modal p').text(data['error']);
                         }
-                    })
+                    });
                 }
             }, 2000);
         }
-    })
+    });
 
 
 
@@ -874,8 +874,8 @@ $('#show-part-src-seg-button').on('click', function (){
     });
     selectedPart.papers.forEach((p) => {
         $('#source-list').append(`<li><a href="/paper?id=${p.id}">${p.title}</li></a>`);
-    })
-})
+    });
+});
 selectedPartHelper
     .addClass('part-helper')
     .append('<b></b>')
@@ -1077,10 +1077,10 @@ $('#add-new-part')
         }, (data) => {
             if (data.success === true)
                 $('.ui.dimmer:first .loader')
-                .text('Success, closing...');
+                    .text('Success, closing...');
             else
                 $('.ui.dimmer:first .loader')
-                .text('Failed, closing...');
+                    .text('Failed, closing...');
             setTimeout(() => {
                 $('.ui.dimmer:first').dimmer('hide');
             }, 1000);
@@ -1222,7 +1222,7 @@ $('#inspect-item')
         $('.SDinDesign-device>.SDinDesign-part')
             .off('mouseenter')
             .off('mouseleave')
-            .off('click')
+            .off('click');
         design.unHighlightDevice($('.SDinDesign-part, .SDinDesign-device'));
     })
     .popup({
