@@ -2,6 +2,7 @@
 
 /* eslint-disable no-console */
 /* global SDinDesign, Chart, html2canvas */
+/* global Vue */
 
 
 
@@ -24,12 +25,84 @@ $('.left.sidebar').first().sidebar('attach events', '#operation');
 $('#share-button').popup({
     content: 'Share your design'
 });
-// TODO: protocol button
-$('#protocol-button').popup({
-    content: 'Add your Protocol'
+
+// using vue.js below to implement protocol
+$(function() {
+    Vue.component('step-item', {
+        props: ['data', 'i'],
+        delimiters: ['[[', ']]'], //use different delimiters to avoid conflict with django
+        template: `
+        <div class="field">
+            <div class="ui horizontal divider header" >
+            step [[i+1]]
+            <i class="ui icon delete" v-on:click="$emit('remove-step')"></i>
+            </div>
+
+            <div class="field">
+                <label> title </label>
+                <input type="text" v-model="data.title"/>
+                <label> body </label>
+                <textarea rows="3" v-model="data.body"></textarea>
+            </div>
+        </div>
+        `
+    });
+
+    new Vue({
+        el: '#protocol-form',
+        data: {
+            description: '',
+            title: '',
+            stepsList: [
+                {id:0, title: '', body: ''}
+            ],
+            lastID: 1
+        },
+        methods: {
+            submit() {
+                let $this = $(this.$el);
+                $this.addClass('loading');
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/test', //TODO: not finished
+                    data: {
+                        data: this.$data
+                    },
+                    success: (data) => {
+                        console.log(data); //TODO: not finished
+                    },
+                    error: (data) => {
+                        console.log('fail');
+                        console.log(data);
+                    },
+                    complete: () => {
+                        $this.removeClass('loading');
+                    }
+                });
+            },
+            add() {
+                this.stepsList.push({
+                    id: this.lastID++,
+                    title: '',
+                    body: ''
+                });
+            },
+            removeStep(i) {
+                this.stepsList.splice(i, 1);
+            }
+        }
+    });
+
 });
 
-
+// protocol button
+$('#protocol-button')
+    .on('click', () => {
+        $('#protocol-modal').modal('show');
+    })
+    .popup({
+        content: 'Add your Protocol'
+    });
 
 // Upload file
 function new_to_old(data) {
