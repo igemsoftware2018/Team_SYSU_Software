@@ -4,10 +4,6 @@
 /* global SDinDesign, Chart, html2canvas */
 /* global Vue */
 
-
-
-
-
 let designId = $('#canvas-box').attr('design-id');
 let design;
 if (designId !== '') {
