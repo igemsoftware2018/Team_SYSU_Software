@@ -426,3 +426,7 @@ div h5,
 #chassis-dropdown {
   width: 100%;
 }
+
+#analysis-modal .selection.dropdown {
+  width: 100%;
+}

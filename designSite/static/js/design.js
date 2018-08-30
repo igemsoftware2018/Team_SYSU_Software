@@ -109,11 +109,7 @@ function new_to_old(data) {
     
     // Set all type included in search targets
     let postData = {
-        data: JSON.stringify(
-            Array.apply(null, Array(10)).map(function() {
-                return 1;
-            })
-        ),
+        data: JSON.stringify(Array(NUM_OF_TYPE).fill(1)),
         csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
     }
     $.ajax({
@@ -139,7 +135,6 @@ function new_to_old(data) {
             url: '/api/parts?name=' + component.name,
             async: false,
             success: function (res) {
-                console.log(res);
                 $.ajax({
                     type: 'GET',
                     url: '/api/part?id=' + res.parts[0].id,
@@ -216,7 +211,8 @@ function new_to_old(data) {
 let JsonFileReader = new FileReader();
 JsonFileReader.onload = () => {
     // TODO: transform new json to old json
-    design.design = JSON.parse(new_to_old(JsonFileReader.result));
+    console.log(new_to_old(JSON.parse(JsonFileReader.result)));
+    design.design = new_to_old(JSON.parse(JsonFileReader.result));
 };
 let sbolFileReader = new FileReader();
 sbolFileReader.onload = () => {
@@ -360,6 +356,67 @@ $('#json-sbol-button').on('click', function () {
     });
 }).popup({
     content: 'Export your design as a SBOL file'
+});
+
+// Analysis view
+$('#analysis-button').on('click', function() {
+    $('#analysis-modal').modal({
+        onShow: function() {
+            let data = [];
+            let unique = {};
+            let parts = design.design.parts;
+            $.each(parts, function(index, part) {
+                let temp = {
+                    name: part.name,
+                    value: part.id
+                };
+                if (!unique[temp]) {
+                    data.push(temp);
+                    unique[temp] = 1;
+                }
+            });
+            $('#analysis-part-dropdown').dropdown({
+                values: data,
+                onChange: function(value) {
+                    $.get('/api/part?id=' + value, function(res) {
+                        $('#selected-part-sequence').text(res.sequence);
+                    });
+                }
+            });
+        },
+        onHide: function() {
+            $('#analysis-sequence').val('');
+            $('#selected-part-sequence').text('Selected Part Sequence here');
+        }
+    }).modal('show');
+}).popup({
+    content: 'Analysis your design.'
+});
+$('#analysis-chassis-dropdown').dropdown({
+    values: [{
+        name: 'Escherichia Coli',
+        value: 'Escherichia Coli',
+        selected: true
+    },{
+        name: 'Pichia pstoris',
+        value: 'Pichia pstoris'
+    },{
+        name: 'Saccharomyces cerevisiae',
+        value: 'Saccharomyces cerevisiae'
+    }]
+});
+$('#analysis-chassis-mode-dropdown').dropdown({
+    values: [{
+        name: '1',
+        value: '1',
+        selected: true
+    },{
+        name: '2',
+        value: '2'
+    },{
+        name: '3',
+        value: '3'
+    }]
 });
 
 $('#components-menu a').on('click', function () {
@@ -591,7 +648,7 @@ $('#redo-button').on('click', function () {
 });
 
 // Part panel
-$('#chassis-dropdown').dropdown( {
+$('#chassis-dropdown').dropdown({
     values: [{
         name: 'Escherichia Coli',
         value: 'Escherichia Coli',

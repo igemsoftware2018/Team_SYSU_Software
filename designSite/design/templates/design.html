@@ -88,6 +88,10 @@
           <a id="protocol-button">
             <img src="/static/img/design/protocol.png">
           </a>
+
+          <a id="analysis-button">
+            <img src="/static/img/design/simulate.png">
+          </a>
         </span>
       </div>
 
@@ -183,6 +187,7 @@
         <i class="dropdown icon"></i>
         <div class="default text">Search BBa...</div>
       </div>
+      <br>
       <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div>
     
 
@@ -196,7 +201,7 @@
         </div>
       </div> -->
 
-
+      <div class="ui divider"></div>
 
       <div class="tab-context">
         <div class="ui top attached tabular menu">
@@ -338,6 +343,51 @@
           <textarea name="component-sequence"></textarea>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div id="analysis-modal" class="ui tiny modal">
+    <div class="content">
+      <h5 class="ui center aligned header">Analysis Modal</h5>
+      
+      <div class="ui divider"></div>
+
+      <form id="analysis-form" class="ui form">
+        <label>DNA Sequence</label>
+        <textarea id="analysis-sequence" placeholder="Please input DNA sequence"></textarea>
+      </form>
+      
+      <div class="ui divider"></div>
+
+      <div>
+        <label>Circuit Part import</label><br>
+        <div class="ui compact floating selection dropdown" id="analysis-part-dropdown">
+          <div class="text" id="analysis-part"></div>
+          <i class="dropdown icon"></i>
+        </div>
+        <br>
+        <span id="selected-part-sequence">Selected Part Sequence here</span>
+      </div>
+
+      <div class="ui divider"></div>
+
+      <label>Chassis Selection</label><br>
+      <div class="ui compact floating selection dropdown" id="analysis-chassis-dropdown">
+        <div class="text" id="analysis-chassis"></div>
+        <i class="dropdown icon"></i>
+      </div>
+      
+      <div class="ui divider"></div>
+      
+      <label>Chassis Mode Selection</label><br>
+      <div class="ui compact floating selection dropdown" id="analysis-chassis-mode-dropdown">
+        <div class="text" id="analysis-chassis-mode"></div>
+        <i class="dropdown icon"></i>
+      </div>
+      
+      <div class="ui divider"></div>
+      
+      <button class="fluid ui button" id="analysis-button">Analysis</button>
     </div>
   </div>
 
