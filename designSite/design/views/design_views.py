@@ -35,14 +35,14 @@ All response contains a status in json
 # Basic design views
 
 
-type_list = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
+TYPE_LIST = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
     'light', 'protein', 'process', 'RNA', 'protein-m', 'protein-l',
     'complex', 'other_DNA', 'composite', 'generator', 'reporter',
     'inverter', 'signalling', 'measurement', 'unknown']
 
 @login_required
 def design(request):
-    context = {'type_list': type_list}
+    context = {'type_list': TYPE_LIST}
     return render(request, 'design.html', context)
 
 def test(request):
@@ -144,7 +144,9 @@ def parts(request):
             'name': xxx
         }]
     '''
+    search_target = request.GET.get('flag')
     query_name = request.GET.get('name')
+    print(search_target)
     # Params empty
     if query_name is None or len(query_name) == 0:
         return JsonResponse({ 'success': False })
@@ -153,7 +155,7 @@ def parts(request):
 
     parts = []
     for x in query_set:
-        if search_target[type_list.index(str(x.Type))] == 0:
+        if search_target[TYPE_LIST.index(str(x.Type))] == '0':
             continue
         if x.IsPublic == 1:
             parts.append({'id': x.id, 'name': "%s" % (x.Name)})
@@ -1104,19 +1106,3 @@ def get_sbol_json(request):
             'status': 1,
             'data': jsonData
         })
-
-def get_search_targets(request):
-    if request.method == 'POST':
-        try:
-            global search_target
-            search_target = json.loads(request.POST['data'])
-            print(search_target)
-            return JsonResponse({
-                'success': True,
-            })
-        except:
-            return JsonResponse({
-                'success': False,
-                'error': "Someting wrong!"
-            })
-    

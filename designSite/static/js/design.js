@@ -8,9 +8,6 @@ let NUM_OF_TYPE = 20;
 
 let designId = $('#canvas-box').attr('design-id');
 let design;
-let searchTarget = Array.apply(null, Array(NUM_OF_TYPE)).map(function() {
-    return 1;
-}); // Initialize an array with 20 elements that are all 1.
 
 
 
@@ -103,21 +100,6 @@ $('#protocol-modal').modal({
 
 // Upload file
 function new_to_old(data) {
-    
-    // Set all type included in search targets
-    let postData = {
-        data: JSON.stringify(Array(NUM_OF_TYPE).fill(1)),
-        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-    }
-    $.ajax({
-        type: 'POST',
-        url: 'api/search_targets',
-        data: postData,
-        success: function(data){
-            if (data['success'] == false)
-                console.log("Error occurs when post the search target data!")
-        }
-    })
 
     // Get parts infomation
     var Lines = [],
@@ -129,7 +111,7 @@ function new_to_old(data) {
         design._nextPartCid = design._nextPartCid + 1;
         $.ajax({
             type: 'GET',
-            url: '/api/parts?name=' + component.name,
+            url: '/api/parts?flag=11111111111111111111&name=' + component.name,
             async: false,
             success: function (res) {
                 $.ajax({
@@ -153,17 +135,6 @@ function new_to_old(data) {
         });
     });
 
-    // Reset search targets
-    postData["data"] = JSON.stringify(searchTarget);
-    $.ajax({
-        type: 'POST',
-        url: 'api/search_targets',
-        data: postData,
-        success: function(data){
-            if (data['success'] == false)
-                console.log("Error occurs when post the search target data!")
-        }
-    })
     
     $.each(data.stimulations, function (index, stimulation) {
         let temp = {
@@ -812,37 +783,6 @@ function uncollapsed() {
 }
 
 
-
-
-
-$('#search-parts-dropdown').dropdown({
-    apiSettings: {
-        url: '/api/parts?name={query}',
-        cache: false,
-        beforeSend: (settings) => settings.urlData.query.length < 3 ? false : settings,
-        onResponse: (response) => ({
-            success: response.success === true,
-            results: response.parts.map((x) => ({
-                name: x.name,
-                value: x.id
-            }))
-        })
-    },
-    onChange: (value) => {
-        setPartPanel(value);
-    }
-}).popup({
-    content: 'Search for a part (Case Sensitive)'
-});
-
-
-// Advanced Searching
-
-$('#advanced-search-button').click(function () {
-    $('#advanced-search-modal').modal('show');
-});
-
-
 // Initialize the checkboxes
 $('#advanced-search-modal .checkbox').checkbox('set checked');
 
@@ -862,7 +802,7 @@ $('.list .master.checkbox')
     });
 
 
-let flag = 0;
+
 $('.list .child.checkbox')
     .checkbox({
         // Fire on load to set parent value
@@ -894,37 +834,51 @@ $('.list .child.checkbox')
             else {
                 $parentCheckbox.checkbox('set indeterminate');
             }
-
-
-            // Debounce
-            flag = (flag + 1) % 101;
-            let current_flag = (flag + 1) % 101;
-
-            setTimeout(() => {
-                if (current_flag == flag){
-                    searchTarget = [];
-                    $checkbox.each(function() {
-                        searchTarget.push($(this).checkbox('is checked') ? 1 : 0);
-                    });
-                    let postData = {
-                        data: JSON.stringify(searchTarget),
-                        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-                    };
-                    $.ajax({
-                        type: 'POST',
-                        url: 'api/search_targets',
-                        data: postData,
-                        success: function(data){
-                            if (data['success'] == true)
-                                console.log('success');
-                            else
-                                $('#advanced-search-modal p').text(data['error']);
-                        }
-                    });
-                }
-            }, 1000);
         }
     });
+
+
+
+
+
+$('#search-parts-dropdown').dropdown({
+    apiSettings: {
+        url: '/api/parts?flag={target}&name={query}',
+        cache: false,
+        beforeSend: (settings) => 
+        {
+            settings.urlData.target = (() =>{
+                let searchTarget = "";
+                let $choices = $('.list .child.checkbox');
+                $choices.each(function() {
+                    searchTarget += $(this).checkbox('is checked')?"1":"0";
+                })
+                return searchTarget;
+            })();
+            return settings.urlData.query.length < 3 ? false : settings;
+        },
+        onResponse: (response) => ({
+            success: response.success === true,
+            results: response.parts.map((x) => ({
+                name: x.name,
+                value: x.id
+            }))
+        })
+    },
+    onChange: (value) => {
+        setPartPanel(value);
+    }
+}).popup({
+    content: 'Search for a part (Case Sensitive)'
+});
+
+
+// Advanced Searching
+
+$('#advanced-search-button').click(function () {
+    $('#advanced-search-modal').modal('show');
+});
+
 
 
 
