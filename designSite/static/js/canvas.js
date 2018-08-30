@@ -174,7 +174,12 @@ class SDinDesign {
             lines: [],
             parts: [],
             id: -1,
-            chassis: "Escherichia Coli"
+            chassis: 'Escherichia Coli',
+            protocol: {
+                title:'',
+                description:'',
+                steps:[{id:0, title:'', body:''}]
+            }
         },
         option = {}
     ) {
@@ -226,7 +231,8 @@ class SDinDesign {
                 X: v.X,
                 Y: v.Y
             })),
-            parts: this._design.devices.reduce((t, v) => t.concat(v.parts), this._design.parts)
+            parts: this._design.devices.reduce((t, v) => t.concat(v.parts), this._design.parts),
+            protocol: this._design.protocol
         };
         data = $.extend(true, {}, data);
         $.each(data.lines, (_, l) => { delete l.DOM; });
@@ -243,15 +249,13 @@ class SDinDesign {
         this.description = design.description;
         this._design = this.convertFormat(design);
         this._design.chassis = design.chassis;
+        this._design.protocol = design.protocol;
 
         $.each(this._design.devices, (_, device) => { this.addDevice(device); });
         $.each(this._design.parts, (_, part) => { this.addPart(part, 1, undefined); });
         $.each(this._design.lines, (_, link) => { this.addLink(link, false); });
 
         this.redrawDesign();
-
-        // TODO: fix updateSafety from other file
-        // this.maxSafety(updateSafety);
     }
     combine(design) {
         this.recordHistory(`Combined design ID=${design.id}.`);

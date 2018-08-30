@@ -90,3 +90,16 @@ class CircuitCombines(models.Model):
     Circuit = models.ForeignKey('Circuit', on_delete = models.CASCADE, related_name = "Father")
     Father = models.ForeignKey('CircuitParts', on_delete = models.CASCADE, related_name = "Sons")
     Sons = models.ManyToManyField(CircuitParts)
+
+class Protocol(models.Model):
+    Circuit = models.OneToOneField('Circuit', on_delete=models.CASCADE)
+    Title = models.CharField(max_length=30)
+    Description = models.TextField()
+
+class Step(models.Model):
+    Father = models.ForeignKey('Protocol', on_delete=models.CASCADE)
+    Title = models.CharField(max_length=30)
+    Body = models.TextField()
+    Order = models.IntegerField()
+    class Meta:
+        ordering = ['Order']

@@ -350,15 +350,15 @@
 
         <div class="field">
           <label>Protocol Title</label>
-          <input type="text" v-model="title" placeholder="Title...">
+          <input type="text" v-model="protocol.title" placeholder="Title...">
         </div>
         <div class="field">
           <label>Description</label>
-          <textarea rows="3" v-model="description" placeholder="description here..."></textarea>
+          <textarea rows="3" v-model="protocol.description" placeholder="description here..."></textarea>
         </div>
 
         <step-item 
-          v-for="(item, index) in stepsList" 
+          v-for="(item, index) in protocol.steps" 
           v-bind:data="item"
           v-bind:key="item.id"
           v-bind:i="index"

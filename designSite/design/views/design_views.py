@@ -331,7 +331,7 @@ def circuit(request):
     '''
     GET method with param:
         id=xxx
-    return json:
+    return json:{
         parts: [{
             'id': xxx, # id of part on Parts table
             'cid': xxx, # id for circuit, used in lines
@@ -356,7 +356,16 @@ def circuit(request):
         combines: {
             x: [x, x, x], # combines dict, x is cid
         },
-        chassis: xxx
+        chassis: xxx,
+        protocol: {
+            title: xxx,
+            description: xxx,
+            steps: [{
+                title: xxx,
+                body: xxx
+            }]
+        }
+    }
 
     POST method with json:
     {
@@ -386,6 +395,14 @@ def circuit(request):
             'id': xxx, # circuit id if it's already existing, -1 else
             'name': xxx,
             'description': xxx
+        },
+        protocol: {
+            'title': xxx,
+            'description': xxx,
+            'steps': [{
+                'title': xxx,
+                'body': xxx
+            }]
         }
     }
     response with json:
@@ -414,6 +431,17 @@ def circuit(request):
             combines_query = CircuitCombines.objects.filter(Circuit = query_id)
             combines = {x.Father.id: [i.id for i in x.Sons.all()] for x in combines_query}
             chassis = circuit.Chassis.name
+            protocol_query = Protocol.objects.get(Circuit=circuit)
+            step_query = Step.objects.filter(Father=protocol_query)
+            protocol = {
+                'title': protocol_query.Title,
+                'description': protocol_query.Description,
+                'steps': [{
+                        'title': x.Title,
+                        'body': x.Body,
+                    } for x in step_query
+                ]
+            }
             return JsonResponse({
                 'status': 1,
                 'id': query_id,
@@ -423,7 +451,9 @@ def circuit(request):
                 'lines': lines,
                 'devices': devices,
                 'combines': combines,
-                'chassis': chassis})
+                'chassis': chassis,
+                'protocol': protocol
+            })
         except:
             traceback.print_exc()
             return JsonResponse({
@@ -445,10 +475,27 @@ def circuit(request):
             if new:
                 # new circuit
                 circuit = Circuit.objects.create(
-                        Name = data['circuit']['name'],
-                        Description = data['circuit']['description'],
-                        Author = request.user,
-                        Chassis = chassis)
+                    Name = data['circuit']['name'],
+                    Description = data['circuit']['description'],
+                    Author = request.user,
+                    Chassis = chassis
+                )
+                # new protocol and steps
+                try:
+                    protocol = Protocol.objects.create(
+                        Circuit=circuit,
+                        Title=data['protocol']['title'],
+                        Description=data['protocol']['description']
+                    )
+                    for idx, step in enumerate(data['protocol']['steps']):
+                        Step.objects.create(
+                            Father=protocol,
+                            Title=step['title'],
+                            Body=step['body'],
+                            Order=idx
+                        )
+                except KeyError:
+                    logger.error('no protocol information found. skip.')
             else:
                 # existing circuit
                 circuit = Circuit.objects.get(pk = data['circuit']['id'])
@@ -464,7 +511,20 @@ def circuit(request):
                     x.delete()
                 for x in CircuitCombines.objects.filter(Circuit = circuit):
                     x.delete()
+                # update protocol
+                protocol = Protocol.objects.get(Circuit=circuit)
+                protocol.Title = data['protocol']['title']
+                protocol.Description = data['protocol']['description']
 
+                # delete all old steps and insert new steps
+                Step.objects.filter(Father=protocol).delete()
+                for idx, step in enumerate(data['protocol']['steps']):
+                    Step.objects.create(
+                        Father=protocol,
+                        Title=step['title'],
+                        Body=step['body'],
+                        Order=idx
+                    )
             cids = {}
             for x in data['parts']:
                 circuit_part = CircuitParts.objects.create(

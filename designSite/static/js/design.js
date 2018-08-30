@@ -4,16 +4,17 @@
 /* global SDinDesign, Chart, html2canvas */
 /* global Vue */
 
-let NUM_OF_TYPE = 20
+let NUM_OF_TYPE = 20;
 
 let designId = $('#canvas-box').attr('design-id');
 let design;
 let searchTarget = Array.apply(null, Array(NUM_OF_TYPE)).map(function() {
-    return 1
+    return 1;
 }); // Initialize an array with 20 elements that are all 1.
 
 
 
+let protocolVue;
 if (designId !== '') {
     $.get(`/api/circuit?id=${designId}`, (value) => {
         design = new SDinDesign('#canvas', value);
@@ -51,48 +52,33 @@ $(function() {
         </div>
         `
     });
-
-    new Vue({
+    protocolVue = new Vue({
         el: '#protocol-form',
         data: {
-            description: '',
-            title: '',
-            stepsList: [
-                {id:0, title: '', body: ''}
-            ],
-            lastID: 1
+            protocol: {
+                description: '',
+                title: '',
+                steps: [
+                    {id:0, title: '', body: ''}
+                ],
+                lastID: 1
+            }
         },
         methods: {
             submit() {
-                let $this = $(this.$el);
-                $this.addClass('loading');
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/test', //TODO: not finished
-                    data: {
-                        data: this.$data
-                    },
-                    success: (data) => {
-                        console.log(data); //TODO: not finished
-                    },
-                    error: (data) => {
-                        console.log('fail');
-                        console.log(data);
-                    },
-                    complete: () => {
-                        $this.removeClass('loading');
-                    }
-                });
+                design._design.protocol = {};
+                $.extend(true, design._design.protocol, this.protocol);
+                $('#protocol-modal').modal('hide');
             },
             add() {
-                this.stepsList.push({
-                    id: this.lastID++,
+                this.protocol.steps.push({
+                    id: this.protocol.lastID++,
                     title: '',
                     body: ''
                 });
             },
             removeStep(i) {
-                this.stepsList.splice(i, 1);
+                this.protocol.steps.splice(i, 1);
             }
         }
     });
@@ -107,6 +93,15 @@ $('#protocol-button')
     .popup({
         content: 'Add your Protocol'
     });
+$('#protocol-modal').modal({
+    dimmerSettings: {
+        onHide: function() {
+            console.log('hide dimmer');
+            protocolVue.protocol = {}
+            $.extend(true, protocolVue.protocol, design._design.protocol);
+        }
+    }
+});
 
 
 // Upload file
@@ -458,7 +453,15 @@ $('#load-button').on('click', () => {
                 $('#chassis-dropdown').dropdown(
                     'set selected', value.chassis
                 );
+                // update protocol
+                protocolVue.protocol = {};
+                $.extend(true, protocolVue.protocol, value.protocol);
+                protocolVue.protocol.steps.forEach((val, idx) => {
+                    val.id = idx;
+                });
+                protocolVue.protocol.lastID = protocolVue.protocol.steps.length;
             });
+
         });
         $('#load-modal').modal('show');
     });
