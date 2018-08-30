@@ -4,8 +4,16 @@
 /* global SDinDesign, Chart, html2canvas */
 /* global Vue */
 
+let NUM_OF_TYPE = 20
+
 let designId = $('#canvas-box').attr('design-id');
 let design;
+let searchTarget = Array.apply(null, Array(NUM_OF_TYPE)).map(function() {
+    return 1
+}); // Initialize an array with 20 elements that are all 1.
+
+
+
 if (designId !== '') {
     $.get(`/api/circuit?id=${designId}`, (value) => {
         design = new SDinDesign('#canvas', value);
@@ -100,8 +108,30 @@ $('#protocol-button')
         content: 'Add your Protocol'
     });
 
+
 // Upload file
 function new_to_old(data) {
+    
+    // Set all type included in search targets
+    let postData = {
+        data: JSON.stringify(
+            Array.apply(null, Array(10)).map(function() {
+                return 1;
+            })
+        ),
+        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+    }
+    $.ajax({
+        type: 'POST',
+        url: 'api/search_targets',
+        data: postData,
+        success: function(data){
+            if (data['success'] == false)
+                console.log("Error occurs when post the search target data!")
+        }
+    })
+
+    // Get parts infomation
     var Lines = [],
         Devices = [],
         Parts = [];
@@ -135,6 +165,19 @@ function new_to_old(data) {
             }
         });
     });
+
+    // Reset search targets
+    postData["data"] = JSON.stringify(searchTarget);
+    $.ajax({
+        type: 'POST',
+        url: 'api/search_targets',
+        data: postData,
+        success: function(data){
+            if (data['success'] == false)
+                console.log("Error occurs when post the search target data!")
+        }
+    })
+    
     $.each(data.stimulations, function (index, stimulation) {
         let temp = {
             start: cid_dict[stimulation.stimulator],
@@ -801,7 +844,7 @@ $('.list .child.checkbox')
 
             setTimeout(() => {
                 if (current_flag == flag){
-                    let searchTarget = [];
+                    searchTarget = [];
                     $checkbox.each(function() {
                         searchTarget.push($(this).checkbox('is checked') ? 1 : 0);
                     });
@@ -821,7 +864,7 @@ $('.list .child.checkbox')
                         }
                     });
                 }
-            }, 2000);
+            }, 1000);
         }
     });
 
