@@ -66,8 +66,6 @@ $(function() {
         },
         methods: {
             submit() {
-                design._design.protocol = {};
-                $.extend(true, design._design.protocol, this.protocol);
                 $('#protocol-modal').modal('hide');
             },
             add() {
@@ -96,9 +94,8 @@ $('#protocol-button')
 $('#protocol-modal').modal({
     dimmerSettings: {
         onHide: function() {
-            console.log('hide dimmer');
-            protocolVue.protocol = {}
-            $.extend(true, protocolVue.protocol, design._design.protocol);
+            //console.log('hide dimmer');
+            //TODO: not finish
         }
     }
 });
@@ -511,8 +508,9 @@ $('#load-button').on('click', () => {
                     'set selected', value.chassis
                 );
                 // update protocol
-                protocolVue.protocol = {};
-                $.extend(true, protocolVue.protocol, value.protocol);
+                protocolVue.protocol.title = value.protocol.title;
+                protocolVue.protocol.description = value.protocol.description;
+                protocolVue.protocol.steps = value.protocol.steps;
                 protocolVue.protocol.steps.forEach((val, idx) => {
                     val.id = idx;
                 });
