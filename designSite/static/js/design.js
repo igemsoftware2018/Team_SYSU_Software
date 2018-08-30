@@ -4,16 +4,17 @@
 /* global SDinDesign, Chart, html2canvas */
 /* global Vue */
 
-let NUM_OF_TYPE = 20
+let NUM_OF_TYPE = 20;
 
 let designId = $('#canvas-box').attr('design-id');
 let design;
 let searchTarget = Array.apply(null, Array(NUM_OF_TYPE)).map(function() {
-    return 1
+    return 1;
 }); // Initialize an array with 20 elements that are all 1.
 
 
 
+let protocolVue;
 if (designId !== '') {
     $.get(`/api/circuit?id=${designId}`, (value) => {
         design = new SDinDesign('#canvas', value);
@@ -51,48 +52,31 @@ $(function() {
         </div>
         `
     });
-
-    new Vue({
+    protocolVue = new Vue({
         el: '#protocol-form',
         data: {
-            description: '',
-            title: '',
-            stepsList: [
-                {id:0, title: '', body: ''}
-            ],
-            lastID: 1
+            protocol: {
+                description: '',
+                title: '',
+                steps: [
+                    {id:0, title: '', body: ''}
+                ],
+                lastID: 1
+            }
         },
         methods: {
             submit() {
-                let $this = $(this.$el);
-                $this.addClass('loading');
-                $.ajax({
-                    type: 'POST',
-                    url: '/api/test', //TODO: not finished
-                    data: {
-                        data: this.$data
-                    },
-                    success: (data) => {
-                        console.log(data); //TODO: not finished
-                    },
-                    error: (data) => {
-                        console.log('fail');
-                        console.log(data);
-                    },
-                    complete: () => {
-                        $this.removeClass('loading');
-                    }
-                });
+                $('#protocol-modal').modal('hide');
             },
             add() {
-                this.stepsList.push({
-                    id: this.lastID++,
+                this.protocol.steps.push({
+                    id: this.protocol.lastID++,
                     title: '',
                     body: ''
                 });
             },
             removeStep(i) {
-                this.stepsList.splice(i, 1);
+                this.protocol.steps.splice(i, 1);
             }
         }
     });
@@ -107,6 +91,14 @@ $('#protocol-button')
     .popup({
         content: 'Add your Protocol'
     });
+$('#protocol-modal').modal({
+    dimmerSettings: {
+        onHide: function() {
+            //console.log('hide dimmer');
+            //TODO: not finish
+        }
+    }
+});
 
 
 // Upload file
@@ -140,7 +132,6 @@ function new_to_old(data) {
             url: '/api/parts?name=' + component.name,
             async: false,
             success: function (res) {
-                console.log(res);
                 $.ajax({
                     type: 'GET',
                     url: '/api/part?id=' + res.parts[0].id,
@@ -217,7 +208,8 @@ function new_to_old(data) {
 let JsonFileReader = new FileReader();
 JsonFileReader.onload = () => {
     // TODO: transform new json to old json
-    design.design = JSON.parse(new_to_old(JsonFileReader.result));
+    console.log(new_to_old(JSON.parse(JsonFileReader.result)));
+    design.design = new_to_old(JSON.parse(JsonFileReader.result));
 };
 let sbolFileReader = new FileReader();
 sbolFileReader.onload = () => {
@@ -363,6 +355,67 @@ $('#json-sbol-button').on('click', function () {
     content: 'Export your design as a SBOL file'
 });
 
+// Analysis view
+$('#analysis-button').on('click', function() {
+    $('#analysis-modal').modal({
+        onShow: function() {
+            let data = [];
+            let unique = {};
+            let parts = design.design.parts;
+            $.each(parts, function(index, part) {
+                let temp = {
+                    name: part.name,
+                    value: part.id
+                };
+                if (!unique[temp]) {
+                    data.push(temp);
+                    unique[temp] = 1;
+                }
+            });
+            $('#analysis-part-dropdown').dropdown({
+                values: data,
+                onChange: function(value) {
+                    $.get('/api/part?id=' + value, function(res) {
+                        $('#selected-part-sequence').text(res.sequence);
+                    });
+                }
+            });
+        },
+        onHide: function() {
+            $('#analysis-sequence').val('');
+            $('#selected-part-sequence').text('Selected Part Sequence here');
+        }
+    }).modal('show');
+}).popup({
+    content: 'Analysis your design.'
+});
+$('#analysis-chassis-dropdown').dropdown({
+    values: [{
+        name: 'Escherichia Coli',
+        value: 'Escherichia Coli',
+        selected: true
+    },{
+        name: 'Pichia pstoris',
+        value: 'Pichia pstoris'
+    },{
+        name: 'Saccharomyces cerevisiae',
+        value: 'Saccharomyces cerevisiae'
+    }]
+});
+$('#analysis-chassis-mode-dropdown').dropdown({
+    values: [{
+        name: '1',
+        value: '1',
+        selected: true
+    },{
+        name: '2',
+        value: '2'
+    },{
+        name: '3',
+        value: '3'
+    }]
+});
+
 $('#components-menu a').on('click', function () {
     let role = $(this).children('i').eq(0).text();
     $('input[name="component-role"]').val(role);
@@ -454,7 +507,16 @@ $('#load-button').on('click', () => {
                 $('#chassis-dropdown').dropdown(
                     'set selected', value.chassis
                 );
+                // update protocol
+                protocolVue.protocol.title = value.protocol.title;
+                protocolVue.protocol.description = value.protocol.description;
+                protocolVue.protocol.steps = value.protocol.steps;
+                protocolVue.protocol.steps.forEach((val, idx) => {
+                    val.id = idx;
+                });
+                protocolVue.protocol.lastID = protocolVue.protocol.steps.length;
             });
+
         });
         $('#load-modal').modal('show');
     });
@@ -584,7 +646,7 @@ $('#redo-button').on('click', function () {
 });
 
 // Part panel
-$('#chassis-dropdown').dropdown( {
+$('#chassis-dropdown').dropdown({
     values: [{
         name: 'Escherichia Coli',
         value: 'Escherichia Coli',

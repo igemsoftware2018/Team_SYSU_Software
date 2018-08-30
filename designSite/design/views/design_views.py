@@ -331,7 +331,7 @@ def circuit(request):
     '''
     GET method with param:
         id=xxx
-    return json:
+    return json:{
         parts: [{
             'id': xxx, # id of part on Parts table
             'cid': xxx, # id for circuit, used in lines
@@ -356,7 +356,16 @@ def circuit(request):
         combines: {
             x: [x, x, x], # combines dict, x is cid
         },
-        chassis: xxx
+        chassis: xxx,
+        protocol: {
+            title: xxx,
+            description: xxx,
+            steps: [{
+                title: xxx,
+                body: xxx
+            }]
+        }
+    }
 
     POST method with json:
     {
@@ -386,6 +395,14 @@ def circuit(request):
             'id': xxx, # circuit id if it's already existing, -1 else
             'name': xxx,
             'description': xxx
+        },
+        protocol: {
+            'title': xxx,
+            'description': xxx,
+            'steps': [{
+                'title': xxx,
+                'body': xxx
+            }]
         }
     }
     response with json:
@@ -414,6 +431,17 @@ def circuit(request):
             combines_query = CircuitCombines.objects.filter(Circuit = query_id)
             combines = {x.Father.id: [i.id for i in x.Sons.all()] for x in combines_query}
             chassis = circuit.Chassis.name
+            protocol_query = Protocol.objects.get(Circuit=circuit)
+            step_query = Step.objects.filter(Father=protocol_query)
+            protocol = {
+                'title': protocol_query.Title,
+                'description': protocol_query.Description,
+                'steps': [{
+                        'title': x.Title,
+                        'body': x.Body,
+                    } for x in step_query
+                ]
+            }
             return JsonResponse({
                 'status': 1,
                 'id': query_id,
@@ -423,7 +451,9 @@ def circuit(request):
                 'lines': lines,
                 'devices': devices,
                 'combines': combines,
-                'chassis': chassis})
+                'chassis': chassis,
+                'protocol': protocol
+            })
         except:
             traceback.print_exc()
             return JsonResponse({
@@ -445,10 +475,27 @@ def circuit(request):
             if new:
                 # new circuit
                 circuit = Circuit.objects.create(
-                        Name = data['circuit']['name'],
-                        Description = data['circuit']['description'],
-                        Author = request.user,
-                        Chassis = chassis)
+                    Name = data['circuit']['name'],
+                    Description = data['circuit']['description'],
+                    Author = request.user,
+                    Chassis = chassis
+                )
+                # new protocol and steps
+                try:
+                    protocol = Protocol.objects.create(
+                        Circuit=circuit,
+                        Title=data['protocol']['title'],
+                        Description=data['protocol']['description']
+                    )
+                    for idx, step in enumerate(data['protocol']['steps']):
+                        Step.objects.create(
+                            Father=protocol,
+                            Title=step['title'],
+                            Body=step['body'],
+                            Order=idx
+                        )
+                except KeyError:
+                    logger.error('no protocol information found. skip.')
             else:
                 # existing circuit
                 circuit = Circuit.objects.get(pk = data['circuit']['id'])
@@ -464,7 +511,20 @@ def circuit(request):
                     x.delete()
                 for x in CircuitCombines.objects.filter(Circuit = circuit):
                     x.delete()
+                # update protocol
+                protocol = Protocol.objects.get(Circuit=circuit)
+                protocol.Title = data['protocol']['title']
+                protocol.Description = data['protocol']['description']
 
+                # delete all old steps and insert new steps
+                Step.objects.filter(Father=protocol).delete()
+                for idx, step in enumerate(data['protocol']['steps']):
+                    Step.objects.create(
+                        Father=protocol,
+                        Title=step['title'],
+                        Body=step['body'],
+                        Order=idx
+                    )
             cids = {}
             for x in data['parts']:
                 circuit_part = CircuitParts.objects.create(
@@ -605,13 +665,43 @@ def get_sbol_doc(request):
         doc = Document()
 
         roles = {
+            # 'RNA': SO_SGRNA,
             'DNA': SO_GENE,
-            'RNA': SO_SGRNA,
-            'Promoter': SO_PROMOTER,
             'RBS': SO_RBS,
             'CDS': SO_CDS,
+            'Promoter': SO_PROMOTER,
             'Terminator': SO_TERMINATOR,
+            'RNA': 'http://identifiers.org/so/SO:0000356',
+            'gene': 'http://identifiers.org/so/SO:0000704',
+            'mRNA': 'http://identifiers.org/so/SO:0000234',
+            'SGRNA': 'http://identifiers.org/so/SO:0001998',
+            'Complex': 'http://identifiers.org/ncit/C47881',
+            'operator': 'http://identifiers.org/so/SO:0000057',
+            'Effector': 'http://identifiers.org/chebi/CHEBI:35224',
+            'Reporter': 'http://identifiers.org/ncit/C41191',
+            'Insulator': 'http://identifiers.org/so/SO:0000627',
+            'Composite': 'http://identifiers.org/ncit/C61520',
+            'Generator': 'http://identifiers.org/ncit/C42770',
+            'Signature': 'http://identifiers.org/so/SO:0001978',
+            '5\' overhang': 'http://identifiers.org/so/SO:0001932',
+            '3\' overhang': 'http://identifiers.org/so/SO:0001933',
+            'User defined': 'http://identifiers.org/so/SO:0000804',
+            'fivePrimeUtr': 'http://identifiers.org/so/SO:0000204',
+            'Assembly scar': 'http://identifiers.org/so/SO:0001953',
+            'Protease site': 'http://identifiers.org/so/SO:0001956',
+            'engineeredGene': 'http://identifiers.org/so/SO:0000280',
+            'Inverter Device': 'http://identifiers.org/ncit/C50010',
             'sequenceFeature': 'http://identifiers.org/so/SO:0000110',
+            'sequenceFeature': 'http://identifiers.org/so/SO:0000110',
+            'Ribonuclease site': 'http://identifiers.org/so/SO:0001977',
+            'Measurement Device': 'http://identifiers.org/ncit/C81182',
+            'primer binding site': 'http://identifiers.org/so/SO:0005850',
+            'Signalling Molecule': 'http://identifiers.org/chebi/CHEBI:62488',
+            'Origin of replication': 'http://identifiers.org/so/SO:0000296',
+            'RNA stability element': 'http://identifiers.org/so/SO:0001979',
+            'Blunt restriction site': 'http://identifiers.org/so/SO:0001691',
+            'Protein stability element': 'http://identifiers.org/so/SO:0001955',
+            'Restriction enzyme recognition site': 'http://identifiers.org/so/SO:0001687',
         }
 
         activity = Activity(data['circuit']['name'])
@@ -757,22 +847,40 @@ def get_sbol_doc(request):
 
 
 so_dict = {
+    'http://identifiers.org/ncit/C47881': 'Complex',
+    'http://identifiers.org/ncit/C61520': 'Composite',
+    'http://identifiers.org/ncit/C42770': 'Generator',
+    'http://identifiers.org/ncit/C50010': 'Inverter Device',
+    'http://identifiers.org/ncit/C81182': 'Measurement Device',
+    'http://identifiers.org/ncit/C41191': 'Reporter',
     'http://identifiers.org/so/SO:0000167': 'Promoter',
     'http://identifiers.org/so/SO:0000057': 'operator',
     'http://identifiers.org/so/SO:0000316': 'CDS',
     'http://identifiers.org/so/SO:0000204': 'fivePrimeUtr',
     'http://identifiers.org/so/SO:0000141': 'Terminator',
-    'http://identifiers.org/so/SO:0000627': 'insulator',
-    'http://identifiers.org/so/SO:0000296': 'originOfReplication',
-    'http://identifiers.org/so/SO:0005850': 'primerBindingSite',
     'http://identifiers.org/so/SO:0000139': 'RBS',
     'http://identifiers.org/so/SO:0000704': 'gene',
     'http://identifiers.org/so/SO:0000234': 'mRNA',
-    'http://identifiers.org/so/SO:0001687': 'restrictionEnzymeRecognitionSite',
     'http://identifiers.org/so/SO:0000280': 'engineeredGene',
-    'http://identifiers.org/so/SO:0000804': 'engineeredRegion',
     'http://identifiers.org/so/SO:0000110': 'sequenceFeature',
-    'http://identifiers.org/so/SO:0001998': 'SGRNA'
+    'http://identifiers.org/so/SO:0001998': 'SGRNA',
+    'http://identifiers.org/so/SO:0000627': 'Insulator',
+    'http://identifiers.org/so/SO:0001977': 'Ribonuclease site',
+    'http://identifiers.org/so/SO:0001979': 'RNA stability element',
+    'http://identifiers.org/so/SO:0001956': 'Protease site',
+    'http://identifiers.org/so/SO:0001955': 'Protein stability element',
+    'http://identifiers.org/so/SO:0000296': 'Origin of replication',
+    'http://identifiers.org/so/SO:0005850': 'primer binding site',
+    'http://identifiers.org/so/SO:0001687': 'Restriction enzyme recognition site',
+    'http://identifiers.org/so/SO:0001691': 'Blunt restriction site',
+    'http://identifiers.org/so/SO:0001932': '5\' overhang',
+    'http://identifiers.org/so/SO:0001933': '3\' overhang',
+    'http://identifiers.org/so/SO:0001953': 'Assembly scar',
+    'http://identifiers.org/so/SO:0001978': 'Signature',
+    'http://identifiers.org/so/SO:0000804': 'User defined',
+    'http://identifiers.org/so/SO:0000356': 'RNA',
+    'http://identifiers.org/chebi/CHEBI:35224': 'Effector',
+    'http://identifiers.org/chebi/CHEBI:62488': 'Signalling Molecule',
 }
 
 sbo_dict = {
