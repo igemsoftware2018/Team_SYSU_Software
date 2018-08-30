@@ -114,11 +114,7 @@ function new_to_old(data) {
     
     // Set all type included in search targets
     let postData = {
-        data: JSON.stringify(
-            Array.apply(null, Array(10)).map(function() {
-                return 1;
-            })
-        ),
+        data: JSON.stringify(Array(NUM_OF_TYPE).fill(1)),
         csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
     }
     $.ajax({
