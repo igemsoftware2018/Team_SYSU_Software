@@ -1124,14 +1124,12 @@ CHASSIS_FORMAT = [
     '15: Blepharisma Nuclear Code'
 ]
 
-CHASSIS = [x.name for x in Chassis.objects.all()]
-
 def chassis(request):
     if request.method == 'GET':
         return JsonResponse({
             'success': True,
             'chassis_format': CHASSIS_FORMAT,
-            'chassis': CHASSIS
+            'chassis': [x.name for x in Chassis.objects.all()]
         })
         
 
