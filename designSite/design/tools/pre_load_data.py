@@ -974,6 +974,19 @@ def load_additional(path):
                 medalRelation = json.dumps([{v3(j, 0): v3(j, i) for j in range(1, 5)}]),
                 _type = "year")
 
+def load_chassis(path):
+    print('Loading chassis...')
+    Chassis.objects.all().delete()
+    with open(os.path.join(path, "chassis.json")) as f:
+        data = json.load(f)
+    chassis_name_list = list(data.keys())
+    for name in chassis_name_list:
+        Chassis.objects.create(
+            name = name,
+            data = json.dumps(data[name])
+        )
+
+
 
 def final():
     for i in Works.objects.filter(Year__lte = 2008):
@@ -998,15 +1011,16 @@ def final():
         work.save()
 
 def pre_load_data(currentpath, Imgpath):
-    load_parts(os.path.join(currentpath, 'parts'))
-    load_partsInteration(os.path.join(currentpath, 'partsinteract'))
-    load_partsParameter(os.path.join(currentpath, 'partsParameter'))
-    load_works(os.path.join(currentpath, 'works'))
-    load_Trelation(os.path.join(currentpath, 'TeamRelation'))
-    load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
-    load_papers(os.path.join(currentpath, 'papers'))
-    load_circuits(os.path.join(currentpath, 'works/circuits'), delete = True)
-    load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    #load_circuits(os.path.join(currentpath, 'works/circuits2'))
-    load_additional(os.path.join(currentpath, 'additional'))
-    final()
+    # load_parts(os.path.join(currentpath, 'parts'))
+    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
+    # load_works(os.path.join(currentpath, 'works'))
+    # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
+    # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
+    # load_papers(os.path.join(currentpath, 'papers'))
+    # load_circuits(os.path.join(currentpath, 'works/circuits'), delete = True)
+    # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
+    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    # load_additional(os.path.join(currentpath, 'additional'))
+    load_chassis(os.path.join(currentpath, 'chassis'))
+    # final()

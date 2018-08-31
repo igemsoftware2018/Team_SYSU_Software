@@ -51,7 +51,8 @@ class PartsInteract(models.Model):
         return "%s contains %s" % (self.parent.Name, self.child.Name)
 
 class Chassis(models.Model):
-    name = models.CharField(max_length = 40, unique = True)
+    name = models.CharField(max_length = 256, unique = True)
+    data = models.TextField()
     def __str__(self):
         return "%s" % (self.name)
 

@@ -9,6 +9,21 @@ let NUM_OF_TYPE = 20;
 let designId = $('#canvas-box').attr('design-id');
 let design;
 
+let CHASSIS
+let CHASSIS_FORMAT
+
+
+$.ajax({
+    type: 'GET',
+    url: '/api/chassis',
+    async: false,
+    success: (res) => {
+        CHASSIS = res.chassis;
+        CHASSIS_FORMAT = res.chassis_format
+    }
+})
+
+
 
 
 let protocolVue;
@@ -328,6 +343,7 @@ $('#json-sbol-button').on('click', function () {
 
 // Analysis view
 $('#analysis-button').on('click', function() {
+    
     $('#analysis-modal').modal({
         onShow: function() {
             let data = [];
@@ -360,32 +376,42 @@ $('#analysis-button').on('click', function() {
 }).popup({
     content: 'Analysis your design.'
 });
-$('#analysis-chassis-dropdown').dropdown({
-    values: [{
-        name: 'Escherichia Coli',
-        value: 'Escherichia Coli',
-        selected: true
-    },{
-        name: 'Pichia pstoris',
-        value: 'Pichia pstoris'
-    },{
-        name: 'Saccharomyces cerevisiae',
-        value: 'Saccharomyces cerevisiae'
-    }]
-});
-$('#analysis-chassis-mode-dropdown').dropdown({
-    values: [{
-        name: '1',
-        value: '1',
-        selected: true
-    },{
-        name: '2',
-        value: '2'
-    },{
-        name: '3',
-        value: '3'
-    }]
-});
+
+
+
+$('#analysis-chassis-dropdown').dropdown(
+    (function() {
+        let ret = {
+            values: []
+        }
+        CHASSIS.forEach(function(element) {
+            ret.values.push({
+                name: element,
+                value: element,
+            })
+        })
+        ret.values[0].selected = true;
+        return ret;
+    }) ()
+);
+
+
+$('#analysis-chassis-mode-dropdown').dropdown(
+    (function() {
+        let ret = {
+            values: []
+        }
+        CHASSIS_FORMAT.forEach(function(element) {
+            ret.values.push({
+                name: element,
+                value: element,
+            })
+        })
+        ret.values[0].selected = true;
+        return ret;
+    }) ()
+);
+
 
 $('#components-menu a').on('click', function () {
     let role = $(this).children('i').eq(0).text();
@@ -617,23 +643,24 @@ $('#redo-button').on('click', function () {
 });
 
 // Part panel
-$('#chassis-dropdown').dropdown({
-    values: [{
-        name: 'Escherichia Coli',
-        value: 'Escherichia Coli',
-        selected: true
-    },{
-        name: 'Pichia pstoris',
-        value: 'Pichia pstoris'
-    },{
-        name: 'Saccharomyces cerevisiae',
-        value: 'Saccharomyces cerevisiae'
-    }],
-    onChange: function(value) {
-        // console.log(value);
-        design.setChassis(value);
-    }
-}).popup({
+$('#chassis-dropdown').dropdown(
+    (function() {
+        let ret = {
+            values: []
+        }
+        CHASSIS.forEach(function(element) {
+            ret.values.push({
+                name: element,
+                value: element,
+            })
+        })
+        ret.values[0].selected = true;
+        ret.onChange = function(value) {
+            design.setChassis(value)
+        }
+        return ret;
+    }) ()
+).popup({
     content: 'Choose your chassis.'
 });
 $('#part-panel')

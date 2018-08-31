@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'api/plasm_part$', design_views.plasm_part),
     url(r'api/sbol_doc$', design_views.get_sbol_doc),
     url(r'api/sbol_json$', design_views.get_sbol_json),
+    url(r'api/chassis$', design_views.chassis),
     # url(r'api/tag_favorite$', design_views.tag_favorite),
     # url(r'api/get_favorite$', design_views.get_favorite),
     # url(r'api/part_favorite$', design_views.part_favorite),

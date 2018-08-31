@@ -1106,3 +1106,34 @@ def get_sbol_json(request):
             'status': 1,
             'data': jsonData
         })
+
+
+CHASSIS_FORMAT = [
+    '1: Standard',
+    '2: Vertebrate Mitochondrial',
+    '3: Yeast Mitochondrial',
+    '4: Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma',
+    '5: Invertebrate Mitochondrial',
+    '6: Ciliate Macronuclear and Dasycladacean',
+    '9: Echinoderm Mitochondrial',
+    '10: Alternative Ciliate Macronuclear',
+    '11: Eubacterial',
+    '12: Alternative Yeast',
+    '13: Ascidian Mitochondrial',
+    '14: Flatworm Mitochondrial',
+    '15: Blepharisma Nuclear Code'
+]
+
+CHASSIS = [x.name for x in Chassis.objects.all()]
+
+def chassis(request):
+    if request.method == 'GET':
+        return JsonResponse({
+            'success': True,
+            'chassis_format': CHASSIS_FORMAT,
+            'chassis': CHASSIS
+        })
+        
+
+def get_chassis_info(name, read_format):
+    return json.loads(Chassis.objects.filter(name = name)[0].data)[read_format]
