@@ -3,3 +3,4 @@
 .vscode
 .idea
 designSite/static/js/tmp.json
+/**/logs/*.log
