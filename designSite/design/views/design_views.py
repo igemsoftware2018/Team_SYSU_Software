@@ -661,6 +661,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def get_sbol_doc(request):
     if request.method == 'POST':
+        print(request.POST['data'])
         data = json.loads(request.POST['data'])
 
         setHomespace('http://sys-bio.org')
@@ -1135,3 +1136,36 @@ def chassis(request):
 
 def get_chassis_info(name, read_format):
     return json.loads(Chassis.objects.filter(name = name)[0].data)[read_format]
+
+import re
+@csrf_exempt
+def analysis_sequence(request):
+    '''
+    POST method with json:
+    {
+        sequence: xxx,
+        chassis: xxx,
+        mode: xxx
+    }
+    response with json:
+    {
+        status: 0 for error, 1 for success.
+        CAI: xxx,
+        CG: xxx
+    }
+    '''
+    if request.method == 'POST':
+        seq = request.POST['sequence']
+        chassis = request.POST['chassis']
+        chassis_format = request.POST['mode']
+        if (re.match('[^atcgATCG]', seq)):
+            return JsonResponse({
+                'status': 0
+            })
+        else:
+            # TODO: calculate CAI and CG
+            return JsonResponse({
+                'status': 1,
+                'CAI': 0.5,
+                'CG': 0.5
+            })

@@ -377,8 +377,8 @@ $('#analysis-button').on('click', function() {
     content: 'Analysis your design.'
 });
 
-
-
+let selected_chassis;
+let selected_chassis_mode;
 $('#analysis-chassis-dropdown').dropdown(
     (function() {
         let ret = {
@@ -391,6 +391,9 @@ $('#analysis-chassis-dropdown').dropdown(
             })
         })
         ret.values[0].selected = true;
+        ret.onChange = function(value) {
+            selected_chassis = value;
+        }
         return ret;
     }) ()
 );
@@ -408,9 +411,37 @@ $('#analysis-chassis-mode-dropdown').dropdown(
             })
         })
         ret.values[0].selected = true;
+        ret.onChange = function(value) {
+            selected_chassis_mode = value;
+        }
         return ret;
     }) ()
 );
+
+$('#analysis-sequence-button').on('click', function() {
+    let temp = { 
+        sequence: $('#analysis-sequence').val(),
+        chassis: selected_chassis,
+        mode: selected_chassis_mode
+    };
+    console.log(temp);
+    $.post('api/analysis', temp, (res) => {
+        if (res.status == 0) {
+            // $.uiAlert({
+            //     textHead: 'Error',
+            //     text: 'Invalid words in your input DNA sequence',
+            //     type: 'danger',
+            //     position: 'center',
+            //     icon: '',
+            //     time: 3
+            // });
+            alert('Invalid words in your input DNA sequence');
+        } else {
+            //TODO: Show CAI and CG in chart
+        }
+    });
+});
+
 
 
 $('#components-menu a').on('click', function () {
