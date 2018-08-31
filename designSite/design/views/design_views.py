@@ -48,90 +48,6 @@ def design(request):
 def test(request):
     return render(request, 'test.html')
 
-# Comment Favorites related views
-# def get_favorite(request):
-#     '''
-#     GET method with no param
-#     return json:
-#         'circuits': [{
-#             'id': xxx,
-#             'Name': xxx,
-#             'Description': xxx,
-#             'Author': xxx(id)
-#         }]
-#     '''
-#     query_set = UserFavorite.objects.filter(user = request.user)
-#     favorites_circuit = [{
-#         'id': x.circuit.id,
-#         'name': x.circuit.Name,
-#         'description': x.circuit.Description,
-#         'author': x.circuit.Author.id if x.circuit.Author != None else None
-#         } for x in query_set]
-#     query_set = FavoriteParts.objects.filter(user = request.user)
-#     favorites_part = [{
-#         'id': x.part.id,
-#         'name': x.part.secondName,
-#         'BBa': x.part.Name,
-#         'type': x.part.Type,
-#         'safety': x.part.Safety
-#         } for x in query_set]
-#     return JsonResponse({
-#         'status': 1,
-#         'circuits': favorites_circuit,
-#         'parts': favorites_part
-#     })
-
-# def tag_favorite(request):
-#     '''
-#     POST method with json:
-#         'circuit_id': xxx, # id of circuit, make sure this circuit is saved
-#         'tag': 0 for cancel favorite, 1 for tag favorite
-#     return json:
-#         status: 0 or 1
-#     '''
-#     if request.method == 'POST':
-#         data = json.loads(request.POST['data'])
-#         try:
-#             circuit = Circuit.objects.get(pk = data['circuit_id'])
-#             if data['tag'] == 1:
-#                 if not UserFavorite.objects.filter(user = request.user, circuit = circuit).exists():
-#                     UserFavorite.objects.create(circuit = circuit, user = request.user)
-#             else:
-#                 UserFavorite.objects.get(user = request.user, circuit = circuit).delete()
-#             return JsonResponse({
-#                 'success': True
-#             })
-#         except:
-#             return JsonResponse({
-#                 'success': False
-#             })
-
-# def part_favorite(request):
-#     '''
-#     POST method with json:
-#         'part_id': xxx, # id of part
-#         'tag': 0 for cancel favorite, 1 for tag favorite
-#     return json:
-#         status: 0 or 1
-#     '''
-#     if request.method == 'POST':
-#         data = json.loads(request.POST['data'])
-#         try:
-#             part = Parts.objects.get(pk = data['part_id'])
-#             if data['tag'] == 1:
-#                 if not FavoriteParts.objects.filter(user = request.user, part = part).exists():
-#                     FavoriteParts.objects.create(part = part, user = request.user)
-#             else:
-#                 FavoriteParts.objects.get(user = request.user, part = part).delete()
-#             return JsonResponse({
-#                 'success': True
-#             })
-#         except:
-#             return JsonResponse({
-#                 'success': False
-#             })
-
-
 # Part related views
 @login_required
 def parts(request):
@@ -616,37 +532,6 @@ def simulation(request):
         })
     return 0
 
-# Comment safety
-# def max_safety(request):
-#     '''
-#     GET /api/max_safety
-#     param:
-#         ids: array of int (as part id)
-#     return:
-#         maximum safety in these parts
-#     '''
-#     if request.method == 'GET':
-#         try:
-#             data = json.loads(request.GET['ids'])
-#             parts = list(map(lambda i: Parts.objects.get(id = i), data))
-#             # TODO:
-#             # 以下代码可以防止一个异常抛出。先检验parts是否为空。为空时返回-1,代表unknown
-#             if parts == []:
-#                 return JsonResponse({ 'status': 1, 'max_safety': -1}) 
-#             max_safety_part = max(parts, key = lambda p: p.Safety)
-#             return JsonResponse({
-#                 'status': 1,
-#                 'max_safety': max_safety_part.Safety
-#             })
-#         except:
-#             traceback.print_exc()
-#             return JsonResponse({
-#                 'status': 0
-#             })
-#     else:
-#         return JsonResponse({
-#             'status': 0
-#         })
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

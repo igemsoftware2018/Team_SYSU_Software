@@ -7,7 +7,7 @@
 
   <!-- <link rel="shortcut icon" href="/static/img/favicon.png"> -->
   <link rel="stylesheet" href="/static/css/fontsize.css">
-  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css"> 
   <link rel="stylesheet" href="/static/css/design.css">
   <link rel="stylesheet" href="/static/css/canvas.css">
 </head>
@@ -48,7 +48,7 @@
         </a>
         <a id="inspect-item">
           <!-- TODO: change this image please -->
-          <img src="/static/img/design/delete.png" /> 
+          <img src="/static/img/design/delete.png" />
         </a>
       </span>
 
@@ -57,7 +57,7 @@
           <a id="add-part-button">
             <img src="/static/img/design/plus.png">
           </a>
-        
+
           <div id="connection-dropdown" class="ui dropdown">
             <img id="connection-dropdown-button" src="/static/img/design/connection.png">
             <div class="menu">
@@ -108,15 +108,7 @@
         </div>
       </span>
 
-      <!-- <div class="right menu">
-        <span class="item">
-          <h4 id="safety" class="ui green header">Low risk
-            <img src="/static/img/design/safety-1.png">
-          </h4>
-        </span>
-      </div> -->
-
-<!-- Temporarily comment the logo -->
+      <!-- Temporarily comment the logo -->
       <!-- <span class="item">
         <a href="/">
           <img id="logo" src="/static/img/logo-black.png">
@@ -132,10 +124,6 @@
   </div>
 
   <div class="ui labeled left inline vertical sidebar menu">
-    <!-- Comment favourite -->
-    <!-- <a class="item" id="open-fav-win">
-      <img src="/static/img/design/favorite.png">
-    </a> -->
     <a class="item" id="load-button">
       <img src="/static/img/design/load.png">
     </a>
@@ -189,17 +177,6 @@
       </div>
       <br>
       <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div>
-    
-
-      <!-- Source circuit part has been redesigned -->
-      <!-- <div class="tab-context">
-        <div class="ui top attached tabular menu">
-          <div class="active item" data-tab="src-tab">Source circuit</div>
-        </div>
-        <div id="part-src-seg" class="ui bottom attached active tab segment" data-tab="src-tab">
-          <ul class="ui list" id="source-list"></ul>
-        </div>
-      </div> -->
 
       <div class="ui divider"></div>
 
@@ -217,53 +194,11 @@
           <div id="part-info-des">
             <h5 class="ui header">Description:</h5>
             <p></p>
-            <div class="mini ui button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source Circuit</div>
+            <div class="mini ui button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source
+              Circuit</div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Comment Favourite window (floating) -->
-  <!-- <div id="fav-win" class="window">
-    <div class="nav">
-      <h5 class="ui header">Favourite</h5>
-      <i id="fav-win-button" class="link icon remove"></i>
-    </div>
-    <div class="content">
-    </div>
-  </div> -->
-
-  <!-- Configure component info -->
-  <div id="component-info-modal" class="ui tiny modal">
-    <div class="content">
-      <form id="component-info-form" class="ui form">
-        <div class="disabled field">
-          <label>Part role</label>
-          <input type="text" name="component-role" placeholder="part role" disabled="">
-        </div>
-        <div class="field">
-          <label>Display ID</label>
-          <input type="text" name="component-id" placeholder="display id">
-        </div>
-        <div class="field">
-          <label>Name</label>
-          <input type="text" name="component-name">
-        </div>
-        <div class="disabled field">
-          <label>Version</label>
-          <input type="text" name="component-version" placeholder="1" disabled="">
-        </div>
-        <div class="field">
-          <label>Description</label>
-          <textarea rows="2" id="component-description"></textarea>
-        </div>
-        <div class="field">
-          <label>DNA Sequence</label>
-          <textarea id="component-sequence"></textarea>
-        </div>
-      </form>
-      <button id="add-new-component" class="ui button">Save</button>
     </div>
   </div>
 
@@ -276,8 +211,8 @@
           <input type="text" name="name" id="part-name" placeholder="Part Name">
         </div>
         <div class="field">
-            <label>Description</label>
-            <textarea id="part-description" rows=2 placeholder="Description"></textarea>
+          <label>Description</label>
+          <textarea id="part-description" rows=2 placeholder="Description"></textarea>
         </div>
         <div class="field">
           <label>Role</label>
@@ -287,24 +222,17 @@
           </div>
         </div>
         <div class="field">
-            <label>Type</label>
-            <div class="ui floating selection dropdown" id="part-type-dropdown">
-              <i class="dropdown icon"></i>
-              <div class="default text">Part type</div>
-            </div>
+          <label>Type</label>
+          <div class="ui floating selection dropdown" id="part-type-dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Part type</div>
+          </div>
         </div>
-          <!-- Part safety level is not used -->
-          <!-- <div class="field">
-            <div class="ui floating selection dropdown" id="part-safety-dropdown">
-              <i class="dropdown icon"></i>
-              <div class="default text">Part safety level</div>
-            </div>
-          </div> -->
         <div class="field">
           <label>Part Sequence</label>
           <textarea name="part-sequence" id="part-sequence" placeholder="Part Sequence"></textarea>
         </div>
-        
+
       </form>
     </div>
     <div class="actions">
@@ -346,6 +274,7 @@
     </div>
   </div>
 
+  <!-- Analysis modal -->
   <div id="analysis-modal" class="ui tiny modal">
     <div class="content">
       <h5 class="ui center aligned header">Analysis Modal</h5>
@@ -354,9 +283,9 @@
 
       <form id="analysis-form" class="ui form">
         <label>DNA Sequence</label>
-        <textarea id="analysis-sequence" placeholder="Please input DNA sequence"></textarea>
+        <textarea id="analysis-sequence" placeholder="Please input DNA sequence" rows="4"></textarea>
       </form>
-      
+
       <div class="ui divider"></div>
 
       <div>
@@ -376,17 +305,22 @@
         <div class="text" id="analysis-chassis"></div>
         <i class="dropdown icon"></i>
       </div>
-      
+
       <div class="ui divider"></div>
-      
+
       <label>Chassis Mode Selection</label><br>
       <div class="ui compact floating selection dropdown" id="analysis-chassis-mode-dropdown">
         <div class="text" id="analysis-chassis-mode"></div>
         <i class="dropdown icon"></i>
       </div>
-      
+
       <div class="ui divider"></div>
       
+      <label>Result Chart</label><br>
+      <div id="myChart" style="width:500px; height:300px"></div>
+      
+      <div class="ui divider"></div>
+
       <button class="fluid ui button" id="analysis-sequence-button">Analysis</button>
     </div>
   </div>
@@ -407,13 +341,8 @@
           <textarea rows="3" v-model="protocol.description" placeholder="description here..."></textarea>
         </div>
 
-        <step-item 
-          v-for="(item, index) in protocol.steps" 
-          v-bind:data="item"
-          v-bind:key="item.id"
-          v-bind:i="index"
-          v-on:remove-step="removeStep(index)"
-        ></step-item>
+        <step-item v-for="(item, index) in protocol.steps" v-bind:data="item" v-bind:key="item.id" v-bind:i="index"
+          v-on:remove-step="removeStep(index)"></step-item>
 
         <div class="ui right floated primary button" v-on:click="add"> Add </div>
         <div class="ui button" v-on:click="submit">Submit</div>
@@ -455,14 +384,14 @@
             <label>All</label>
           </div>
           <div class="list">
-              {% for item in type_list %}
-                <div class="item">
-                  <div class="ui child checkbox">
-                  <input type="checkbox" name="{{ item }}">
-                  <label>{{ item }}</label>
-                  </div>
-                </div>
-              {% endfor %}
+            {% for item in type_list %}
+            <div class="item">
+              <div class="ui child checkbox">
+                <input type="checkbox" name="{{ item }}">
+                <label>{{ item }}</label>
+              </div>
+            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -544,7 +473,8 @@
       You have finished your circuit, congratulations!
     </div>
     <div class="content">
-      <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in real world
+      <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in
+        real world
         application.
       </p>
     </div>
@@ -573,10 +503,10 @@
               <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
 
               <!-- draw the plasmid bone markers and labels -->
-              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4" arrowstartlength="-4"
-                markerstyle="{[m.markerStyleIn]}">
-                <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}" showline="1" linevadjust="-5"
-                  lineclass="labelline" style='font-size:17px'></markerlabel>
+              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4"
+                arrowstartlength="-4" markerstyle="{[m.markerStyleIn]}">
+                <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}"
+                  showline="1" linevadjust="-5" lineclass="labelline" style='font-size:17px'></markerlabel>
               </trackmarker>
 
               <!-- draw the marker regions -->
@@ -586,11 +516,11 @@
             </plasmidtrack>
 
             <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="110" width="10">
-              <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}" sequence="{[m.sequence]}"
-                ng-mousedown="showSequence(m)">
+              <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}"
+                sequence="{[m.sequence]}" ng-mousedown="showSequence(m)">
                 <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
-                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}" wadjust="-5"
-                  vadjust="-5"></trackmarker>
+                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}"
+                  wadjust="-5" vadjust="-5"></trackmarker>
               </trackmarker>
               <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
             </plasmidtrack>
@@ -646,6 +576,7 @@
 <script src="/static/js/html2canvas.min.js"></script>
 <script src="/static/js/html2canvas.svg.min.js"></script>
 <script src="/static/js/Chart.min.js"></script>
+<script src="/static/js/echarts.js"></script>
 <script src="/static/js/plasmid/angular.min.js"></script>
 <script src="/static/js/plasmid/angularplasmid.min.js"></script>
 <script src="/static/js/plasmid.js"></script>

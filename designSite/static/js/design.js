@@ -1,7 +1,7 @@
 'use strict';
 
 /* eslint-disable no-console */
-/* global SDinDesign, Chart, html2canvas */
+/* global SDinDesign, Chart, html2canvas echart*/
 /* global Vue */
 
 let NUM_OF_TYPE = 20;
@@ -24,8 +24,6 @@ $.ajax({
 })
 
 
-
-
 let protocolVue;
 if (designId !== '') {
     $.get(`/api/circuit?id=${designId}`, (value) => {
@@ -44,7 +42,7 @@ $('#share-button').popup({
 });
 
 // using vue.js below to implement protocol
-$(function() {
+$(function () {
     Vue.component('step-item', {
         props: ['data', 'i'],
         delimiters: ['[[', ']]'], //use different delimiters to avoid conflict with django
@@ -70,9 +68,11 @@ $(function() {
             protocol: {
                 description: '',
                 title: '',
-                steps: [
-                    {id:0, title: '', body: ''}
-                ],
+                steps: [{
+                    id: 0,
+                    title: '',
+                    body: ''
+                }],
                 lastID: 1
             }
         },
@@ -105,7 +105,7 @@ $('#protocol-button')
     });
 $('#protocol-modal').modal({
     dimmerSettings: {
-        onHide: function() {
+        onHide: function () {
             //console.log('hide dimmer');
             //TODO: not finish
         }
@@ -150,7 +150,7 @@ function new_to_old(data) {
         });
     });
 
-    
+
     $.each(data.stimulations, function (index, stimulation) {
         let temp = {
             start: cid_dict[stimulation.stimulator],
@@ -193,7 +193,6 @@ function new_to_old(data) {
 
 let JsonFileReader = new FileReader();
 JsonFileReader.onload = () => {
-    // TODO: transform new json to old json
     console.log(new_to_old(JSON.parse(JsonFileReader.result)));
     design.design = new_to_old(JSON.parse(JsonFileReader.result));
 };
@@ -205,7 +204,6 @@ sbolFileReader.onload = () => {
     };
     $.post('/api/sbol_json', data, function (v) {
         console.log(v['data']);
-        // $('#data').text(JSON.stringify(JSON.parse(v["data"]), null, '\t'));
         let temp = new_to_old(JSON.parse(v['data']));
         console.log(temp);
         design.design = temp;
@@ -219,13 +217,13 @@ $('#upload-button').on('click', function () {
 $('#fileupload').on('change', function () {
     JsonFileReader.readAsText($('#fileupload')[0].files[0]);
 });
-// TODO: transform sbol to new json, new json to old json
+
 $('#sbol-json-button').on('click', function () {
     $('#sbolfileupload').trigger('click');
 }).popup({
     content: 'Import a SBOL file as your design'
 });
-$('#sbolfileupload').on('change', function() {
+$('#sbolfileupload').on('change', function () {
     let data = $('input[name="sbolfiles[]"]')[0].files[0];
     sbolFileReader.readAsText(data);
 });
@@ -310,7 +308,6 @@ $('#export-button').on('click', () => {
         filename = 'unnamed_design.json';
     else
         filename = `${design.name}.json`;
-    // TODO: transform old json to new json
     createJsonDownload(filename, old_to_new(design.design));
 }).popup({
     content: 'Export your design as a JSON.'
@@ -342,14 +339,14 @@ $('#json-sbol-button').on('click', function () {
 });
 
 // Analysis view
-$('#analysis-button').on('click', function() {
-    
+$('#analysis-button').on('click', function () {
+
     $('#analysis-modal').modal({
-        onShow: function() {
+        onShow: function () {
             let data = [];
             let unique = {};
             let parts = design.design.parts;
-            $.each(parts, function(index, part) {
+            $.each(parts, function (index, part) {
                 let temp = {
                     name: part.name,
                     value: part.id
@@ -361,16 +358,17 @@ $('#analysis-button').on('click', function() {
             });
             $('#analysis-part-dropdown').dropdown({
                 values: data,
-                onChange: function(value) {
-                    $.get('/api/part?id=' + value, function(res) {
+                onChange: function (value) {
+                    $.get('/api/part?id=' + value, function (res) {
                         $('#selected-part-sequence').text(res.sequence);
                     });
                 }
             });
         },
-        onHide: function() {
+        onHide: function () {
             $('#analysis-sequence').val('');
             $('#selected-part-sequence').text('Selected Part Sequence here');
+            echarts.dispose(document.getElementById('myChart'));
         }
     }).modal('show');
 }).popup({
@@ -380,46 +378,46 @@ $('#analysis-button').on('click', function() {
 let selected_chassis;
 let selected_chassis_mode;
 $('#analysis-chassis-dropdown').dropdown(
-    (function() {
+    (function () {
         let ret = {
             values: []
         }
-        CHASSIS.forEach(function(element) {
+        CHASSIS.forEach(function (element) {
             ret.values.push({
                 name: element,
                 value: element,
             })
         })
         ret.values[0].selected = true;
-        ret.onChange = function(value) {
+        ret.onChange = function (value) {
             selected_chassis = value;
         }
         return ret;
-    }) ()
+    })()
 );
 
 
 $('#analysis-chassis-mode-dropdown').dropdown(
-    (function() {
+    (function () {
         let ret = {
             values: []
         }
-        CHASSIS_FORMAT.forEach(function(element) {
+        CHASSIS_FORMAT.forEach(function (element) {
             ret.values.push({
                 name: element,
                 value: element,
             })
         })
         ret.values[0].selected = true;
-        ret.onChange = function(value) {
+        ret.onChange = function (value) {
             selected_chassis_mode = value;
         }
         return ret;
-    }) ()
+    })()
 );
 
-$('#analysis-sequence-button').on('click', function() {
-    let temp = { 
+$('#analysis-sequence-button').on('click', function () {
+    let temp = {
         sequence: $('#analysis-sequence').val(),
         chassis: selected_chassis,
         mode: selected_chassis_mode
@@ -427,45 +425,135 @@ $('#analysis-sequence-button').on('click', function() {
     console.log(temp);
     $.post('api/analysis', temp, (res) => {
         if (res.status == 0) {
-            // $.uiAlert({
-            //     textHead: 'Error',
-            //     text: 'Invalid words in your input DNA sequence',
-            //     type: 'danger',
-            //     position: 'center',
-            //     icon: '',
-            //     time: 3
-            // });
-            alert('Invalid words in your input DNA sequence');
+            $('#analysis-sequence').popup({
+                content: 'Invalid words in your input DNA sequence',
+                onHide: function () {
+                    $('#analysis-sequence').popup('destroy');
+                }
+            }).popup('show');
         } else {
-            //TODO: Show CAI and CG in chart
+            let myChart = echarts.init(document.getElementById('myChart'));
+            let option = {
+                tooltip: {
+                    formatter: "{b}:{c}"
+                },
+                series: [{
+                        name: 'CAI',
+                        type: 'gauge',
+                        radius: '80%',
+                        min: 0,
+                        max: 100,
+                        startAngle: 150,
+                        endAngle: 30,
+                        splitNumber: 2,
+                        axisLine: {
+                            lineStyle: {
+                                width: 8,
+                                color: [
+                                    [0.2, '#c23531'],
+                                    [0.8, '#63869e'],
+                                    [1, '#91c7ae']
+                                ]
+                            }
+                        },
+                        axisTick: {
+                            splitNumber: 5,
+                            length: 10,
+                            lineStyle: {
+                                color: 'auto'
+                            }
+                        },
+                        axisLabel: {
+                            fontWeight: 'bold',
+                            fontSize: '15',
+                            formatter: function (v) {
+                                switch (v + '') {
+                                    case '0':
+                                        return '0';
+                                    case '50':
+                                        return '50%\nCAI';
+                                    case '100':
+                                        return '100%';
+                                }
+                            }
+                        },
+                        splitLine: {
+                            length: 15,
+                            lineStyle: {
+                                color: 'auto'
+                            }
+                        },
+                        title: {
+                            show: false
+                        },
+                        detail: {
+                            show: false
+                        },
+                        data: [{
+                            value: res.CAI,
+                            name: 'CAI'
+                        }]
+                    },
+                    {
+                        name: 'CG',
+                        type: 'gauge',
+                        radius: '80%',
+                        min: 0,
+                        max: 100,
+                        startAngle: 330,
+                        endAngle: 210,
+                        splitNumber: 2,
+                        axisLine: {
+                            lineStyle: {
+                                width: 8,
+                                color: [
+                                    [1, '#63869e']
+                                ]
+                            }
+                        },
+                        axisTick: {
+                            splitNumber: 5,
+                            length: 10,
+                            lineStyle: {
+                                color: 'auto'
+                            }
+                        },
+                        axisLabel: {
+                            fontWeight: 'bold',
+                            fontSize: '15',
+                            formatter: function (v) {
+                                switch (v + '') {
+                                    case '0':
+                                        return '0';
+                                    case '50':
+                                        return 'CG\n50%';
+                                    case '100':
+                                        return '100%';
+                                }
+                            }
+                        },
+                        splitLine: {
+                            length: 15,
+                            lineStyle: {
+                                color: 'auto'
+                            }
+                        },
+                        title: {
+                            show: false
+                        },
+                        detail: {
+                            show: false
+                        },
+                        data: [{
+                            value: res.CG,
+                            name: 'CG'
+                        }]
+                    }
+                ]
+            };
+            myChart.setOption(option);
         }
     });
-});
-
-
-
-$('#components-menu a').on('click', function () {
-    let role = $(this).children('i').eq(0).text();
-    $('input[name="component-role"]').val(role);
-    $('#component-info-modal').modal({
-        onHide: function () {
-            $('#component-info-form div input').val('');
-            $('#component-info-form div textarea').val('');
-        }
-    }).modal('show');
-}).popup();
-
-$('#add-new-component').on('click', function () {
-    /*let data = {
-        role: $('input[name="component-role"]').val(),
-        id: $('input[name="component-id"]').val(),
-        name: $('input[name="component-name"]').val(),
-        version: $('input[name="component-version"]').val(),
-        description: $('#component-description').val(),
-        sequence: $('#component-sequence').val()
-    };*/
-    // console.log(data);
-    $('#component-info-modal').modal('hide');
 });
 
 $('#save-button').on('click', () => {
@@ -496,10 +584,10 @@ $('#save-circuit').on('click', () => {
     $.post('/api/circuit', postData, (v) => {
         if (v.status === 1)
             $('.ui.dimmer:first .loader')
-                .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
+            .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
             $('.ui.dimmer:first .loader')
-                .text('Failed, closing...');
+            .text('Failed, closing...');
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
         }, 1000);
@@ -675,22 +763,22 @@ $('#redo-button').on('click', function () {
 
 // Part panel
 $('#chassis-dropdown').dropdown(
-    (function() {
+    (function () {
         let ret = {
             values: []
         }
-        CHASSIS.forEach(function(element) {
+        CHASSIS.forEach(function (element) {
             ret.values.push({
                 name: element,
                 value: element,
             })
         })
         ret.values[0].selected = true;
-        ret.onChange = function(value) {
+        ret.onChange = function (value) {
             design.setChassis(value)
         }
         return ret;
-    }) ()
+    })()
 ).popup({
     content: 'Choose your chassis.'
 });
@@ -848,12 +936,12 @@ $('#advanced-search-modal .checkbox').checkbox('set checked');
 $('.list .master.checkbox')
     .checkbox({
         // check all children
-        onChecked: function() {
+        onChecked: function () {
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('check');
         },
         // uncheck all children
-        onUnchecked: function() {
+        onUnchecked: function () {
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('uncheck');
         }
@@ -866,30 +954,27 @@ $('.list .child.checkbox')
         // Fire on load to set parent value
         fireOnInit: true,
         // Change parent state on each child checkbox change
-        onChange: function() {
-            let 
-                $listGroup      = $(this).closest('.list'),
+        onChange: function () {
+            let
+                $listGroup = $(this).closest('.list'),
                 $parentCheckbox = $listGroup.closest('.item').children('.checkbox'),
-                $checkbox       = $listGroup.find('.checkbox'),
-                allChecked      = true,
-                allUnchecked    = true;
+                $checkbox = $listGroup.find('.checkbox'),
+                allChecked = true,
+                allUnchecked = true;
             // check to see if all other siblings are checked or unchecked
-            $checkbox.each(function() {
-                if( $(this).checkbox('is checked') ) {
+            $checkbox.each(function () {
+                if ($(this).checkbox('is checked')) {
                     allUnchecked = false;
-                }
-                else {
+                } else {
                     allChecked = false;
                 }
             });
             // set parent checkbox state, but dont trigger its onChange callback
             if (allChecked) {
                 $parentCheckbox.checkbox('set checked');
-            }
-            else if (allUnchecked) {
+            } else if (allUnchecked) {
                 $parentCheckbox.checkbox('set unchecked');
-            }
-            else {
+            } else {
                 $parentCheckbox.checkbox('set indeterminate');
             }
         }
@@ -903,13 +988,12 @@ $('#search-parts-dropdown').dropdown({
     apiSettings: {
         url: '/api/parts?flag={target}&name={query}',
         cache: false,
-        beforeSend: (settings) => 
-        {
-            settings.urlData.target = (() =>{
+        beforeSend: (settings) => {
+            settings.urlData.target = (() => {
                 let searchTarget = "";
                 let $choices = $('.list .child.checkbox');
-                $choices.each(function() {
-                    searchTarget += $(this).checkbox('is checked')?"1":"0";
+                $choices.each(function () {
+                    searchTarget += $(this).checkbox('is checked') ? "1" : "0";
                 })
                 return searchTarget;
             })();
@@ -936,8 +1020,6 @@ $('#search-parts-dropdown').dropdown({
 $('#advanced-search-button').click(function () {
     $('#advanced-search-modal').modal('show');
 });
-
-
 
 
 
@@ -975,7 +1057,7 @@ function setPartPanel(id) {
         $('#show-part-src-seg-button').show();
     });
 }
-$('#show-part-src-seg-button').on('click', function (){
+$('#show-part-src-seg-button').on('click', function () {
     $('#source-circuit-modal').modal('show');
     $('#source-list').html('');
     selectedPart.works.forEach((w) => {
@@ -1044,101 +1126,6 @@ $('#part-panel')
     });
 
 
-// Comment Favourite window
-// $('#fav-win')
-//     .resizable('option', 'minWidth', 350);
-// $('#fav-win-button').on('click', function () {
-//     $('#fav-win').fadeOut({
-//         duration: 200
-//     });
-// }).popup({
-//     content: 'Close collection window.'
-// });
-// $('#open-fav-win').on('click', () => {
-//     $('#fav-win').fadeToggle({
-//         duration: 200
-//     });
-// }).popup({
-//     content: 'Toggle collection window.'
-// });
-
-// function loadFavWin() {
-//     $('#fav-win>.content').html('');
-//     $.get('/api/get_favorite', (data) => {
-//         if (data.status !== 1)
-//             return;
-//         data.circuits.forEach((v) => {
-//             let data = `
-//                 <div class="ui segment fav-cir-seg">
-//                   <div class="combine-circuit-button" data-id=${v.id}><i class="plus icon"></i></div>
-//                   <p><b>${v.name}</b> by <b>${v.author}</b></p>
-//                   <p><b>Description:</b> ${v.description}</p>
-//                 </div>`;
-//             $('#fav-win>.content').append(data);
-//         });
-//         data.parts.forEach((v) => {
-//             let safety = SDinDesign.partSafetyLevels[v.safety];
-//             if (safety === undefined)
-//                 safety = 'Unknown risk';
-//             let data = `
-//                 <div class="ui segment fav-part-seg" data-id=${v.id}>
-//                   <div class="remove-part-fav" data-id="${v.id}"><i class="remove icon"></i></div>
-//                   <img src="/static/img/design/${v.type.toLowerCase()}.png"></img>
-//                   <p><b>BBa:</b> ${v.BBa}</p>
-//                   <p><b>Name:</b> ${v.name}</p>
-//                   <p><b>Safety level:</b> ${safety}</p>
-//                 </div>`;
-//             $('#fav-win>.content').append(data);
-//         });
-//         $('.fav-part-seg').off('click').on('click', function () {
-//             $(this).transition({
-//                 animation: 'pulse',
-//                 duration: '0.2s'
-//             });
-//             setPartPanel($(this).data('id'));
-//         }).popup({
-//             content: 'Click to pick this part into part panel!'
-//         });
-//         $('.remove-part-fav').off('click').on('click', function () {
-//             let postData = {
-//                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val(),
-//                 data: JSON.stringify({
-//                     part_id: $(this).data('id'),
-//                     tag: 0
-//                 })
-//             };
-//             $.post('/api/part_favorite', postData, (data) => {
-//                 if (data.success !== true)
-//                     return;
-//                 loadFavWin();
-//             });
-//         }).popup({
-//             content: 'Remove this part from your favorite'
-//         });
-//         $('.combine-circuit-button').off('click').on('click', function () {
-//             $.get(`/api/circuit?id=${$(this).data('id')}`, (value) => {
-//                 design.combine(value);
-//             });
-//         }).popup({
-//             content: 'Add this circuit into your design!'
-//         });
-//     });
-// }
-// loadFavWin();
-
-// Toolbox
-// $('#toolbox')
-//     .on('mouseenter', function () {
-//         $(this).css({
-//             opacity: 0.9
-//         });
-//     })
-//     .on('mouseleave', function () {
-//         $(this).css({
-//             opacity: 0.2
-//         });
-//     });
-
 $('.ui.dimmer:first').dimmer({
     closable: false
 });
@@ -1148,13 +1135,6 @@ function initPositionSize() {
     $('#fav-win').css({
         height: $(this).height()
     });
-    // $('#toolbox').css({
-    //     bottom: 100,
-    //     left: ($('#canvas').width() - $('#toolbox').width()) / 2,
-    // });
-    // $('#toolbox>.content').css({
-    //     height: $('#toolbox>.content').outerHeight() + 1
-    // });
 }
 initPositionSize();
 
@@ -1186,10 +1166,10 @@ $('#add-new-part')
         }, (data) => {
             if (data.success === true)
                 $('.ui.dimmer:first .loader')
-                    .text('Success, closing...');
+                .text('Success, closing...');
             else
                 $('.ui.dimmer:first .loader')
-                    .text('Failed, closing...');
+                .text('Failed, closing...');
             setTimeout(() => {
                 $('.ui.dimmer:first').dimmer('hide');
             }, 1000);
@@ -1285,11 +1265,11 @@ $('#inspect-item')
         $('.SDinDesign-device').off('click');
         $('.SDinDesign-part')
             .off('mouseenter')
-            .on('mouseenter', function() {
+            .on('mouseenter', function () {
                 design.highlightDevice($(this), 0.4);
             })
             .off('mouseleave')
-            .on('mouseleave', function() {
+            .on('mouseleave', function () {
                 design.unHighlightDevice($(this));
             })
             .off('click')
@@ -1316,7 +1296,7 @@ $('#inspect-item')
                     data: {
                         name: data['part']['name']
                     },
-                    success: (data)=>{
+                    success: (data) => {
                         console.log(data);
                         itemModal
                             .find('textarea[name=component-sequence]')
@@ -1600,6 +1580,9 @@ $('#real-clear-all-button')
         );
     });
 
+//TODO: only this place use Chart.js
+// Consider to remove Chart.js
+// Use new chart js code: echart.js to implement the stimulate
 $('#simulation-button')
     .on('click', () => {
         let data = design.matrix;
@@ -1665,47 +1648,6 @@ $('#simulation-button')
         content: 'Run simulation on the design.'
     });
 
-// let safetyPopupContent;
-// $('#safety').popup({
-//     position: 'bottom right',
-//     variation: 'wide popup',
-//     content: 'safety',
-//     onShow: function () {
-//         console.log(safetyPopupContent);
-//         this.html(safetyPopupContent);
-//     }
-// });
-
-// function updateSafety(safety) {
-//     /*
-//      * safety == -1 表示unknown, 也列入安全的范畴。
-//      */
-//     if (safety <= 1) {
-//         $('#safety').removeClass('red yellow').addClass('green')
-//             .html('Low risk<img src="/static/img/design/safety-1.png"></img>');
-//     } else if (safety === 2) {
-//         $('#safety').removeClass('red green').addClass('yellow')
-//             .html('Moderate risk<img src="/static/img/design/safety-2.png"></img>');
-//     } else if (safety === 3) {
-//         $('#safety').removeClass('yellow green').addClass('red')
-//             .html('High risk<img src="/static/img/design/safety-3.png"></img>');
-//     }
-
-//     if (safety === 3) {
-//         safetyPopupContent = `
-//             <div class="header">Warning!</div>
-//             <div class="content">Please check your design again in case of
-//                 using any potential risky part! We don't recommend you to
-//                 use parts with high risk ground. Change them into safe parts?</div>`;
-//         $('#safety').popup('show');
-//     } else {
-//         $('#safety').popup('hide');
-//         safetyPopupContent = `
-//             <div class="header">Safe!</div>
-//             <div class="content">Your design is now under an acceptable safety level.</div>`;
-//     }
-// }
-
 $('#show-plasmid').on('click', function () {
     $('#plasmid-modal').modal('show');
 });
@@ -1719,4 +1661,3 @@ $(window)
     });
 
 selectMode('modifyItem');
-// updateSafety();

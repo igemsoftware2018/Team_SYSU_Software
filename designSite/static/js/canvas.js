@@ -121,7 +121,9 @@ class SDinDesign {
 
     static zoom(size, ratio) {
         let newSize = {};
-        $.each(size, (key, value) => { newSize[key] = value * ratio; });
+        $.each(size, (key, value) => {
+            newSize[key] = value * ratio;
+        });
         return newSize;
     }
 
@@ -176,9 +178,13 @@ class SDinDesign {
             id: -1,
             chassis: 'Escherichia Coli',
             protocol: {
-                title:'',
-                description:'',
-                steps:[{id:0, title:'', body:''}]
+                title: '',
+                description: '',
+                steps: [{
+                    id: 0,
+                    title: '',
+                    body: ''
+                }]
             }
         },
         option = {}
@@ -211,7 +217,9 @@ class SDinDesign {
             this._ready = f;
     }
 
-    get ratio() { return this._size.unit; }
+    get ratio() {
+        return this._size.unit;
+    }
     set ratio(ratio) {
         if (this._option.zoomable === false)
             return;
@@ -219,7 +227,9 @@ class SDinDesign {
         this.redrawDesign();
     }
 
-    get canvas() { return $(this._canvas); }
+    get canvas() {
+        return $(this._canvas);
+    }
     get design() {
         let data = {
             id: this._id,
@@ -235,8 +245,12 @@ class SDinDesign {
             protocol: this._design.protocol
         };
         data = $.extend(true, {}, data);
-        $.each(data.lines, (_, l) => { delete l.DOM; });
-        $.each(data.parts, (_, p) => { delete p.DOM; });
+        $.each(data.lines, (_, l) => {
+            delete l.DOM;
+        });
+        $.each(data.parts, (_, p) => {
+            delete p.DOM;
+        });
         return data;
     }
     set design(design) {
@@ -251,9 +265,15 @@ class SDinDesign {
         this._design.chassis = design.chassis;
         this._design.protocol = design.protocol;
 
-        $.each(this._design.devices, (_, device) => { this.addDevice(device); });
-        $.each(this._design.parts, (_, part) => { this.addPart(part, 1, undefined); });
-        $.each(this._design.lines, (_, link) => { this.addLink(link, false); });
+        $.each(this._design.devices, (_, device) => {
+            this.addDevice(device);
+        });
+        $.each(this._design.parts, (_, part) => {
+            this.addPart(part, 1, undefined);
+        });
+        $.each(this._design.lines, (_, link) => {
+            this.addLink(link, false);
+        });
 
         this.redrawDesign();
     }
@@ -261,9 +281,15 @@ class SDinDesign {
         this.recordHistory(`Combined design ID=${design.id}.`);
 
         let design2 = this.convertFormat(design);
-        $.each(design2.devices, (_, device) => { this.addDevice(device); });
-        $.each(design2.parts, (_, part) => { this.addPart(part, 1, undefined); });
-        $.each(design2.lines, (_, link) => { this.addLink(link, false); });
+        $.each(design2.devices, (_, device) => {
+            this.addDevice(device);
+        });
+        $.each(design2.parts, (_, part) => {
+            this.addPart(part, 1, undefined);
+        });
+        $.each(design2.lines, (_, link) => {
+            this.addLink(link, false);
+        });
 
         this._design = {
             devices: this._design.devices.concat(design2.devices),
@@ -276,7 +302,10 @@ class SDinDesign {
         // this.maxSafety(updateSafety);
     }
     convertFormat(design) {
-        let tmp = design.parts.reduce((t, p) => { t[p.cid] = p; return t; }, {});
+        let tmp = design.parts.reduce((t, p) => {
+            t[p.cid] = p;
+            return t;
+        }, {});
         $.each(tmp, (_, v) => {
             if (v.X === undefined)
                 v.X = 0;
@@ -357,7 +386,9 @@ class SDinDesign {
         if (this._option.draggable) {
             device.on('click', () => SDinDesign.preventClickOnDrag(this, device));
             this._jsPlumb.draggable(device, {
-                drag: () => { device.addClass('dragging'); },
+                drag: () => {
+                    device.addClass('dragging');
+                },
                 start: (event) => {
                     device.data('drag-origin', {
                         x: event.e.pageX,
@@ -379,7 +410,7 @@ class SDinDesign {
             .addClass('bone');
 
         if (this._option.addable) {
-        // Creating dropper for adding subparts
+            // Creating dropper for adding subparts
             for (let i = 0; i <= data.parts.length; ++i) {
                 let dropper = this.addSubpartDropper(device, data);
                 dropper.attr('dropper-id', i);
@@ -410,13 +441,17 @@ class SDinDesign {
                 accept: '#part-info-img',
                 greedy: true,
                 tolerance: 'intersect',
-                over: function() {
-                    $(this).css({ backgroundColor: 'rgba(255, 0, 0, 0.3)' });
+                over: function () {
+                    $(this).css({
+                        backgroundColor: 'rgba(255, 0, 0, 0.3)'
+                    });
                 },
-                out: function() {
-                    $(this).css({ backgroundColor: 'rgba(255, 0, 0, 0.1)' });
+                out: function () {
+                    $(this).css({
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)'
+                    });
                 },
-                drop: function() {
+                drop: function () {
                     // TODO: fix selectedPart, updateSafety from other file
                     // VERY IMPORTANT
                     // first, deep copy selectedPart to copySelectedPart
@@ -454,13 +489,13 @@ class SDinDesign {
             if (this._option.draggable) {
                 part.on('click', () => SDinDesign.preventClickOnDrag(this, part));
                 this._jsPlumb.draggable(part, {
-                    start: function(event) {
+                    start: function (event) {
                         part.data('drag-origin', {
                             x: event.e.pageX,
                             y: event.e.pageY
                         });
                     },
-                    drag: function() {
+                    drag: function () {
                         part.addClass('dragging');
                     },
                     stop: (event) => {
@@ -498,9 +533,18 @@ class SDinDesign {
         // Arrow
         let arrowSetting;
         if (data.type === 'promotion' || data.type === 'combine' || data.type === 'stimulation')
-            arrowSetting = ['Arrow', { foldback: 0.01, width: 15, location: 1 }];
+            arrowSetting = ['Arrow', {
+                foldback: 0.01,
+                width: 15,
+                location: 1
+            }];
         else
-            arrowSetting = ['Diamond', { foldback: 1, width: 30, length: 1, location: 1 }];
+            arrowSetting = ['Diamond', {
+                foldback: 1,
+                width: 30,
+                length: 1,
+                location: 1
+            }];
         arrowSetting[1].id = `SDinDesign-arrow-${data.type}-${data.start}-${data.end}`;
 
         for (let s of source)
@@ -604,12 +648,17 @@ class SDinDesign {
         this._design.devices.forEach((device) => {
             device.parts.forEach((part) => {
                 if (part.DOM[0] === DOM)
-                    result = { device: device, part: part };
+                    result = {
+                        device: device,
+                        part: part
+                    };
             });
         });
         this._design.parts.forEach((part) => {
             if (part.DOM[0] === DOM)
-                result = { part: part };
+                result = {
+                    part: part
+                };
         });
         return result;
     }
@@ -658,7 +707,10 @@ class SDinDesign {
             lines.forEach((l) => {
                 let pos = dev.parts.findIndex((part) => part.cid === l.start);
                 if (i < pos && pos < j)
-                    gen.push({ cid: l.end, type: l.type });
+                    gen.push({
+                        cid: l.end,
+                        type: l.type
+                    });
             });
         });
         return gen;
@@ -666,7 +718,10 @@ class SDinDesign {
 
     traceCDS(p, lines, partDic) {
         if (p.type !== 'CDS')
-            return [{ cid: p.cid, type: 'stimulation' }]; //promotion
+            return [{
+                cid: p.cid,
+                type: 'stimulation'
+            }]; //promotion
         let ans = lines.reduce((a, l) => {
             if (l.start === p.cid)
                 a.push(partDic[l.end]);
@@ -681,7 +736,10 @@ class SDinDesign {
         let design = $.extend(true, {}, this._design);
         let parts = design.devices.reduce((t, v) => t.concat(v.parts), design.parts);
         let maxCid = Math.max.apply(this, parts.map((p) => p.cid));
-        let partDic = parts.reduce((t, v) => { t[v.cid] = v; return t; }, {});
+        let partDic = parts.reduce((t, v) => {
+            t[v.cid] = v;
+            return t;
+        }, {});
         // Dealing with CDS
         let newLines = [];
         parts.forEach((p) => {
@@ -689,8 +747,7 @@ class SDinDesign {
                 return;
             // find a material linked by this CDS
             let found = design.lines.reduce((f, l) =>
-                f || (l.start === p.cid && SDinDesign.isMaterial(partDic[l.end].type))
-                , false);
+                f || (l.start === p.cid && SDinDesign.isMaterial(partDic[l.end].type)), false);
             if (found === true)
                 return;
             // generate a fake material generated by this CDS
@@ -706,10 +763,18 @@ class SDinDesign {
             });
         });
         design.lines = design.lines.concat(newLines);
-        partDic = parts.reduce((t, v) => { t[v.cid] = v; return t; }, {});
+        partDic = parts.reduce((t, v) => {
+            t[v.cid] = v;
+            return t;
+        }, {});
         parts = parts.filter((p) => SDinDesign.isMaterial(p.type));
-        let materialDic = parts.reduce((t, v) => { t[v.cid] = v; return t; }, {});
-        parts.forEach((v, i) => { partDic[v.cid].index = i; });
+        let materialDic = parts.reduce((t, v) => {
+            t[v.cid] = v;
+            return t;
+        }, {});
+        parts.forEach((v, i) => {
+            partDic[v.cid].index = i;
+        });
         let n = parts.length;
         let res = Array(n).fill(0).map(() => Array(n).fill(0));
         let partName = parts.map((p) => p.name);
@@ -773,7 +838,10 @@ class SDinDesign {
         $(this._canvas)
             .on('mousedown', (event) => {
                 this._dragging = true;
-                this._dragOrigin = { x: event.offsetX, y: event.offsetY };
+                this._dragOrigin = {
+                    x: event.offsetX,
+                    y: event.offsetY
+                };
             })
             .on('mouseup', () => {
                 this._dragging = false;
@@ -786,7 +854,10 @@ class SDinDesign {
                     return;
                 this._canvasPositionX += (event.offsetX - this._dragOrigin.x) / this.ratio;
                 this._canvasPositionY += (event.offsetY - this._dragOrigin.y) / this.ratio;
-                this._dragOrigin = { x: event.offsetX, y: event.offsetY };
+                this._dragOrigin = {
+                    x: event.offsetX,
+                    y: event.offsetY
+                };
                 this.redrawDesign();
             });
     }
@@ -803,17 +874,21 @@ class SDinDesign {
         $(this._canvas).droppable({
             accept: '#part-info-img',
             greedy: true,
-            over: function() {
+            over: function () {
                 $(this).css({
                     backgroundColor: 'rgba(0, 0, 255, 0.1)'
                 });
             },
-            out: function() {
-                $(this).css({ backgroundColor: '' });
+            out: function () {
+                $(this).css({
+                    backgroundColor: ''
+                });
             },
-            drop: function(event) {
+            drop: function (event) {
                 // TODO: fix selectedPart, updateSafety from other file
-                $(this).css({ backgroundColor: '' });
+                $(this).css({
+                    backgroundColor: ''
+                });
                 let partData = $.extend(true, {}, selectedPart);
                 if (partData.id === undefined)
                     partData.id = that._nextPartId;
@@ -822,7 +897,11 @@ class SDinDesign {
                 let y = event.offsetY / that._size.unit - that._canvasPositionY;
                 if (SDinDesign.isGene(partData.type)) {
                     that.recordHistory(`Insert ${partData.name} as new device.`);
-                    let newDevice = { parts: [], X: x, Y: y };
+                    let newDevice = {
+                        parts: [],
+                        X: x,
+                        Y: y
+                    };
                     newDevice.parts.push(partData);
                     that._design.devices[Object.keys(that._design.devices).length] = newDevice;
                     that.addDevice(newDevice);
@@ -871,14 +950,4 @@ class SDinDesign {
             design.highlightDevice(item, 0.7);
         }
     }
-
-    // comment get maximum safety
-    //   quite a workaround
-    //   need restruct
-    // maxSafety(callback) {
-    //     let getData = {
-    //         ids: JSON.stringify(this.design.parts.map((v) => v.id))
-    //     };
-    //     $.get('/api/max_safety', getData ,(v) => callback(v.max_safety));
-    // }
 }
