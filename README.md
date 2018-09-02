@@ -11,7 +11,7 @@ Document - 一系列具有父子关系（历史继承关系）的Design。
 
 
 ### 关于part
-part之前设计分成公有和私有了。在后端可能需要修改一下逻辑，使得
+part之前设计分成公有和私有了。在后端可能需要修改一下逻辑。
 
 ### 关于Document
 事实上这是一个不需要被实现的概念。把Design的`name`字段作为Document的id，在处理时我们认为拥有同一个`Name`的Design是归属于同一个`Document`的。同时，一个`Document`只有一个`Master`，即建立这个Document（或者说建立这个Document的第一个Design）的用户名。此外，一个Document共享一个`EditableGroup`，其中记录着可以编辑该Document下所有Design的用户。
