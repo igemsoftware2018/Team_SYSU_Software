@@ -1039,19 +1039,69 @@ def analysis_sequence(request):
         CG: xxx
     }
     '''
-    logger.debug(request.POST['chassis'])
     if request.method == 'POST':
         seq = request.POST['sequence']
         chassis = request.POST['chassis']
         chassis_format = request.POST['mode']
+
         if (re.match('[^atcgATCG]', seq)):
             return JsonResponse({
                 'status': 0
             })
-        else:
-            # TODO: calculate CAI and CG
-            return JsonResponse({
-                'status': 1,
-                'CAI': 0.5,
-                'CG': 0.5
-            })
+
+        # for CG
+        cg_num = sum(map(lambda ch: 1 if ch in 'cgCG' else 0, seq))
+        CG = cg_num / len(seq)
+
+        # for CAI
+        def dna2rna(ch):
+            if ch in 'aA': return 'U'
+            if ch in 'tT': return 'A'
+            if ch in 'cC': return 'G'
+            if ch in 'gG': return 'C'
+            raise Exception('invalid dna seq format {}'.format(ch))
+        rna = list(map(dna2rna, seq.strip()))
+        # break every 3 elements into groups 
+        # rna_codon = ['XXX', 'XXX', 'XXX']
+        rna_codon = [''.join(rna[i:i+3]) for i in range(0, len(rna), 3)]
+        chassis_codon_table = json.loads(Chassis.objects.get(name=chassis).data) # get the json
+        chassis_codon_table = chassis_codon_table[chassis_format] # get the mode
+
+        max_frequency = {} # map amino_acid(str) to frequency(float)
+        codon2amino_acid = {} # map codon(str) to amino_acid(str)
+        codon2frequency = {} # map codon(str) to frequency(float)
+        # init the above dicts
+        for item in chassis_codon_table:
+            codon = item['codon']
+            amino_acid = item['amino_acid']
+            f = item['frequency']
+            if max_frequency.get(amino_acid) is None:
+                max_frequency[amino_acid] = float(f)
+            else:
+                max_frequency[amino_acid] = max(max_frequency[amino_acid], float(f))
+            codon2amino_acid[codon] = amino_acid
+            codon2frequency[codon] = float(f)
+        logger.debug('max_frequency %s', max_frequency)
+        logger.debug('codon2amino_acid %s ', codon2amino_acid)
+        logger.debug('codon2frequency %s ', codon2frequency)
+        
+        # calculate CAI
+        weights = []
+        for codon in rna_codon:
+            f = codon2frequency[codon]
+            amino = codon2amino_acid[codon]
+            max_f = max_frequency[amino]
+            weights.append(f/max_f)
+        def product(iter):
+            acc = 1
+            for i in iter: acc *= i
+            return acc
+        CAI = product(weights) ** (1/len(weights))
+        logger.debug('CAI %s', CAI)
+        logger.debug('CG %s', CG)
+
+        return JsonResponse({
+            'status': 1,
+            'CAI': CAI,
+            'CG': CG
+        })
