@@ -130,6 +130,9 @@
     <a class="item" id="save-button">
       <img src="/static/img/design/save.png">
     </a>
+    <a class="item" id="save-as-new-button">
+      <img src="/static/img/design/save.png">
+    </a>
     <a class="item" id="export-button">
       <img src="/static/img/design/export-json.png">
     </a>
@@ -246,21 +249,21 @@
   <div id="inspect-item-modal" class="ui tiny modal">
     <div class="content">
       <form id="inspect-item-form" class="ui form">
-        <div class="disabled field">
+        <div class="field">
           <label>Part role</label>
-          <input type="text" name="component-role" placeholder="part role" disabled="">
+          <input type="text" readonly="readonly" name="component-role" placeholder="part role">
         </div>
-        <div class="disabled field">
+        <div class="field">
           <label>Display ID</label>
-          <input type="text" name="component-id" placeholder="display id">
+          <input type="text" readonly="readonly" name="component-id" placeholder="display id">
         </div>
-        <div class="disabled field">
+        <div class="field">
           <label>Name</label>
-          <input type="text" name="component-name">
+          <input type="text" readonly="readonly" name="component-name">
         </div>
-        <div class="disabled field">
+        <div class="field">
           <label>Version</label>
-          <input type="text" name="component-version" placeholder="1" disabled="">
+          <input type="text" readonly="readonly" name="component-version" placeholder="1">
         </div>
         <div class="field">
           <label>Description</label>
@@ -459,13 +462,7 @@
 
   <!-- Load modal -->
   <div id="load-modal" class="ui tiny modal">
-    <div class="content">
-    </div>
-    <div class="actions">
-      <div class="ui one bottom attached big buttons">
-        <div id="save-circuit" class="ui white button">Close</div>
-      </div>
-    </div>
+    <div class="content"></div>
   </div>
 
   <!-- High risk modal -->

@@ -12,6 +12,8 @@ let design;
 let CHASSIS;
 let CHASSIS_FORMAT;
 
+let save_mode = 0;
+
 
 $.ajax({
     type: 'GET',
@@ -347,13 +349,12 @@ $('#analysis-button').on('click', function () {
             let unique = {};
             let parts = design.design.parts;
             $.each(parts, function (index, part) {
-                let temp = {
-                    name: part.name,
-                    value: part.id
-                };
-                if (!unique[temp]) {
-                    data.push(temp);
-                    unique[temp] = 1;
+                if (!unique[part.name]) {
+                    data.push({
+                        name: part.name,
+                        value: part.id
+                    });
+                    unique[part.name] = 1;
                 }
             });
             $('#analysis-part-dropdown').dropdown({
@@ -563,13 +564,25 @@ $('#analysis-sequence-button').on('click', function () {
 });
 
 $('#save-button').on('click', () => {
+    save_mode = 0;
     $('#safety-modal').modal('show');
 }).popup({
     content: 'Save your design to server.'
 });
+$('#save-as-new-button').on('click', function() {
+    save_mode = 1;
+    $('#safety-modal').modal('show');
+}).popup({
+    content: 'Save as a new design to the server'
+});
 $('#continue-save').on('click', () => {
-    $('#circuit-name').val(design.name);
-    $('#circuit-description').val(design.description);
+    if (save_mode == 0) {
+        $('#circuit-name').val(design.name);
+        $('#circuit-description').val(design.description);
+        $('#circuit-name').prop('readonly', 'readonly');
+    } else {
+        $('#circuit-name').removeAttr('readonly');
+    }
     $('#save-modal').modal('show');
 });
 $('#save-circuit').on('click', () => {
@@ -579,7 +592,7 @@ $('#save-circuit').on('click', () => {
     $('.ui.dimmer:first').dimmer('show');
     let postData = design.design;
     postData.circuit = {
-        id: design._id,
+        id: (save_mode == 0 ? design._id: -1),
         name: $('#circuit-name').val(),
         description: $('#circuit-description').val()
     };
@@ -607,14 +620,60 @@ $('#load-button').on('click', () => {
     $.get('/api/get_saves', (v) => {
         $('.ui.dimmer:first').dimmer('hide');
         $('#load-modal>.content').html('');
+        $('#load-modal>.content').append(`
+            <label>Your Circuits</label><br>
+            
+            <div class="ui divider"></div>
+            <label>Filter: </label>
+            <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
+                <div class="text" id="circuit-filter"></div>
+                <i class="dropdown icon"></i>
+            </div>
+            <div class="ui button" id="filter-clear">Clear </div>
+            <div class="ui divider"></div>
+            `
+        );
+        let filter_data = [];
+        let unique = {};
         v.circuits.forEach((c) => {
             let html = `
-                <div class="ui segment" data-id=${c.id}>
+                <div class="ui segment" data-id=${c.id} data-name=${c.name}>
                     <p><b>ID: </b>${c.id}</p>
                     <p><b>Name: </b>${c.name}</p>
                     <p><b>Description: </b>${c.description}</p>
+                    <p><b>Version: </b><!--TODO: Version--></p>
                 </div>`;
             $('#load-modal>.content').append(html);
+            if (!unique[c.name]) {
+                filter_data.push({
+                    name: c.name,
+                    value: c.name
+                });
+                unique[c.name] = 1;
+            }
+        });
+        $('#circuit-filter-dropdown').dropdown({
+            values: filter_data,
+            onChange: function(value) {
+                if (value != '') {
+                    $('#load-modal .segment').each(function(index, item) {
+                        // console.log($(this).data('name'));
+                        if ($(this).data('name') != value) {
+                            $(this).attr("style","display:none;");
+                        } else {
+                            $(this).attr("style","display:block;");
+                        }
+                    });
+                } else {
+                    $(this).attr("style","display:block;");
+                }
+            }
+        });
+        $('#filter-clear').on('click', function() {
+            $('#circuit-filter-dropdown').dropdown('clear');
+            $('#load-modal .segment').each(function(index, item) {
+                $(this).attr("style","display:block;");
+            });
         });
         $('#load-modal .segment').on('click', function () {
             let id = $(this).data('id');

@@ -176,6 +176,8 @@ class SDinDesign {
             lines: [],
             parts: [],
             id: -1,
+            description: '',
+            name: '',
             chassis: 'Escherichia Coli',
             protocol: {
                 title: '',
@@ -233,6 +235,8 @@ class SDinDesign {
     get design() {
         let data = {
             id: this._id,
+            name: this.name,
+            description: this.description,
             chassis: this._design.chassis,
             lines: this._design.lines,
             combines: [],
