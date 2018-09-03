@@ -1034,9 +1034,10 @@ def analysis_sequence(request):
     }
     response with json:
     {
-        status: 0 for error, 1 for success.
+        status: 0 or errno
         CAI: xxx,
-        CG: xxx
+        CG: xxx,
+        msg: xxx (error msg, ignore me when success)
     }
     '''
     if request.method == 'POST':
@@ -1044,9 +1045,15 @@ def analysis_sequence(request):
         chassis = request.POST['chassis']
         chassis_format = request.POST['mode']
 
-        if (re.match('[^atcgATCG]', seq)):
+        if not re.match('^[^atcgATCG]*$', seq):
             return JsonResponse({
-                'status': 0
+                'status': 1,
+                'msg': 'Error: The sequence include invalid characters. Only A, C, T, G, a, c, t, g are allowed'
+            })
+        if len(seq) % 3 != 0:
+            return JsonResponse({
+                'status': 2,
+                'msg': 'Error: the length of the sequence is not dividable by three. Can not decode'
             })
 
         # for CG
@@ -1064,6 +1071,7 @@ def analysis_sequence(request):
         # break every 3 elements into groups 
         # rna_codon = ['XXX', 'XXX', 'XXX']
         rna_codon = [''.join(rna[i:i+3]) for i in range(0, len(rna), 3)]
+        logger.debug("rna_codon %s", rna_codon)
         chassis_codon_table = json.loads(Chassis.objects.get(name=chassis).data) # get the json
         chassis_codon_table = chassis_codon_table[chassis_format] # get the mode
 
@@ -1101,7 +1109,8 @@ def analysis_sequence(request):
         logger.debug('CG %s', CG)
 
         return JsonResponse({
-            'status': 1,
+            'status': 0,
             'CAI': CAI,
-            'CG': CG
+            'CG': CG,
+            'msg': 'success'
         })
