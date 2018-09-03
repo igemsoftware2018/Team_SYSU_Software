@@ -1,7 +1,7 @@
 'use strict';
 
 /* eslint-disable no-console */
-/* global SDinDesign, Chart, html2canvas echart*/
+/* global SDinDesign, Chart, html2canvas echarts*/
 /* global Vue */
 
 let NUM_OF_TYPE = 20;
@@ -9,8 +9,8 @@ let NUM_OF_TYPE = 20;
 let designId = $('#canvas-box').attr('design-id');
 let design;
 
-let CHASSIS
-let CHASSIS_FORMAT
+let CHASSIS;
+let CHASSIS_FORMAT;
 
 
 $.ajax({
@@ -19,7 +19,7 @@ $.ajax({
     async: false,
     success: (res) => {
         CHASSIS = res.chassis;
-        CHASSIS_FORMAT = res.chassis_format
+        CHASSIS_FORMAT = res.chassis_format;
     }
 })
 
@@ -374,7 +374,13 @@ $('#analysis-button').on('click', function () {
 }).popup({
     content: 'Analysis your design.'
 });
-
+$('#add-to-sequence-button').on('click', function() {
+    let seq = $('#selected-part-sequence').html();
+    console.log(seq);
+    $('#analysis-sequence').val(function(i, text) {
+        return text + seq;
+    });
+});
 let selected_chassis;
 let selected_chassis_mode;
 $('#analysis-chassis-dropdown').dropdown(
