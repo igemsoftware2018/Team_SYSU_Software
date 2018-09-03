@@ -1045,7 +1045,7 @@ def analysis_sequence(request):
         chassis = request.POST['chassis']
         chassis_format = request.POST['mode']
 
-        if not re.match('^[^atcgATCG]*$', seq):
+        if not re.match('^[atcgATCG]*$', seq):
             return JsonResponse({
                 'status': 1,
                 'msg': 'Error: The sequence include invalid characters. Only A, C, T, G, a, c, t, g are allowed'
@@ -1058,7 +1058,7 @@ def analysis_sequence(request):
 
         # for CG
         cg_num = sum(map(lambda ch: 1 if ch in 'cgCG' else 0, seq))
-        CG = cg_num / len(seq)
+        CG = cg_num / len(seq) * 100
 
         # for CAI
         def dna2rna(ch):
@@ -1104,7 +1104,7 @@ def analysis_sequence(request):
             acc = 1
             for i in iter: acc *= i
             return acc
-        CAI = product(weights) ** (1/len(weights))
+        CAI = product(weights) ** (1/len(weights)) * 100
         logger.debug('CAI %s', CAI)
         logger.debug('CG %s', CG)
 
