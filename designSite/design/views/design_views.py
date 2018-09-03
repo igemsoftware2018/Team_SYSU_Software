@@ -1050,10 +1050,10 @@ def analysis_sequence(request):
                 'status': 1,
                 'msg': 'Error: The sequence include invalid characters. Only A, C, T, G, a, c, t, g are allowed'
             })
-        if len(seq) % 3 != 0:
+        if len(seq) % 3 != 0 or len(seq) == 0:
             return JsonResponse({
                 'status': 2,
-                'msg': 'Error: the length of the sequence is not dividable by three. Can not decode'
+                'msg': 'Error: the length of the sequence is zero or is not dividable by three. Can not decode'
             })
 
         # for CG
