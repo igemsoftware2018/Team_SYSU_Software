@@ -430,9 +430,9 @@ $('#analysis-sequence-button').on('click', function () {
     };
     console.log(temp);
     $.post('api/analysis', temp, (res) => {
-        if (res.status == 0) {
+        if (res.status != 0) {
             $('#analysis-sequence').popup({
-                content: 'Invalid words in your input DNA sequence',
+                content: res.msg,
                 onHide: function () {
                     $('#analysis-sequence').popup('destroy');
                 }
