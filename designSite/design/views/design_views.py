@@ -22,7 +22,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import traceback
 import logging
-logger = logging.getLogger('design.views')
+logger = logging.getLogger(__name__)
 
 '''
 All response contains a status in json
@@ -1039,6 +1039,7 @@ def analysis_sequence(request):
         CG: xxx
     }
     '''
+    logger.debug(request.POST['chassis'])
     if request.method == 'POST':
         seq = request.POST['sequence']
         chassis = request.POST['chassis']

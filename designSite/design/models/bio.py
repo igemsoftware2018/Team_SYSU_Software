@@ -52,7 +52,7 @@ class PartsInteract(models.Model):
 
 class Chassis(models.Model):
     name = models.CharField(max_length = 256, unique = True)
-    data = models.TextField()
+    data = models.TextField(default='')
     def __str__(self):
         return "%s" % (self.name)
 
