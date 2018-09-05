@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-
+from design.models.bio import *
 import traceback
 import logging
 logger = logging.getLogger(__name__)
@@ -34,28 +34,25 @@ def index(request):
 @login_required
 def personal_index(request):
     # TODO: query parts and circuits
+    user = request.user
+    username = user.username
+    part_query = Parts.objects.filter(Username=username)
+    circuit_query = Circuit.objects.filter(Author=user)
+
     parts = [{
-        'ID' : 'xxx',
-        'Name' : 'xxx',
-        'Role' : 'xxx',
-        'Description' : 'xxx'
-    }, {
-        'ID' : 'yyy',
-        'Name' : 'yyy',
-        'Role' : 'yyy',
-        'Description' : 'yyy'
-    }]
+        'ID': x.id,
+        'Name': x.Name,
+        'Role': x.Role,
+        'Description': x.Description
+    } for x in part_query]
     circuits = [{
-        'ID' : 'xxx',
-        'Name' : 'xxx',
-        'Version' : 'xxx',
-        'Description' : 'xxx'
-    }, {
-        'ID' : 'yyy',
-        'Name' : 'yyy',
-        'Version' : 'yyy',
-        'Description' : 'yyy'
-    }]
+        'ID': x.id,
+        'Name': x.Name,
+        'Version': 0, #TODO: no version.
+        'Description': x.Description
+    } for x in circuit_query]
+    logger.debug(part_query)
+    logger.debug(circuit_query)
     return render(request, 'personal_index.html', {'parts': parts, 'circuits': circuits})
 
 

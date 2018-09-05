@@ -39,13 +39,13 @@ class User(AbstractBaseUser):
     REQUIRED_FIELD = ['org', 'igem']
 
     def get_full_name(self):
-        return "%s of %s" % self.email, self.org
+        return "%s of %s" % (self.email, self.org)
 
     def get_short_name(self):
         return self.email
 
     def __str__(self):
-        return "email: %s\norg: %s" % self.email, self.org
+        return "Model.User: name: %s email: %s\norg: %s" % (self.username, self.email, self.org)
 
 class Works(models.Model):
     TeamID = models.IntegerField(unique = True)
@@ -78,7 +78,7 @@ class Works(models.Model):
     logo = models.URLField(default=join("static", "img", "Team_img", "none.jpg"))
 
     def __str__(self):
-        return "%s : %s" % str(self.TeamID), self.Teamname
+        return "%s : %s" % (str(self.TeamID), self.Teamname)
 
 class TeamImg(models.Model):
     Name = models.CharField(max_length = 180, unique=True)
@@ -99,7 +99,7 @@ class Papers(models.Model):
     Circuit = models.ForeignKey('Circuit', on_delete = models.CASCADE, null = True)
 
     def __str__(self):
-        return "%s : %s" % str(self.DOI), self.Title
+        return "%s : %s" % (str(self.DOI), self.Title)
 
 class Trelation(models.Model):
     first =  models.ForeignKey('Works', related_name = 'first_work', on_delete = models.CASCADE)
@@ -116,7 +116,7 @@ class UserFavorite(models.Model):
     circuit = models.ForeignKey('Circuit', on_delete = models.CASCADE)
 
     def __str__(self):
-        return "%s - %s" % self.user.name, self.circuit.Name
+        return "%s - %s" % (self.user.name, self.circuit.Name)
 
 class FavoriteParts(models.Model):
     user = models.ForeignKey('User', on_delete = models.CASCADE)
