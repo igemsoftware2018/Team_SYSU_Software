@@ -11,14 +11,21 @@
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
         <a class="item">An Icon Please</a>
+        {% if user.is_authenticated %}
         <div class="right item">
-          {% if user.is_authenticated %}
-          <a id="logout" class="ui inverted button">Log Out</a>
-          {% else %}
-          <a id="signin" class="ui inverted button">Sign In</a>
-          <a id="signup" class="ui inverted button">Sign Up</a>
-          {% endif %}
+          <h5>Welcome, {{ user.username }}!</h5>
         </div>
+        <div class="item">
+          <a id="logout" class="ui inverted button">Log Out</a>
+        </div>
+        {% else %}
+        <div class="right item">
+          <a id="signin" class="ui inverted button">Sign In</a>
+        </div>
+        <div class="item">
+          <a id="signup" class="ui inverted button">Sign Up</a>
+        </div>
+        {% endif %}
       </div>
     </div>
 
@@ -28,7 +35,8 @@
       </h1>
       <h2>Design and Collaborate, Analysis and Optimize.</h2>
       {% if user.is_authenticated %}
-      <div id="index-button" class="ui huge primary button">My Page<i class="right arrow icon"></i></div>
+      <div id="index-button" class="ui primary button">Index Page</div>
+      <div id="design-button" class="ui primary button">New Design</div>
       {% endif %}
     </div>
   </div>
@@ -52,6 +60,9 @@
   });
   $('#index-button').on('click', function () {
     window.location.href = '/index';
+  });
+  $('#design-button').on('click', function () {
+    window.location.href = '/design';
   });
 </script>
 
