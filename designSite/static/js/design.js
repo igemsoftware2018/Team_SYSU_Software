@@ -27,9 +27,16 @@ $.ajax({
 
 
 let protocolVue;
-if (designId !== '') {
-    $.get(`/api/circuit?id=${designId}`, (value) => {
-        design = new SDinDesign('#canvas', value);
+if (designId !== '' && parseInt(designId) !== -1) {
+    // $.get(`/api/circuit?id=${designId}`, (value) => {
+    //     design = new SDinDesign('#canvas', value);
+    // });
+    $.ajax(`/api/circuit?id=${designId}`, {
+        type: 'GET',
+        async: false,
+        success: function(value) {
+            design = new SDinDesign('#canvas', value);
+        }
     });
 } else
     design = new SDinDesign('#canvas');

@@ -26,6 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^index/?$', account.views.personal_index),
     url(r'^design/?$', design_views.design),
+    url(r'^design/\d+/?$', design_views.personal_design),
+    url(r'^design/share/\d+/?$', design_views.share_design),
     url(r'^interest/?$', account.views.interest),
     path('login/', account.views.login_view),
     path('register/', account.views.register),

@@ -4,6 +4,7 @@
   <title>Index Page</title>
   <link rel="stylesheet" href="/static/css/fontsize.css">
   <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/css/personal_index.css">
 </head>
 
 <body>
@@ -39,7 +40,7 @@
             <h5>Parts</h5>
             {% if parts %}
               {% for part in parts %}
-              <div class="ui segment" data-id={{ part.id }} data-name={{ part.name }}>
+              <div class="ui segment" data-id="{{ part.ID }}" data-name="{{ part.Name }}">
                 <p><b>ID: </b>{{ part.ID }}</p>
                 <p><b>Name: </b>{{ part.Name }}</p>
                 <p><b>Role: </b>{{ part.Role }}</p>
@@ -56,11 +57,11 @@
 
         <!--Private Circuit panel-->
         <div class="ui seven wide column card">
-          <div class="ui content">
+          <div class="ui content" id="circuit-card">
             <h5>Circuits</h5>
             {% if circuits %}
               {% for circuit in circuits %}
-              <div class="ui segment" data-id={{ circuit.id }} data-name={{ circuit.name }}>
+              <div class="ui segment" data-id="{{ circuit.ID }}" data-name="{{ circuit.Name }}">
                 <p><b>ID: </b>{{ circuit.ID }}</p>
                 <p><b>Name: </b>{{ circuit.Name }}</p>
                 <p><b>Version: </b>
@@ -98,5 +99,6 @@
     window.location.href = '/design';
   });
 </script>
+<script src="/static/js/personal_index.js"></script>
 
 </html>

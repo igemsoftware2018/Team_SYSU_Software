@@ -6,7 +6,8 @@ from django.http import HttpRequest
 from sbol import *
 
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound,\
+    HttpResponseForbidden
 from django.contrib import messages
 
 # from design.models import *
@@ -42,8 +43,43 @@ TYPE_LIST = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
 
 @login_required
 def design(request):
-    context = {'type_list': TYPE_LIST}
+    context = {
+        'type_list': TYPE_LIST,
+        'designID': -1
+        }
     return render(request, 'design.html', context)
+
+def personal_design(request):
+    designID = request.path.split('/')[-1] # the correct way to retrive path elements is split.
+    designID = int(designID)
+    logger.debug('visiting design id=%s', designID)
+    try:
+        circuit = Circuit.objects.get(pk=designID)
+        user = request.user
+        # this design is not construct by this user. forbidden.
+        if circuit.Author != user:
+            return HttpResponseForbidden()
+    except ObjectDoesNotExist:
+        # do not exist this id
+        return HttpResponseNotFound()
+    except:
+        # unknown error, in case it occurs
+        traceback.print_exc()
+        logger.error('unknown bugs')
+        return HttpResponseNotFound()
+    context = {
+        'type_list': TYPE_LIST,
+        'designID': designID
+        }
+    return render(request, 'design.html', context)
+def share_design(request):
+    return HttpResponseNotFound()
+    context = {
+        'type_list': TYPE_LIST,
+        'designID': -1
+        }
+    return render(request, 'design.html', context)
+
 
 def test(request):
     return render(request, 'test.html')
