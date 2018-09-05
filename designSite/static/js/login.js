@@ -6,16 +6,16 @@ $('#login-form')
         }
     });
 $('#register-button')
-    .on('click', function() {
+    .on('click', function () {
         window.location.href = '/register/';
     });
 $('#login-button')
-    .on('click', function() {
+    .on('click', function () {
         $('#login-form')
             .form('submit');
     });
 $('#signin-button')
-    .on('click', function() {
+    .on('click', function () {
         $('#signin-modal')
             .modal('show');
     });

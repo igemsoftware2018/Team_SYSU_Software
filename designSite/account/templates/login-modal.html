@@ -3,14 +3,14 @@
 
 
 <div class="ui tiny modal" id="signin-modal">
-  {% if user.is_authenticated %} 
-    <div class="content">
-      <div class="ui center aligned container">
-        <p>You've login</p>
-      </div>
+  {% if user.is_authenticated %}
+  <div class="content">
+    <div class="ui center aligned container">
+      <p>You've login</p>
     </div>
+  </div>
   {% else %}
-  <div class="header">
+  <div class="ui center aligned header">
     Sign In
   </div>
   <div class="content">
@@ -37,8 +37,8 @@
     </div>
   </div>
   <div class="ui two bottom attached big buttons" id="button-group">
-    <div class="ui left button" id="register-button">Register</div>
-    <div class="ui secondary button" id="login-button">Login</div>
+    <div class="ui left button" id="register-button">Signup</div>
+    <div class="ui secondary button" id="login-button">Signin</div>
   </div>
 </div>
 {% endif %}

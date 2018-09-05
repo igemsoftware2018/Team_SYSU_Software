@@ -5,6 +5,10 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
+import traceback
+import logging
+logger = logging.getLogger(__name__)
+
 # from account.models import *
 
 from design.models import *
@@ -29,7 +33,30 @@ def index(request):
 
 @login_required
 def personal_index(request):
-    return render(request, 'personal_index.html')
+    # TODO: query parts and circuits
+    parts = [{
+        'ID' : 'xxx',
+        'Name' : 'xxx',
+        'Role' : 'xxx',
+        'Description' : 'xxx'
+    }, {
+        'ID' : 'yyy',
+        'Name' : 'yyy',
+        'Role' : 'yyy',
+        'Description' : 'yyy'
+    }]
+    circuits = [{
+        'ID' : 'xxx',
+        'Name' : 'xxx',
+        'Version' : 'xxx',
+        'Description' : 'xxx'
+    }, {
+        'ID' : 'yyy',
+        'Name' : 'yyy',
+        'Version' : 'yyy',
+        'Description' : 'yyy'
+    }]
+    return render(request, 'personal_index.html', {'parts': parts, 'circuits': circuits})
 
 
 def login_view(request):
@@ -43,8 +70,9 @@ def login_view(request):
             user = authenticate(username = username, password = password)
             if user is not None:
                 login(request, user)
-                messages.success(request, "Login successfully!")
+                # messages.success(request, "Login successfully!")
                 next_url = request.POST.get('next')
+                logger.debug(str(next_url))
                 if next_url:
                     return redirect(next_url)
                 else:
@@ -60,7 +88,7 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('/index')
+    return redirect('/')
 
 @login_required
 def interest_view(request):
@@ -80,7 +108,7 @@ def register(request):
                     igem = form.cleaned_data["igem"]
                 )
                 login(request, user)
-                messages.success(request, "Register successfully!")
+                # messages.success(request, "Register successfully!")
                 return redirect('/index')
             except IntegrityError:
                 messages.error(request, "Email already exists!")

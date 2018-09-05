@@ -1,22 +1,94 @@
 <html>
 
+<head>
+  <title>Index Page</title>
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+</head>
+
 <body>
-    {% if user.is_authenticated %}
-        <p>{{ user.username }}</p>
-        <br>
-        <p>{{ user.email }}</p>
-        You've log in.
-        <button id="logout">Logout</button>
-    {% else %}
-        You should log in first.
-        
-    {% endif %}
+  {% if user.is_authenticated %}
+  <div class="ui inverted vertical masthead center aligned segment">
+    <div class="ui container">
+      <div class="ui large secondary inverted pointing menu">
+        <a class="active item">Home</a>
+        <div class="right item">
+          <h5>{{ user.username }}</h5>
+        </div>
+        <div class="item">
+          <a id="logout" class="ui inverted button">Log out</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui text container">
+      <h1 class="ui inverted header">
+        <a href="/" style="color:white">CO-RAD</a>
+      </h1>
+      <h2>Design and Collaborate, Analysis and Optimize.</h2>
+      <div id="design-button" class="ui huge primary button">Make new Design<i class="right arrow icon"></i></div>
+    </div>
+  </div>
+
+  <div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+      <div class="row">
+        <!--Private Parts panel-->
+        <div class="ui seven wide column card">
+          <div class="ui content">
+            <h5>Parts</h5>
+            {% for part in parts %}
+            <div class="ui segment" data-id={{ part.id }} data-name={{ part.name }}>
+              <p><b>ID: </b>{{ part.ID }}</p>
+              <p><b>Name: </b>{{ part.Name }}</p>
+              <p><b>Role: </b>{{ part.Role }}</p>
+              <p><b>Description: </b>{{ part.Description }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="two wide column"></div>
+
+        <!--Private Circuit panel-->
+        <div class="ui seven wide column card">
+          <div class="ui content">
+            <h5>Circuits</h5>
+            {% for circuit in circuits %}
+            <div class="ui segment" data-id={{ circuit.id }} data-name={{ circuit.name }}>
+              <p><b>ID: </b>{{ circuit.ID }}</p>
+              <p><b>Name: </b>{{ circuit.Name }}</p>
+              <p><b>Version: </b>
+                <!--TODO: {{ circuit.Version }}-->
+              </p>
+              <p><b>Description: </b>{{ circuit.Description }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <h5 class="ui error">You should log in first.</h5>
+  {% endif %}
 </body>
 
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.mousewheel.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
 <script>
-    document.getElementById("logout").onclick = function (){
-        window.location.href = '/logout';
-    }
+  $('#logout').on('click', function () {
+    window.location.href = '/logout';
+  });
+  $('#design-button').on('click', function () {
+    window.location.href = '/design';
+  });
 </script>
 
 </html>

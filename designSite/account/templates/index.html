@@ -1,20 +1,58 @@
 <html>
 
+<head>
+  <title>CO-RAD</title>
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+</head>
+
 <body>
-    This is the index page.
-    {% if user.is_authenticated %}
-        You've log in.
-        <button id="logout">Logout</button>
-    {% else %}
-        You should log in first.
-        
-    {% endif %}
+  <div class="ui inverted vertical masthead center aligned segment">
+    <div class="ui container">
+      <div class="ui large secondary inverted pointing menu">
+        <a class="item">An Icon Please</a>
+        <div class="right item">
+          {% if user.is_authenticated %}
+          <a id="logout" class="ui inverted button">Log Out</a>
+          {% else %}
+          <a id="signin" class="ui inverted button">Sign In</a>
+          <a id="signup" class="ui inverted button">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="ui text container">
+      <h1 class="ui inverted header">
+        CO-RAD
+      </h1>
+      <h2>Design and Collaborate, Analysis and Optimize.</h2>
+      {% if user.is_authenticated %}
+      <div id="index-button" class="ui huge primary button">My Page<i class="right arrow icon"></i></div>
+      {% endif %}
+    </div>
+  </div>
 </body>
 
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.mousewheel.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
 <script>
-    document.getElementById("logout").onclick = function (){
-        window.location.href = '/logout';
-    }
+  $('#signup').on('click', function () {
+    window.location.href = '/register';
+  });
+  $('#signin').on('click', function () {
+    window.location.href = '/login';
+  });
+  $('#logout').on('click', function () {
+    window.location.href = '/logout';
+  });
+  $('#index-button').on('click', function () {
+    window.location.href = '/index';
+  });
 </script>
 
 </html>

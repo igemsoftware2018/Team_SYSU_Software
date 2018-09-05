@@ -1,37 +1,40 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Login - S-Din</title>
-    <link rel="shortcut icon" href="/static/img/favicon.png">
-    <link rel="stylesheet" href="/static/css/fontsize.css">
-    <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
-    <link rel="stylesheet" href="/static/semantic/dist/components/icon.min.css">
-    <link rel="stylesheet" href="/static/css/custom.css">
-    <link rel="stylesheet" href="/static/css/login-page.css">
-  </head>
-  <body>
-      
-    <div class="ui menu">
-      <div class="ui container">
-        <a class="item" id="index-button" href="/">
-          <i class="angle left icon"></i>
-          BACK TO HOME SCREEN
-        </a>
-      </div>
-    </div>
-    <div class="ui main center aligned container">
-    </div>
-  </body>
 
-  {% include 'login-modal.html' %}
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Login - CO-RAD</title>
+  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/semantic/dist/components/icon.min.css">
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <link rel="stylesheet" href="/static/css/login-page.css">
+</head>
 
-  <script src="/static/js/jquery.min.js"></script>
-  <script src="/static/semantic/dist/semantic.js"></script>
-  <script src="/static/js/login.js"></script>
-  <script>
-$('.modal')
-  .addClass('active');
-  </script>
+<body>
+
+  <div class="ui menu">
+    <div class="ui container">
+      <a class="item" id="index-button" href="/">
+        <i class="angle left icon"></i>
+        BACK TO HOME SCREEN
+      </a>
+    </div>
+  </div>
+  <div class="ui main center aligned container">
+  </div>
+</body>
+
+{% include 'login-modal.html' %}
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/js/login.js"></script>
+<script>
+  $('.modal')
+    .addClass('active');
+</script>
+
 </html>
