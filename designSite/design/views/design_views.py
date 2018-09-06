@@ -414,19 +414,30 @@ def circuit(request):
                 'status': 0})
     elif request.method == 'POST':
         try:
-
-            print("Here")
             data = json.loads(request.POST['data'])
 
+            name = data['circuit']['name']
+            new = (data['circuit']['id'] == -1)
+
+            # Judge if name has been replicated in db
+            if Circuit.objects.filter(Name = name).count() > 0 and new:
+                return JsonResponse({
+                    'status': -1,
+                    'error_msg': "Design Name has been used. Please Rename it."
+                })
+
+            
             # New circuit
             circuit = Circuit.objects.create(
-                Name = data['circuit']['name'],
+                Name = name,
                 Description = data['circuit']['description'],
-                Master = request.user if data['circuit']['id'] == -1 else Circuit.objects.filter(name = name)[0].Author,
+                Author = request.user if new else Circuit.objects.filter(name = name)[0].Author,
                 Editor = request.user,
                 Chassis = Chassis.objects.get(name = data['chassis'])
             )
 
+
+            
             # New protocol and steps
             try:
                 protocol = Protocol.objects.create(
@@ -483,7 +494,8 @@ def circuit(request):
         except:
             traceback.print_exc()
             return JsonResponse({
-                'status': 0})
+                'status': 0
+                })
     else:
         return JsonResponse({
             'status': 0})

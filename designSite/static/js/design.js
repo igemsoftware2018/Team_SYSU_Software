@@ -612,11 +612,11 @@ $('#save-circuit').on('click', () => {
             $('.ui.dimmer:first .loader')
             .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
-            $('.ui.dimmer:first .loader')
-            .text('Failed, closing...');
+            $('.ui.dimmer:first .loader').text( (v.status == -1 ? v.error_msg : 'Failed, closing...'));
+        
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
-        }, 1000);
+        }, 3000);
     });
 });
 
