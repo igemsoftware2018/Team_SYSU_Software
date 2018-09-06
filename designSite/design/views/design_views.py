@@ -414,64 +414,26 @@ def circuit(request):
                 'status': 0})
     elif request.method == 'POST':
         try:
-            data = json.loads(request.POST['data'])
-            new = data['circuit']['id'] == -1
-            chassis = Chassis.objects.get(name = data['chassis'])
-            try:
-                circuit = Circuit.objects.get(pk = data['circuit']['id'])
-                logger.error(str(data['circuit']))
-                if (not request.user.is_admin) and circuit.Author != request.user:
-                    new = True
-                else:
-                    new = False
-            except:
-                new = True
-            if new:
-                # new circuit
-                circuit = Circuit.objects.create(
-                    Name = data['circuit']['name'],
-                    Description = data['circuit']['description'],
-                    Author = request.user,
-                    Chassis = chassis
-                )
-                # new protocol and steps
-                try:
-                    protocol = Protocol.objects.create(
-                        Circuit=circuit,
-                        Title=data['protocol']['title'],
-                        Description=data['protocol']['description']
-                    )
-                    for idx, step in enumerate(data['protocol']['steps']):
-                        Step.objects.create(
-                            Father=protocol,
-                            Title=step['title'],
-                            Body=step['body'],
-                            Order=idx
-                        )
-                except KeyError:
-                    logger.error('no protocol information found. skip.')
-            else:
-                # existing circuit
-                circuit = Circuit.objects.get(pk = data['circuit']['id'])
-                circuit.Name = data['circuit']['name']
-                circuit.Description = data['circuit']['description']
-                circuit.Author = request.user
-                circuit.Chassis = chassis
-                circuit.save()
-                # delete existing circuit part, device
-                for x in CircuitParts.objects.filter(Circuit = circuit):
-                    x.delete()
-                for x in CircuitDevices.objects.filter(Circuit = circuit):
-                    x.delete()
-                for x in CircuitCombines.objects.filter(Circuit = circuit):
-                    x.delete()
-                # update protocol
-                protocol = Protocol.objects.get(Circuit=circuit)
-                protocol.Title = data['protocol']['title']
-                protocol.Description = data['protocol']['description']
 
-                # delete all old steps and insert new steps
-                Step.objects.filter(Father=protocol).delete()
+            print("Here")
+            data = json.loads(request.POST['data'])
+
+            # New circuit
+            circuit = Circuit.objects.create(
+                Name = data['circuit']['name'],
+                Description = data['circuit']['description'],
+                Master = request.user if data['circuit']['id'] == -1 else Circuit.objects.filter(name = name)[0].Author,
+                Editor = request.user,
+                Chassis = Chassis.objects.get(name = data['chassis'])
+            )
+
+            # New protocol and steps
+            try:
+                protocol = Protocol.objects.create(
+                    Circuit=circuit,
+                    Title=data['protocol']['title'],
+                    Description=data['protocol']['description']
+                )
                 for idx, step in enumerate(data['protocol']['steps']):
                     Step.objects.create(
                         Father=protocol,
@@ -479,13 +441,16 @@ def circuit(request):
                         Body=step['body'],
                         Order=idx
                     )
+            except KeyError:
+                logger.error('no protocol information found. skip.')
+
             cids = {}
             for x in data['parts']:
                 circuit_part = CircuitParts.objects.create(
-                        Part = Parts.objects.get(id = int(x['id'])),
-                        Circuit = circuit,
-                        X = x['X'] if 'X' in x else 0,
-                        Y = x['Y'] if 'Y' in x else 0)
+                    Part = Parts.objects.get(id = int(x['id'])),
+                    Circuit = circuit,
+                    X = x['X'] if 'X' in x else 0,
+                    Y = x['Y'] if 'Y' in x else 0)
                 cids[x['cid']] = circuit_part
             for x in data['lines']:
                 try:

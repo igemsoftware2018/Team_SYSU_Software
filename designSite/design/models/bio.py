@@ -59,8 +59,10 @@ class Chassis(models.Model):
 class Circuit(models.Model):
     Name = models.CharField(max_length = 50, unique = False)
     Description = models.CharField(max_length = 100)
-    Author = models.ForeignKey('User', on_delete = models.CASCADE, null = True)
+    Master = models.ForeignKey('User', on_delete = models.CASCADE, null = True, related_name='%(class)s_requests_master')
+    Editor = models.ForeignKey('User', on_delete = models.CASCADE, null = True, related_name='%(class)s_requests_editor')
     Chassis = models.ForeignKey('Chassis', on_delete = models.SET_NULL, null=True)
+    Update_time = models.DateTimeField(auto_now=True)
     def __str__(self):
         return "%s" % self.Name
 
