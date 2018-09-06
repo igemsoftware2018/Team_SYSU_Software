@@ -33,9 +33,10 @@ urlpatterns = [
     path('register/', account.views.register),
     url(r'^logout/?$', account.views.logout_view),
     path('account/', include('account.urls')),
-    path('test/', design_views.test),
 ] + [
     # API urls
+    url(r'api/users$', design_views.users),
+    url(r'api/authority$', design_views.authority),
     url(r'api/parts$', design_views.parts),
     url(r'api/part$', design_views.part),
     url(r'api/circuit$', design_views.circuit),

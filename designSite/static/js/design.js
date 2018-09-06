@@ -570,6 +570,60 @@ $('#analysis-sequence-button').on('click', function () {
     });
 });
 
+// Share
+$('#share-button').on('click', function() {
+    $('#share-modal').modal('show');
+});
+$('#search-users-dropdown').dropdown({
+    apiSettings: {
+        url: '/api/users?username={query}',
+        cache: false,
+        beforeSend: (settings) => {
+            return settings.urlData.query.length < 3 ? false : settings;
+        },
+        onResponse: (response) => ({
+            success: response.success === true,
+            results: response.users.map((x) => ({
+                name: x.username,
+                value: x.username
+            }))
+        })
+    }
+}).popup({
+    content: 'Search a user (Case Sensitive)'
+});
+$('#share-view-button').on('click', function() {
+    if (design._id == -1) {
+        alert('Please save your design first');
+    } else {
+        let data = { 
+            users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
+            circuit: JSON.stringify(design._id),
+            authority: JSON.stringify('read')
+        };
+        console.log(data);
+        $.post('/api/authority', data, function(v) {
+            $('#share-info').html(v.msg);
+        });
+    }
+});
+$('#share-edit-button').on('click', function() {
+    if (design._id == -1) {
+        alert('Please save your design first');
+    } else {
+        let data = { 
+            users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
+            circuit: JSON.stringify(design._id),
+            authority: JSON.stringify('write')
+        };
+        console.log(data);
+        $.post('/api/authority', data, function(v) {
+            $('#share-info').html(v.msg);
+        });
+    }
+});
+
+
 $('#save-button').on('click', () => {
     save_mode = 0;
     $('#safety-modal').modal('show');
@@ -633,10 +687,7 @@ $('#load-button').on('click', () => {
         );
         if (v.circuits.length > 0) {
             $('#load-modal>.content').append(
-                `<label>Your Circuits</label><br>
-                
-                <div class="ui divider"></div>
-                <label>Filter: </label>
+                `<label>Filter: </label>
                 <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
                     <div class="text" id="circuit-filter"></div>
                     <i class="dropdown icon"></i>
