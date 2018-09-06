@@ -7,7 +7,7 @@
 }
 
 .menu a.active>img {
-  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.7)); /*Highlight the mode button*/
   transition: all 0.2s ease;
 }
 
@@ -20,13 +20,6 @@
   /* height: 1.75rem;
   width: auto */
 }
-
-/* Comment the safety */
-/* #safety>img {
-  margin-left: 1rem;
-  height: 2rem;
-  width: 2rem;
-} */
 
 .window {
   position: absolute;
@@ -179,26 +172,6 @@
 #toolbox div>img.active {
   filter: drop-shadow(0px 0px 5px rgb(255, 255, 255));
 }
-
-/* #connection-dropdown-button {
-  max-height: 35px;
-} */
-
-/* #toolbox a:last-child {
-  margin-right: 0;
-} */
-
-/* #toolbox img {
-  width: 2.5rem;
-  height: 2.5rem;
-  cursor: pointer;
-} */
-
-/* #toolbox>i {
-  margin: 0 0.1rem;
-  font-size: 3rem;
-  line-height: 1;
-} */
 
 body {
   overflow: hidden;
