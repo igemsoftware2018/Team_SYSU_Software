@@ -86,7 +86,7 @@ def share_design(request):
     try:
         circuit = Circuit.objects.get(pk=designID)
         if circuit.Author == request_user:
-            return render(request, 'design.html', context)
+            return redirect(os.path.join('/design/', designID))
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
     except:
