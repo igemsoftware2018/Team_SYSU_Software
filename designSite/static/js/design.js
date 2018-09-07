@@ -26,7 +26,7 @@ $.ajax({
 })
 
 
-let protocolVue;
+// let protocolVue;
 if (designId !== '' && parseInt(designId) !== -1) {
     // $.get(`/api/circuit?id=${designId}`, (value) => {
     //     design = new SDinDesign('#canvas', value);
@@ -50,61 +50,118 @@ $('#share-button').popup({
     content: 'Share your design'
 });
 
-// using vue.js below to implement protocol
-$(function () {
-    Vue.component('step-item', {
-        props: ['data', 'i'],
-        delimiters: ['[[', ']]'], //use different delimiters to avoid conflict with django
-        template: `
-        <div class="field">
-            <div class="ui horizontal divider header" >
-            step [[i+1]]
-            <i class="ui icon delete" v-on:click="$emit('remove-step')"></i>
-            </div>
+// // using vue.js below to implement protocol
+// $(function () {
+//     Vue.component('step-item', {
+//         props: ['data', 'i'],
+//         delimiters: ['[[', ']]'], //use different delimiters to avoid conflict with django
+//         template: `
+//         <div class="field">
+//             <div class="ui horizontal divider header" >
+//             step [[i+1]]
+//             <i class="ui icon delete" v-on:click="$emit('remove-step')"></i>
+//             </div>
 
-            <div class="field">
-                <label> title </label>
-                <input type="text" v-model="data.title"/>
-                <label> body </label>
-                <textarea rows="3" v-model="data.body"></textarea>
-            </div>
+//             <div class="field">
+//                 <label> title </label>
+//                 <input type="text" v-model="data.title"/>
+//                 <label> body </label>
+//                 <textarea rows="3" v-model="data.body"></textarea>
+//             </div>
+//         </div>
+//         `
+//     });
+//     protocolVue = new Vue({
+//         el: '#protocol-form',
+//         data: {
+//             protocol: {
+//                 description: '',
+//                 title: '',
+//                 steps: [{
+//                     id: 0,
+//                     title: '',
+//                     body: ''
+//                 }],
+//                 lastID: 1
+//             }
+//         },
+//         methods: {
+//             submit() {
+//                 $('#protocol-modal').modal('hide');
+//             },
+//             add() {
+//                 this.protocol.steps.push({
+//                     id: this.protocol.lastID++,
+//                     title: '',
+//                     body: ''
+//                 });
+//             },
+//             removeStep(i) {
+//                 this.protocol.steps.splice(i, 1);
+//             }
+//         }
+//     });
+
+// });
+
+const protocolStepHelper = (i) => {
+    return `
+    <div class="field">
+        <div class="ui horizontal divider header" >
+        step ${i+1}
+        <i class="ui icon delete" name="protocol-step-delete"></i>
         </div>
-        `
+
+        <div class="field">
+            <label> title </label>
+            <input type="text" />
+            <label> body </label>
+            <textarea rows="3" ></textarea>
+        </div>
+    </div>
+    `;
+};
+// protocol button
+$('#protocol-step-add').on('click', function() {
+    let $mountpoint = $('#protocol-step-mountpoint');
+    let length = $mountpoint.children().length;
+    $mountpoint.append(protocolStepHelper(length));
+    let $0 = $mountpoint; // shorter name
+    $0.children().last().find('i[name=protocol-step-delete]').on('click', function() {
+        $(this).parent().parent().remove();
     });
-    protocolVue = new Vue({
-        el: '#protocol-form',
-        data: {
-            protocol: {
-                description: '',
-                title: '',
-                steps: [{
-                    id: 0,
-                    title: '',
-                    body: ''
-                }],
-                lastID: 1
-            }
-        },
-        methods: {
-            submit() {
-                $('#protocol-modal').modal('hide');
-            },
-            add() {
-                this.protocol.steps.push({
-                    id: this.protocol.lastID++,
-                    title: '',
-                    body: ''
-                });
-            },
-            removeStep(i) {
-                this.protocol.steps.splice(i, 1);
-            }
+});
+$(function() {
+    $('#protocol-step-add').click();
+});
+$('#protocol-submit').on('click', function() {
+    let $m = $('#protocol-modal');
+    design._design.protocol.title = $m.find('[name=title]').val();
+    design._design.protocol.description = $m.find('[name=description]').val();
+    let $mp = $('#protocol-step-mountpoint');
+    let step_titles = $mp.find('input');
+    let step_desc = $mp.find('textarea'); 
+
+    // WARNING: this zip only use here. never use elsewhere.
+    const zip = (iter1, iter2) => {
+        let ret = [];
+        for (let idx = 0; idx < iter1.length; ++idx) {
+            ret.push([iter1.eq(idx), iter2.eq(idx)]);
         }
-    });
+        return ret;
+    };
+    design._design.protocol.steps = [];
+    let id = 0;
+    for (let item of zip(step_titles, step_desc)) {
+        design._design.protocol.steps.push({
+            id: id++,
+            title: item[0].val(),
+            body: item[1].val()
+        });
+    }
+    $m.parent().click();
 
 });
-
-// protocol button
 $('#protocol-button')
     .on('click', () => {
         $('#protocol-modal').modal('show');
@@ -112,11 +169,51 @@ $('#protocol-button')
     .popup({
         content: 'Add your Protocol'
     });
+let __trigger = false;
 $('#protocol-modal').modal({
     dimmerSettings: {
         onHide: function () {
-            //console.log('hide dimmer');
+            if (!__trigger) {
+                __trigger = true;
+                return;
+            }
+            __trigger = false;
+            console.log('hide dimmer');
             //TODO: not finish
+            let $m = $('#protocol-modal');
+            $m.find('[name=title]').val(design._design.protocol.title);
+            $m.find('[name=description]').val(design._design.protocol.description);
+            let $mp = $('#protocol-step-mountpoint');
+            let step_titles = $mp.find('input');
+            let step_desc = $mp.find('textarea'); 
+
+            let pl = design.design.protocol.steps.length;
+            let ml = step_titles.length;
+            let diff = pl - ml;
+            const min = (a, b) => (a < b ? a : b);
+            let base = min(pl, ml);
+            console.log(diff);
+            if (diff > 0) {
+                for (let i = 0; i < diff; ++i) {
+                    $mp.append(protocolStepHelper(base + i));
+                    $mp.children().last().find('i[name=protocol-step-delete]').on('click', function() {
+                        $(this).parent().parent().remove();
+                    });
+                }
+            } else if (diff < 0) {
+                for (let i = 0; i < -diff; ++i) {
+                    let s = '' + (base + i);
+                    console.log('delete id is' + s);
+                    $mp.children().eq(base).remove();
+                }
+            }
+            let new_step_titles = $mp.find('input');
+            let new_step_desc = $mp.find('textarea'); 
+            for (let i = 0; i < pl; ++i) {
+                console.log('set up ith ' + i);
+                new_step_titles.eq(i).val(design.design.protocol.steps[i].title);
+                new_step_desc.eq(i).val(design.design.protocol.steps[i].body);
+            }
         }
     }
 });

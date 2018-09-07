@@ -332,18 +332,45 @@
 
         <div class="field">
           <label>Protocol Title</label>
-          <input type="text" v-model="protocol.title" placeholder="Title...">
+          <input type="text" name="title" placeholder="Title...">
         </div>
         <div class="field">
           <label>Description</label>
-          <textarea rows="3" v-model="protocol.description" placeholder="description here..."></textarea>
+          <textarea rows="3" name="description" placeholder="description here..."></textarea>
         </div>
 
-        <step-item v-for="(item, index) in protocol.steps" v-bind:data="item" v-bind:key="item.id" v-bind:i="index"
-          v-on:remove-step="removeStep(index)"></step-item>
+        <div class="field" id="protocol-step-mountpoint">
+        <!-- step item here -->
+          <!-- <div class="field">
+              <div class="ui horizontal divider header" >
+              step [[i+1]]
+              <i class="ui icon delete" v-on:click="$emit('remove-step')"></i>
+              </div>
 
-        <div class="ui right floated primary button" v-on:click="add"> Add </div>
-        <div class="ui button" v-on:click="submit">Submit</div>
+              <div class="field">
+                  <label> title </label>
+                  <input type="text" v-model="data.title"/>
+                  <label> body </label>
+                  <textarea rows="3" v-model="data.body"></textarea>
+              </div>
+          </div>
+          <div class="field">
+              <div class="ui horizontal divider header" >
+              step [[i+1]]
+              <i class="ui icon delete" v-on:click="$emit('remove-step')"></i>
+              </div>
+
+              <div class="field">
+                  <label> title </label>
+                  <input type="text" v-model="data.title"/>
+                  <label> body </label>
+                  <textarea rows="3" v-model="data.body"></textarea>
+              </div>
+          </div> -->
+        </div>
+
+        <div class="ui right floated primary button" id="protocol-step-add"> Add </div>
+        <div class="ui button" id="protocol-submit">Submit</div>
 
         <!-- end using vue.js -->
       </form>
