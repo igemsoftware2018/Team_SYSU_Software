@@ -2,7 +2,6 @@
 
 /* eslint-disable no-console */
 /* global SDinDesign, Chart, html2canvas echarts*/
-/* global Vue */
 
 let NUM_OF_TYPE = 20;
 
@@ -23,10 +22,9 @@ $.ajax({
         CHASSIS = res.chassis;
         CHASSIS_FORMAT = res.chassis_format;
     }
-})
+});
 
 
-// let protocolVue;
 if (designId !== '' && parseInt(designId) !== -1) {
     // $.get(`/api/circuit?id=${designId}`, (value) => {
     //     design = new SDinDesign('#canvas', value);
@@ -50,59 +48,6 @@ $('#share-button').popup({
     content: 'Share your design'
 });
 
-// // using vue.js below to implement protocol
-// $(function () {
-//     Vue.component('step-item', {
-//         props: ['data', 'i'],
-//         delimiters: ['[[', ']]'], //use different delimiters to avoid conflict with django
-//         template: `
-//         <div class="field">
-//             <div class="ui horizontal divider header" >
-//             step [[i+1]]
-//             <i class="ui icon delete" v-on:click="$emit('remove-step')"></i>
-//             </div>
-
-//             <div class="field">
-//                 <label> title </label>
-//                 <input type="text" v-model="data.title"/>
-//                 <label> body </label>
-//                 <textarea rows="3" v-model="data.body"></textarea>
-//             </div>
-//         </div>
-//         `
-//     });
-//     protocolVue = new Vue({
-//         el: '#protocol-form',
-//         data: {
-//             protocol: {
-//                 description: '',
-//                 title: '',
-//                 steps: [{
-//                     id: 0,
-//                     title: '',
-//                     body: ''
-//                 }],
-//                 lastID: 1
-//             }
-//         },
-//         methods: {
-//             submit() {
-//                 $('#protocol-modal').modal('hide');
-//             },
-//             add() {
-//                 this.protocol.steps.push({
-//                     id: this.protocol.lastID++,
-//                     title: '',
-//                     body: ''
-//                 });
-//             },
-//             removeStep(i) {
-//                 this.protocol.steps.splice(i, 1);
-//             }
-//         }
-//     });
-
-// });
 function protocolShuffleStepID() {
     let $mp = $('#protocol-step-mountpoint');
     $mp.children().each((idx, ele) => {
@@ -181,6 +126,8 @@ $('#protocol-button')
     .popup({
         content: 'Add your Protocol'
     });
+//  __trigger: one click dimmer one, onHide trigger twice.
+// use this method to only run it once.
 let __trigger = false;
 $('#protocol-modal').modal({
     dimmerSettings: {
@@ -190,8 +137,6 @@ $('#protocol-modal').modal({
                 return;
             }
             __trigger = false;
-            console.log('hide dimmer');
-            //TODO: not finish
             let $m = $('#protocol-modal');
             $m.find('[name=title]').val(design._design.protocol.title);
             $m.find('[name=description]').val(design._design.protocol.description);
@@ -204,7 +149,6 @@ $('#protocol-modal').modal({
             let diff = pl - ml;
             const min = (a, b) => (a < b ? a : b);
             let base = min(pl, ml);
-            console.log(diff);
             if (diff > 0) {
                 for (let i = 0; i < diff; ++i) {
                     $mp.append(protocolStepHelper(base + i));
@@ -212,15 +156,12 @@ $('#protocol-modal').modal({
                 }
             } else if (diff < 0) {
                 for (let i = 0; i < -diff; ++i) {
-                    let s = '' + (base + i);
-                    console.log('delete id is' + s);
                     $mp.children().eq(base).remove();
                 }
             }
             let new_step_titles = $mp.find('input');
             let new_step_desc = $mp.find('textarea'); 
             for (let i = 0; i < pl; ++i) {
-                console.log('set up ith ' + i);
                 new_step_titles.eq(i).val(design.design.protocol.steps[i].title);
                 new_step_desc.eq(i).val(design.design.protocol.steps[i].body);
             }
