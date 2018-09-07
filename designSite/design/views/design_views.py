@@ -21,6 +21,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.views.decorators.csrf import csrf_exempt
+
 import traceback
 import logging
 logger = logging.getLogger(__name__)
@@ -80,9 +82,71 @@ def share_design(request):
         }
     return render(request, 'design.html', context)
 
+# share related views
+@login_required
+def users(request):
+    '''
+    GET method with param:
+        username=xxx
+    return json:
+        'users': [{
+            'username': xxx
+        }]
+    '''
+    query_user = request.GET.get('username')
+    logger.debug(query_user)
+    logger.debug("test")
+    if query_user is None or len(query_user) == 0:
+        return JsonResponse({ 'success' : False })
+    
+    query_set = User.objects.filter(username__contains = query_user)
 
-def test(request):
-    return render(request, 'test.html')
+    users = []
+    for x in query_set:
+        users.append({ 'username': x.username })
+    
+    return JsonResponse({
+        'success' : True,
+        'users': users
+    })
+
+@csrf_exempt
+@login_required
+def authority(request):
+    '''
+    POST method with json:
+    {
+        users: [xxx, xxx],
+        circuit: xxx,
+        authority: xxx
+    }
+    return json:
+    msg: xxx
+    '''
+    users = json.loads(request.POST['users'])
+    authority = request.POST['authority']
+    circuit = Circuit.objects.get(id=request.POST['circuit'])
+    for x in users:
+        logger.debug(x)
+        # Circuit owner
+        if x == circuit.Author.username:
+            continue
+        
+        # Not have authority
+        user = User.objects.get(username=x)
+        check = Authorities.objects.get_or_create(
+            User=user,
+            Circuit=circuit,
+            Authority = authority
+        )
+        # Already have authority
+        if check == False:
+            check.Authority = authority
+            check.save()
+    
+    return JsonResponse({
+        'msg': 'Success'
+    })
 
 # Part related views
 @login_required
@@ -555,7 +619,6 @@ def plasmid_data(request):
         return JsonResponse({ 'data': json.load(f) })
 
 # transform json data to sbol document
-from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def get_sbol_doc(request):
     if request.method == 'POST':

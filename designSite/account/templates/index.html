@@ -10,7 +10,9 @@
   <div class="ui inverted vertical masthead center aligned segment">
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
-        <a class="item">An Icon Please</a>
+        <a class="item" href="/">
+          <img id="logo" src="/static/img/logo.png">
+        </a>
         {% if user.is_authenticated %}
         <div class="right item">
           <h5>Welcome, {{ user.username }}!</h5>
@@ -50,10 +52,10 @@
 <script src="/static/semantic/dist/components/tab.min.js"></script>
 <script>
   $('#signup').on('click', function () {
-    window.location.href = '/register';
+    window.location.href = '/signup';
   });
   $('#signin').on('click', function () {
-    window.location.href = '/login';
+    window.location.href = '/signin';
   });
   $('#logout').on('click', function () {
     window.location.href = '/logout';

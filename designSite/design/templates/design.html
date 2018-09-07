@@ -5,9 +5,9 @@
 <head>
   <title>Designer</title>
 
-  <!-- <link rel="shortcut icon" href="/static/img/favicon.png"> -->
+  <link rel="shortcut icon" href="/static/img/favicon.png">
   <link rel="stylesheet" href="/static/css/fontsize.css">
-  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css"> 
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
   <link rel="stylesheet" href="/static/css/design.css">
   <link rel="stylesheet" href="/static/css/canvas.css">
 </head>
@@ -108,16 +108,9 @@
         </div>
       </span>
 
-      <!-- Temporarily comment the logo -->
-      <!-- <span class="item">
-        <a href="/">
-          <img id="logo" src="/static/img/logo-black.png">
-        </a>
-      </span> -->
-
       <span id="logo" class="item">
         <a href="/account/">
-          <p>Account</p>
+          <img id="logo" src="/static/img/logo.png">
         </a>
       </span>
     </div>
@@ -281,7 +274,7 @@
   <div id="analysis-modal" class="ui tiny modal">
     <div class="content">
       <h5 class="ui center aligned header">Analysis Modal</h5>
-      
+
       <div class="ui divider"></div>
 
       <form id="analysis-form" class="ui form">
@@ -320,10 +313,10 @@
       </div>
 
       <div class="ui divider"></div>
-      
+
       <label>Result Chart</label><br>
       <div id="myChart" style="width:500px; height:300px"></div>
-      
+
       <div class="ui divider"></div>
 
       <button class="fluid ui button" id="analysis-sequence-button">Analysis</button>
@@ -463,6 +456,25 @@
   <!-- Load modal -->
   <div id="load-modal" class="ui tiny modal">
     <div class="content"></div>
+  </div>
+
+  <!-- Share modal -->
+  <div id="share-modal" class="ui tiny modal">
+    <div class="content">
+      <select id="search-users-dropdown" class="ui fluid search dropdown"  multiple="">
+        <i class="dropdown icon"></i>
+        <div class="default text">Search User...</div>
+      </select>{% csrf_token %}
+
+      <div class="ui divider"></div>
+      
+      <h5 id="share-info"></h5>
+
+      <div class="ui divider"></div>
+
+      <div class="ui primary button" id="share-view-button">Share view</div>
+      <div class="ui primary button" id="share-edit-button">Share edit</div>
+    </div>
   </div>
 
   <!-- High risk modal -->

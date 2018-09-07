@@ -29,13 +29,14 @@ urlpatterns = [
     url(r'^design/\d+/?$', design_views.personal_design),
     url(r'^design/share/\d+/?$', design_views.share_design),
     url(r'^interest/?$', account.views.interest),
-    path('login/', account.views.login_view),
-    path('register/', account.views.register),
+    path('signin/', account.views.signin_view),
+    path('signup/', account.views.signup),
     url(r'^logout/?$', account.views.logout_view),
     path('account/', include('account.urls')),
-    path('test/', design_views.test),
 ] + [
     # API urls
+    url(r'api/users$', design_views.users),
+    url(r'api/authority$', design_views.authority),
     url(r'api/parts$', design_views.parts),
     url(r'api/part$', design_views.part),
     url(r'api/circuit$', design_views.circuit),

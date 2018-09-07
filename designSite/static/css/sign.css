@@ -1,0 +1,67 @@
+@font-face {
+  /* font-properties */
+  font-family: OCRAStd;
+  src:url('../font/OCRAStd.otf');
+}
+
+body {
+  background-color: #F7F7F7;
+}
+
+.ui.modal {
+  top: auto !important;
+  width: 650 !important;
+  margin-left: -300px !important;
+  border-radius: 0% !important;
+  border: 3px solid	#C6C6C6;
+}
+
+.modal>.content {
+  background-color:	#B1B1B1 !important;
+}
+
+.content label {
+  font-family: OCRAStd;
+  font-size: 80px;
+  color: white;
+  margin-left: 50px;
+}
+.content img {
+  height: 130px;
+  width: 130px;
+  margin-bottom: -40px;
+}
+
+.content .ui.form {
+  margin: 25 0 1rem !important;
+}
+
+.content input {
+  background-color:	#E7E5E6 !important;
+}
+
+input::-webkit-input-placeholder {
+  color: #B1B1B1 !important;
+}
+
+.ui.main.container {
+  margin-top: 6rem;
+}
+
+.back {
+  margin-right: 300;
+  text-decoration: underline;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 30px;
+  color: white;
+}
+.next {
+  display: inline;
+  font-family: OCRAStd;
+  font-size: 45px;
+  color: white;
+}
+
+.next:hover {
+  cursor: pointer;
+}

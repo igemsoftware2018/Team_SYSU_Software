@@ -570,6 +570,60 @@ $('#analysis-sequence-button').on('click', function () {
     });
 });
 
+// Share
+$('#share-button').on('click', function() {
+    $('#share-modal').modal('show');
+});
+$('#search-users-dropdown').dropdown({
+    apiSettings: {
+        url: '/api/users?username={query}',
+        cache: false,
+        beforeSend: (settings) => {
+            return settings.urlData.query.length < 3 ? false : settings;
+        },
+        onResponse: (response) => ({
+            success: response.success === true,
+            results: response.users.map((x) => ({
+                name: x.username,
+                value: x.username
+            }))
+        })
+    }
+}).popup({
+    content: 'Search a user (Case Sensitive)'
+});
+$('#share-view-button').on('click', function() {
+    if (design._id == -1) {
+        alert('Please save your design first');
+    } else {
+        let data = { 
+            users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
+            circuit: JSON.stringify(design._id),
+            authority: JSON.stringify('read')
+        };
+        console.log(data);
+        $.post('/api/authority', data, function(v) {
+            $('#share-info').html(v.msg);
+        });
+    }
+});
+$('#share-edit-button').on('click', function() {
+    if (design._id == -1) {
+        alert('Please save your design first');
+    } else {
+        let data = { 
+            users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
+            circuit: JSON.stringify(design._id),
+            authority: JSON.stringify('write')
+        };
+        console.log(data);
+        $.post('/api/authority', data, function(v) {
+            $('#share-info').html(v.msg);
+        });
+    }
+});
+
+
 $('#save-button').on('click', () => {
     save_mode = 0;
     $('#safety-modal').modal('show');
@@ -627,85 +681,91 @@ $('#load-button').on('click', () => {
     $.get('/api/get_saves', (v) => {
         $('.ui.dimmer:first').dimmer('hide');
         $('#load-modal>.content').html('');
-        $('#load-modal>.content').append(`
-            <label>Your Circuits</label><br>
-            
-            <div class="ui divider"></div>
-            <label>Filter: </label>
-            <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
-                <div class="text" id="circuit-filter"></div>
-                <i class="dropdown icon"></i>
-            </div>
-            <div class="ui button" id="filter-clear">Clear </div>
-            <div class="ui divider"></div>
-            `
+        $('#load-modal>.content').append(
+            `<label>Your Circuits</label><br>
+            <div class="ui divider"></div>`
         );
-        let filter_data = [];
-        let unique = {};
-        v.circuits.forEach((c) => {
-            let html = `
-                <div class="ui segment" data-id=${c.id} data-name=${c.name}>
-                    <p><b>ID: </b>${c.id}</p>
-                    <p><b>Name: </b>${c.name}</p>
-                    <p><b>Description: </b>${c.description}</p>
-                    <p><b>Version: </b><!--TODO: Version--></p>
-                </div>`;
-            $('#load-modal>.content').append(html);
-            if (!unique[c.name]) {
-                filter_data.push({
-                    name: c.name,
-                    value: c.name
-                });
-                unique[c.name] = 1;
-            }
-        });
-        $('#circuit-filter-dropdown').dropdown({
-            values: filter_data,
-            onChange: function(value) {
-                if (value != '') {
-                    $('#load-modal .segment').each(function(index, item) {
-                        // console.log($(this).data('name'));
-                        if ($(this).data('name') != value) {
-                            $(this).attr("style","display:none;");
-                        } else {
-                            $(this).attr("style","display:block;");
-                        }
+        if (v.circuits.length > 0) {
+            $('#load-modal>.content').append(
+                `<label>Filter: </label>
+                <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
+                    <div class="text" id="circuit-filter"></div>
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="ui button" id="filter-clear">Clear </div>
+                <div class="ui divider"></div>`
+            );
+            let filter_data = [];
+            let unique = {};
+            v.circuits.forEach((c) => {
+                let html = `
+                    <div class="ui segment" data-id=${c.id} data-name=${c.name}>
+                        <p><b>ID: </b>${c.id}</p>
+                        <p><b>Name: </b>${c.name}</p>
+                        <p><b>Description: </b>${c.description}</p>
+                        <p><b>Version: </b><!--TODO: Version--></p>
+                    </div>`;
+                $('#load-modal>.content').append(html);
+                if (!unique[c.name]) {
+                    filter_data.push({
+                        name: c.name,
+                        value: c.name
                     });
-                } else {
-                    $(this).attr("style","display:block;");
+                    unique[c.name] = 1;
                 }
-            }
-        });
-        $('#filter-clear').on('click', function() {
-            $('#circuit-filter-dropdown').dropdown('clear');
-            $('#load-modal .segment').each(function(index, item) {
-                $(this).attr("style","display:block;");
             });
-        });
-        $('#load-modal .segment').on('click', function () {
-            let id = $(this).data('id');
-            $('#load-modal').modal('hide');
-            $('.ui.dimmer:first .loader')
-                .text(`Loading ${id} from server, please wait...`);
-            $('.ui.dimmer:first').dimmer('show');
-            $.get(`/api/circuit?id=${id}`, (value) => {
-                $('.ui.dimmer:first').dimmer('hide');
-                design.design = value;
-                // console.log(value);
-                $('#chassis-dropdown').dropdown(
-                    'set selected', value.chassis
-                );
-                // update protocol
-                protocolVue.protocol.title = value.protocol.title;
-                protocolVue.protocol.description = value.protocol.description;
-                protocolVue.protocol.steps = value.protocol.steps;
-                protocolVue.protocol.steps.forEach((val, idx) => {
-                    val.id = idx;
+            $('#circuit-filter-dropdown').dropdown({
+                values: filter_data,
+                onChange: function(value) {
+                    if (value != '') {
+                        $('#load-modal .segment').each(function(index, item) {
+                            // console.log($(this).data('name'));
+                            if ($(this).data('name') != value) {
+                                $(this).attr("style","display:none;");
+                            } else {
+                                $(this).attr("style","display:block;");
+                            }
+                        });
+                    } else {
+                        $(this).attr("style","display:block;");
+                    }
+                }
+            });
+            $('#filter-clear').on('click', function() {
+                $('#circuit-filter-dropdown').dropdown('clear');
+                $('#load-modal .segment').each(function(index, item) {
+                    $(this).attr("style","display:block;");
                 });
-                protocolVue.protocol.lastID = protocolVue.protocol.steps.length;
             });
-
-        });
+            $('#load-modal .segment').on('click', function () {
+                let id = $(this).data('id');
+                $('#load-modal').modal('hide');
+                $('.ui.dimmer:first .loader')
+                    .text(`Loading ${id} from server, please wait...`);
+                $('.ui.dimmer:first').dimmer('show');
+                $.get(`/api/circuit?id=${id}`, (value) => {
+                    $('.ui.dimmer:first').dimmer('hide');
+                    design.design = value;
+                    // console.log(value);
+                    $('#chassis-dropdown').dropdown(
+                        'set selected', value.chassis
+                    );
+                    // update protocol
+                    protocolVue.protocol.title = value.protocol.title;
+                    protocolVue.protocol.description = value.protocol.description;
+                    protocolVue.protocol.steps = value.protocol.steps;
+                    protocolVue.protocol.steps.forEach((val, idx) => {
+                        val.id = idx;
+                    });
+                    protocolVue.protocol.lastID = protocolVue.protocol.steps.length;
+                });
+    
+            });
+        } else {
+            $('#load-modal>.content').append(
+                `<h5>Empty.</h5>`
+            );
+        }
         $('#load-modal').modal('show');
     });
 }).popup({
