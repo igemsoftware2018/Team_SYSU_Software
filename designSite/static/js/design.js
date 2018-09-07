@@ -26,7 +26,15 @@ $.ajax({
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+// Hide save button when creating a new design.
+if (window.location.href.split('/').pop() == 'design')
+    $('#save-button').hide()
+
+
+>>>>>>> Unfinish work for save and save-as-new
 let protocolVue;
 >>>>>>> yb-dev
 if (designId !== '' && parseInt(designId) !== -1) {
@@ -678,7 +686,8 @@ $('#share-edit-button').on('click', function() {
 
 $('#save-button').on('click', () => {
     save_mode = 0;
-    $('#safety-modal').modal('show');
+    // $('#safety-modal').modal('show');
+    $('#save-modal').modal('show');
 }).popup({
     content: 'Save your design to server.'
 });

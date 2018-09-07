@@ -441,6 +441,29 @@
     <div class="content">
       <form class="ui form">
         <div class="field">
+          <label>Design Name: <span id="circuit-name">1234</span></label>
+        </div>
+        <div class="field">
+          <label>Design Description: <span id="circuit-description"></span></label>
+        </div>
+        <div class="field">
+          <label>Update Comment</label>
+          <textarea id="circuit-description" rows=4 placeholder="Type your update comment here"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="save-circuit" class="ui white button">Update circuit!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save as new modal -->
+  <div id="save-as-new-modal" class="ui tiny modal">
+    <div class="content">
+      <form class="ui form">
+        <div class="field">
           <input type="text" name="name" id="circuit-name" placeholder="Circuit name">
         </div>
         <div class="field">
