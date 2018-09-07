@@ -25,6 +25,10 @@ $.ajax({
 });
 
 
+<<<<<<< HEAD
+=======
+let protocolVue;
+>>>>>>> yb-dev
 if (designId !== '' && parseInt(designId) !== -1) {
     // $.get(`/api/circuit?id=${designId}`, (value) => {
     //     design = new SDinDesign('#canvas', value);
