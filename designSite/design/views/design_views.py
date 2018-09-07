@@ -75,11 +75,30 @@ def personal_design(request):
         }
     return render(request, 'design.html', context)
 def share_design(request):
-    return HttpResponseNotFound()
+    request_user = request.user
+    designID = request.path.split('/')[-1]
     context = {
         'type_list': TYPE_LIST,
-        'designID': -1
+        'designID': designID
         }
+
+    # check whether this id exists
+    try:
+        circuit = Circuit.objects.get(pk=designID)
+        if circuit.Author == request_user:
+            return render(request, 'design.html', context)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+    except:
+        traceback.print_exc()
+        logger.error('unknown bugs')
+        return HttpResponseNotFound()
+    
+    # check authorities
+    try:
+        Authorities.objects.get(User=request_user, Circuit=circuit)
+    except ObjectDoesNotExist:
+        return HttpResponseForbidden()
     return render(request, 'design.html', context)
 
 # share related views
