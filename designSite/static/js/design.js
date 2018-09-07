@@ -103,12 +103,25 @@ $('#share-button').popup({
 //     });
 
 // });
+function protocolShuffleStepID() {
+    let $mp = $('#protocol-step-mountpoint');
+    $mp.children().each((idx, ele) => {
+        let $ele = $(ele);
+        $ele.find('span').html(`step ${idx + 1}`);
+    });
+}
+function protocolAddLastStepHook() {
+    $('#protocol-step-mountpoint').children().last().find('i[name=protocol-step-delete]').on('click', function() {
+        $(this).parent().parent().remove();
+        protocolShuffleStepID();
+    });
+}
 
 const protocolStepHelper = (i) => {
     return `
     <div class="field">
         <div class="ui horizontal divider header" >
-        step ${i+1}
+        <span> step ${i+1} </span>
         <i class="ui icon delete" name="protocol-step-delete"></i>
         </div>
 
@@ -126,10 +139,9 @@ $('#protocol-step-add').on('click', function() {
     let $mountpoint = $('#protocol-step-mountpoint');
     let length = $mountpoint.children().length;
     $mountpoint.append(protocolStepHelper(length));
-    let $0 = $mountpoint; // shorter name
-    $0.children().last().find('i[name=protocol-step-delete]').on('click', function() {
-        $(this).parent().parent().remove();
-    });
+    // add delete hook here
+    protocolAddLastStepHook();
+
 });
 $(function() {
     $('#protocol-step-add').click();
@@ -196,9 +208,7 @@ $('#protocol-modal').modal({
             if (diff > 0) {
                 for (let i = 0; i < diff; ++i) {
                     $mp.append(protocolStepHelper(base + i));
-                    $mp.children().last().find('i[name=protocol-step-delete]').on('click', function() {
-                        $(this).parent().parent().remove();
-                    });
+                    protocolAddLastStepHook();
                 }
             } else if (diff < 0) {
                 for (let i = 0; i < -diff; ++i) {
