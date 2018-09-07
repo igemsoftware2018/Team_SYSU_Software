@@ -26,6 +26,11 @@ $.ajax({
 })
 
 
+// Hide save button when creating a new design.
+if (window.location.href.split('/').pop() == 'design')
+    $('#save-button').hide()
+
+
 let protocolVue;
 if (designId !== '' && parseInt(designId) !== -1) {
     // $.get(`/api/circuit?id=${designId}`, (value) => {
@@ -626,7 +631,8 @@ $('#share-edit-button').on('click', function() {
 
 $('#save-button').on('click', () => {
     save_mode = 0;
-    $('#safety-modal').modal('show');
+    // $('#safety-modal').modal('show');
+    $('#save-modal').modal('show');
 }).popup({
     content: 'Save your design to server.'
 });
