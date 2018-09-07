@@ -10,12 +10,14 @@
     </div>
   </div>
   {% else %}
-  <div class="ui center aligned header">
-    Sign In
-  </div>
   <div class="content">
     <div class="ui center aligned container">
-      <form class="ui form" id="login-form" method="POST" action="/login/">
+      <div class="ui center aligned">
+        <a href="/"><img src="/static/img/logo.png"></a>
+        <label class="ui center aligned">Sign in</label>
+      </div>
+
+      <form class="ui form" id="login-form" method="POST" action="/signin/">
         {% if request.GET.next %}
         <input type="text" name="next" value="{{ request.GET.next }}" hidden> {% endif %} {% csrf_token %}
         <div class="field">
@@ -34,11 +36,14 @@
           {% endif %}
         </div>
       </form>
+
+      <!-- Button panel -->
+      <div id="action-panel">
+        <a class="back" href="/signup">No Account?</a>
+        <a id="signin-button" class="next">Next</a>
+      </div>
+      
     </div>
-  </div>
-  <div class="ui two bottom attached big buttons" id="button-group">
-    <div class="ui left button" id="register-button">Signup</div>
-    <div class="ui secondary button" id="login-button">Signin</div>
   </div>
 </div>
 {% endif %}

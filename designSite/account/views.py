@@ -56,7 +56,7 @@ def personal_index(request):
     return render(request, 'personal_index.html', {'parts': parts, 'circuits': circuits})
 
 
-def login_view(request):
+def signin_view(request):
     if request.method == "POST":
         # Login action
         form = LoginForm(request.POST)
@@ -78,9 +78,9 @@ def login_view(request):
                 messages.error(request, "Invalid Login")
         else:
             messages.error(request, Inv)
-        return render(request, "login.html")
+        return render(request, "signin.html")
     elif request.method == "GET":
-        return render(request, 'login.html')
+        return render(request, 'signin.html')
 
 @login_required
 def logout_view(request):
@@ -92,7 +92,7 @@ def interest_view(request):
     return render(request, 'interest.html')
 
 
-def register(request):
+def signup(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -113,4 +113,4 @@ def register(request):
                 messages.error(request, Err)
         else:
             messages.error(request, Inv)
-    return render(request, 'register.html')
+    return render(request, 'signup.html')
