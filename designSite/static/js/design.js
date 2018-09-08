@@ -34,7 +34,15 @@ if (window.location.href.split('/').pop() == 'design')
     $('#save-button').hide()
 
 
+<<<<<<< HEAD
 >>>>>>> Unfinish work for save and save-as-new
+=======
+// Hide save button when creating a new design.
+if (window.location.href.split('/').pop() == 'design')
+    $('#save-button').hide()
+
+
+>>>>>>> 6c981852bd390620841c814260a404a5e4d7eec0
 let protocolVue;
 >>>>>>> yb-dev
 if (designId !== '' && parseInt(designId) !== -1) {
