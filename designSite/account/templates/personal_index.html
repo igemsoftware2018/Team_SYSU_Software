@@ -41,7 +41,6 @@
           <div class="ui content">
             <h5>Parts</h5>
             {% if parts %}
-<<<<<<< HEAD
             {% for part in parts %}
             <div class="ui segment" data-id="{{ part.ID }}" data-name="{{ part.Name }}">
               <p><b>ID: </b>{{ part.ID }}</p>
@@ -50,16 +49,6 @@
               <p><b>Description: </b>{{ part.Description }}</p>
             </div>
             {% endfor %}
-=======
-              {% for part in parts %}
-              <div class="ui segment" data-id="{{ part.ID }}" data-name="{{ part.Name }}">
-                <p><b>ID: </b>{{ part.ID }}</p>
-                <p><b>Name: </b>{{ part.Name }}</p>
-                <p><b>Role: </b>{{ part.Role }}</p>
-                <p><b>Description: </b>{{ part.Description }}</p>
-              </div>
-              {% endfor %}
->>>>>>> yb-dev
             {% else %}
             <p> You have no part added. </p>
             {% endif %}
@@ -73,7 +62,6 @@
           <div class="ui content" id="circuit-card">
             <h5>Circuits</h5>
             {% if circuits %}
-<<<<<<< HEAD
             {% for circuit in circuits %}
             <div class="ui segment" data-id="{{ circuit.ID }}" data-name="{{ circuit.Name }}">
               <p><b>ID: </b>{{ circuit.ID }}</p>
@@ -84,18 +72,6 @@
               <p><b>Description: </b>{{ circuit.Description }}</p>
             </div>
             {% endfor %}
-=======
-              {% for circuit in circuits %}
-              <div class="ui segment" data-id="{{ circuit.ID }}" data-name="{{ circuit.Name }}">
-                <p><b>ID: </b>{{ circuit.ID }}</p>
-                <p><b>Name: </b>{{ circuit.Name }}</p>
-                <p><b>Version: </b>
-                  <!--TODO: {{ circuit.Version }}-->
-                </p>
-                <p><b>Description: </b>{{ circuit.Description }}</p>
-              </div>
-              {% endfor %}
->>>>>>> yb-dev
             {% else %}
             <p> You have no circuit added.</p>
             {% endif %}

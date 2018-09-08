@@ -49,7 +49,6 @@ def design(request):
         'type_list': TYPE_LIST,
         'designID': -1
         }
-<<<<<<< HEAD
     return render(request, 'design.html', context)
 
 def personal_design(request):
@@ -167,7 +166,6 @@ def authority(request):
     return JsonResponse({
         'msg': 'Success'
     })
-=======
     return render(request, 'design.html', context)
 
 def personal_design(request):
@@ -204,7 +202,6 @@ def share_design(request):
 
 def test(request):
     return render(request, 'test.html')
->>>>>>> yb-dev
 
 # Part related views
 @login_required
