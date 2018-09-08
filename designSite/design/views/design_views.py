@@ -49,7 +49,6 @@ def design(request):
         'type_list': TYPE_LIST,
         'designID': -1
         }
-<<<<<<< HEAD
     return render(request, 'design.html', context)
 
 def personal_design(request):
@@ -167,44 +166,6 @@ def authority(request):
     return JsonResponse({
         'msg': 'Success'
     })
-=======
-    return render(request, 'design.html', context)
-
-def personal_design(request):
-    designID = request.path.split('/')[-1] # the correct way to retrive path elements is split.
-    designID = int(designID)
-    logger.debug('visiting design id=%s', designID)
-    try:
-        circuit = Circuit.objects.get(pk=designID)
-        user = request.user
-        # this design is not construct by this user. forbidden.
-        if circuit.Author != user:
-            return HttpResponseForbidden()
-    except ObjectDoesNotExist:
-        # do not exist this id
-        return HttpResponseNotFound()
-    except:
-        # unknown error, in case it occurs
-        traceback.print_exc()
-        logger.error('unknown bugs')
-        return HttpResponseNotFound()
-    context = {
-        'type_list': TYPE_LIST,
-        'designID': designID
-        }
-    return render(request, 'design.html', context)
-def share_design(request):
-    return HttpResponseNotFound()
-    context = {
-        'type_list': TYPE_LIST,
-        'designID': -1
-        }
-    return render(request, 'design.html', context)
-
-
-def test(request):
-    return render(request, 'test.html')
->>>>>>> yb-dev
 
 # Part related views
 @login_required
@@ -405,6 +366,7 @@ def interact(request):
 
 def circuit(request):
     '''
+    !!!!! The following return format is out-of-date!!!!!!
     GET method with param:
         id=xxx
     return json:{
@@ -471,6 +433,7 @@ def circuit(request):
             'id': xxx, # circuit id if it's already existing, -1 else
             'name': xxx,
             'description': xxx
+            'comment': xxx (exist only when id != -1)
         },
         protocol: {
             'title': xxx,
@@ -523,6 +486,7 @@ def circuit(request):
                 'id': query_id,
                 'name': circuit.Name,
                 'description': circuit.Description,
+                'comment': circuit.Comment,
                 'parts': parts,
                 'lines': lines,
                 'devices': devices,
@@ -537,9 +501,8 @@ def circuit(request):
     elif request.method == 'POST':
         try:
             data = json.loads(request.POST['data'])
-
-            name = data['circuit']['name']
-            new = (data['circuit']['id'] == -1)
+            name = data['name']
+            new = (data['id'] == -1)
 
             # Judge if name has been replicated in db
             if Circuit.objects.filter(Name = name).count() > 0 and new:
@@ -547,18 +510,17 @@ def circuit(request):
                     'status': -1,
                     'error_msg': "Design Name has been used. Please Rename it."
                 })
-
-            
+            if not new:
+                old_circuit = Circuit.objects.filter(Name = name)[0]
             # New circuit
             circuit = Circuit.objects.create(
                 Name = name,
-                Description = data['circuit']['description'],
-                Author = request.user if new else Circuit.objects.filter(name = name)[0].Author,
+                Description = data['description'] if new else old_circuit.Description,
+                Comment = "None" if new else data['comment'],
+                Author = request.user if new else old_circuit.Author,
                 Editor = request.user,
                 Chassis = Chassis.objects.get(name = data['chassis'])
             )
-
-
             
             # New protocol and steps
             try:

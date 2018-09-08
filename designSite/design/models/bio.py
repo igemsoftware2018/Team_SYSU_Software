@@ -58,11 +58,12 @@ class Chassis(models.Model):
 
 class Circuit(models.Model):
     Name = models.CharField(max_length = 50, unique = False)
-    Description = models.CharField(max_length = 100)
+    Description = models.CharField(max_length = 500)
+    Comment = models.CharField(max_length = 500, null = True, default="None") #Denote the comment when update
     Author = models.ForeignKey('User', on_delete = models.CASCADE, null = True, related_name='%(class)s_requests_author')
     Editor = models.ForeignKey('User', on_delete = models.CASCADE, null = True, related_name='%(class)s_requests_editor')
     Chassis = models.ForeignKey('Chassis', on_delete = models.SET_NULL, null=True)
-    Update_time = models.DateTimeField(auto_now=True)
+    Update_time = models.DateTimeField(auto_now=True, null=True)
     def __str__(self):
         return "%s" % self.Name
 
