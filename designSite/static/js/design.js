@@ -710,20 +710,6 @@ $('#save-as-new-button').on('click', function() {
     content: 'Save as a new design to the server'
 });
 
-
-// $('#continue-save').on('click', () => {
-//     if (save_mode == 0) {   //save mode
-//         $('#circuit-name').val(design.name);
-//         $('#circuit-description').val(design.description);
-//         $('#circuit-name').prop('readonly', 'readonly');
-//         $('#circuit-name').modal('show');
-//     } else {    //save as new mode
-//         // $('#circuit-name').removeAttr('readonly');
-        
-//     }
-// });
-
-
 $('#save-circuit, #save-as-new-circuit').on('click', () => {
     $('#save-modal, #save-as-new-modal').modal('hide');
     $('.ui.dimmer:first .loader')
@@ -753,8 +739,8 @@ $('#save-circuit, #save-as-new-circuit').on('click', () => {
         }, 3000);
 
         // Redirect to the new design
-        // if (v.status === 1)
-        //     window.location.replace(`/design/${v.circuit_id}`);
+        if (v.status === 1)
+            window.location.replace(`/design/${v.circuit_id}`);
     });
 });
 
