@@ -24,6 +24,23 @@ $.ajax({
     }
 });
 
+
+
+// Hide save button when creating a new design
+$(function() {
+    let t = window.location.href.split('/');
+    console.log(t)
+    if (t[t.length - 1] == "design" || (t[t.length - 2] == "design" &&  t[t.length - 1] == ""))
+        $("#save-button").hide();
+})
+
+// // Hide save button when creating a new design.
+// console.log(window.location.href.split('/').pop())
+
+// if (window.location.href.split('/').pop() == 'design')
+//     $('#save-button').hide()
+
+
 if (designId !== '' && parseInt(designId) !== -1) {
     // $.get(`/api/circuit?id=${designId}`, (value) => {
     //     design = new SDinDesign('#canvas', value);
@@ -673,51 +690,56 @@ $('#share-edit-button').on('click', function() {
 
 $('#save-button').on('click', () => {
     save_mode = 0;
-    $('#safety-modal').modal('show');
+    // $('#safety-modal').modal('show');
+    $('#save-circuit-name').val(design.name);
+    $('#save-circuit-description').val(design.description);
+    $('#save-modal').modal('show');
 }).popup({
     content: 'Save your design to server.'
 });
 $('#save-as-new-button').on('click', function() {
     save_mode = 1;
-    $('#safety-modal').modal('show');
+    if (!$('#save-as-new-circuit-name').val()) {
+        $('#save-as-new-circuit-name').attr("placeholder", design.name);
+    }
+    $('#save-as-new-modal').modal('show');
+    // $('#safety-modal').modal('show');
+    
 }).popup({
     content: 'Save as a new design to the server'
 });
-$('#continue-save').on('click', () => {
-    if (save_mode == 0) {
-        $('#circuit-name').val(design.name);
-        $('#circuit-description').val(design.description);
-        $('#circuit-name').prop('readonly', 'readonly');
-    } else {
-        $('#circuit-name').removeAttr('readonly');
-    }
-    $('#save-modal').modal('show');
-});
-$('#save-circuit').on('click', () => {
-    $('#save-modal').modal('hide');
+
+$('#save-circuit, #save-as-new-circuit').on('click', () => {
+    $('#save-modal, #save-as-new-modal').modal('hide');
     $('.ui.dimmer:first .loader')
         .text('Saving your circuit to server, please wait...');
     $('.ui.dimmer:first').dimmer('show');
     let postData = design.design;
-    postData.circuit = {
-        id: (save_mode == 0 ? design._id: -1),
-        name: $('#circuit-name').val(),
-        description: $('#circuit-description').val()
-    };
+    postData.comment =  $('#update-comment').val();
+    postData.id = save_mode == 0 ? design._id: -1;
+    if (postData.id === -1)
+        postData.description = $("#save-as-new-circuit-description").val()
+    // postData.circuit = {
+    //     id: (save_mode == 0 ? design._id: -1),
+    //     description 
+    //     comment = $('#update-comment').val()
+    // };
     postData = {
         data: JSON.stringify(postData),
         csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
     };
     $.post('/api/circuit', postData, (v) => {
         if (v.status === 1)
-            $('.ui.dimmer:first .loader')
-            .text(`Success, circuit ID = ${v.circuit_id}, closing...`);
+            $('.ui.dimmer:first .loader').text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
-            $('.ui.dimmer:first .loader').text( (v.status == -1 ? v.error_msg : 'Failed, closing...'));
-        
+            $('.ui.dimmer:first .loader').text( (v.status == -1 ? v.error_msg : 'Failed, closing...') );
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
         }, 3000);
+
+        // Redirect to the new design
+        if (v.status === 1)
+            window.location.replace(`/design/${v.circuit_id}`);
     });
 });
 

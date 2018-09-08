@@ -123,7 +123,7 @@
     <a class="item" id="save-button">
       <img src="/static/img/design/save.png">
     </a>
-    <a class="item" id="save-as-new-button">
+    <a class="item" id="save-as-new-button">  
       <img src="/static/img/design/save.png">
     </a>
     <a class="item" id="export-button">
@@ -441,16 +441,41 @@
     <div class="content">
       <form class="ui form">
         <div class="field">
-          <input type="text" name="name" id="circuit-name" placeholder="Circuit name">
+          <label>Design Name: <span id="save-circuit-name">1234</span></label>
         </div>
         <div class="field">
-          <textarea id="circuit-description" rows=4 placeholder="Circuit description"></textarea>
+          <label>Design Description: <span id="save-circuit-description"></span></label>
+        </div>
+        <div class="field">
+          <label>Update Comment</label>
+          <textarea id="update-comment" rows=4 placeholder="Type your update comment here"></textarea>
         </div>
       </form>
     </div>
     <div class="actions">
       <div class="ui one bottom attached big buttons">
-        <div id="save-circuit" class="ui white button">Save my new circuit!</div>
+        <div id="save-circuit" class="ui white button">Update circuit!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save as new modal -->
+  <div id="save-as-new-modal" class="ui tiny modal">
+    <div class="content">
+      <form class="ui form">
+        <div class="field">
+          <label>Design Name</label>
+          <input type="text" name="name" id="save-as-new-circuit-name" placeholder="">
+        </div>
+        <div class="field">
+          <label>Descrioption</label>
+          <textarea id="save-as-new-circuit-description" rows=4 placeholder="Type your description here"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="save-as-new-circuit" class="ui white button">Save my new circuit!</div>
       </div>
     </div>
   </div>

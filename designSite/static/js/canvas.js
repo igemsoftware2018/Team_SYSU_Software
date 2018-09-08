@@ -237,6 +237,7 @@ class SDinDesign {
             id: this._id,
             name: this.name,
             description: this.description,
+            comment: this.comment,
             chassis: this._design.chassis,
             lines: this._design.lines,
             combines: [],

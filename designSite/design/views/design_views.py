@@ -402,6 +402,7 @@ def interact(request):
 
 def circuit(request):
     '''
+    !!!!! The following return format is out-of-date!!!!!!
     GET method with param:
         id=xxx
     return json:{
@@ -468,6 +469,7 @@ def circuit(request):
             'id': xxx, # circuit id if it's already existing, -1 else
             'name': xxx,
             'description': xxx
+            'comment': xxx (exist only when id != -1)
         },
         protocol: {
             'title': xxx,
@@ -520,6 +522,7 @@ def circuit(request):
                 'id': query_id,
                 'name': circuit.Name,
                 'description': circuit.Description,
+                'comment': circuit.Comment,
                 'parts': parts,
                 'lines': lines,
                 'devices': devices,
@@ -534,9 +537,8 @@ def circuit(request):
     elif request.method == 'POST':
         try:
             data = json.loads(request.POST['data'])
-
-            name = data['circuit']['name']
-            new = (data['circuit']['id'] == -1)
+            name = data['name']
+            new = (data['id'] == -1)
 
             # Judge if name has been replicated in db
             if Circuit.objects.filter(Name = name).count() > 0 and new:
@@ -544,18 +546,17 @@ def circuit(request):
                     'status': -1,
                     'error_msg': "Design Name has been used. Please Rename it."
                 })
-
-            
+            if not new:
+                old_circuit = Circuit.objects.filter(Name = name)[0]
             # New circuit
             circuit = Circuit.objects.create(
                 Name = name,
-                Description = data['circuit']['description'],
-                Author = request.user if new else Circuit.objects.filter(name = name)[0].Author,
+                Description = data['description'] if new else old_circuit.Description,
+                Comment = "None" if new else data['comment'],
+                Author = request.user if new else old_circuit.Author,
                 Editor = request.user,
                 Chassis = Chassis.objects.get(name = data['chassis'])
             )
-
-
             
             # New protocol and steps
             try:
