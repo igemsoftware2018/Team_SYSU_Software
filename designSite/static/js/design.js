@@ -29,27 +29,21 @@ $.ajax({
 // Hide save button when creating a new design
 $(function() {
     let t = window.location.href.split('/');
-    console.log(t)
     if (t[t.length - 1] == "design" || (t[t.length - 2] == "design" &&  t[t.length - 1] == ""))
         $("#save-button").hide();
 })
 
-// // Hide save button when creating a new design.
-// console.log(window.location.href.split('/').pop())
-
-// if (window.location.href.split('/').pop() == 'design')
-//     $('#save-button').hide()
-
 
 if (designId !== '' && parseInt(designId) !== -1) {
-    // $.get(`/api/circuit?id=${designId}`, (value) => {
-    //     design = new SDinDesign('#canvas', value);
-    // });
+    $.get(`/api/circuit?id=${designId}`, (value) => {
+        design = new SDinDesign('#canvas', value);
+    });
     $.ajax(`/api/circuit?id=${designId}`, {
         type: 'GET',
         async: false,
         success: function(value) {
             design = new SDinDesign('#canvas', value);
+
         }
     });
 } else
@@ -812,10 +806,14 @@ $('#load-button').on('click', () => {
                 $('.ui.dimmer:first .loader')
                     .text(`Loading ${id} from server, please wait...`);
                 $('.ui.dimmer:first').dimmer('show');
+
+                // Redirect to a new url when 
+                window.location.replace(`/design/${id}`);
+
+                // The following code is useless
                 $.get(`/api/circuit?id=${id}`, (value) => {
                     $('.ui.dimmer:first').dimmer('hide');
                     design.design = value;
-                    // console.log(value);
                     $('#chassis-dropdown').dropdown(
                         'set selected', value.chassis
                     );
