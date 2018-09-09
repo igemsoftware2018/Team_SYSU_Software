@@ -51,6 +51,7 @@ def design(request):
         }
     return render(request, 'design.html', context)
 
+@login_required
 def personal_design(request):
     designID = request.path.split('/')[-1] # the correct way to retrive path elements is split.
     designID = int(designID)
@@ -74,9 +75,11 @@ def personal_design(request):
         'designID': designID
         }
     return render(request, 'design.html', context)
+@login_required
 def share_design(request):
     request_user = request.user
     designID = request.path.split('/')[-1]
+    logger.debug('share request at %s', designID)
     context = {
         'type_list': TYPE_LIST,
         'designID': designID
@@ -189,13 +192,6 @@ def personal_design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': designID
-        }
-    return render(request, 'design.html', context)
-def share_design(request):
-    return HttpResponseNotFound()
-    context = {
-        'type_list': TYPE_LIST,
-        'designID': -1
         }
     return render(request, 'design.html', context)
 
