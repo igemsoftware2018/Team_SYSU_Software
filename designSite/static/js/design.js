@@ -819,16 +819,7 @@ $('#load-button').on('click', () => {
                     $('#chassis-dropdown').dropdown(
                         'set selected', value.chassis
                     );
-                    // update protocol
-                    protocolVue.protocol.title = value.protocol.title;
-                    protocolVue.protocol.description = value.protocol.description;
-                    protocolVue.protocol.steps = value.protocol.steps;
-                    protocolVue.protocol.steps.forEach((val, idx) => {
-                        val.id = idx;
-                    });
-                    protocolVue.protocol.lastID = protocolVue.protocol.steps.length;
                 });
-    
             });
         } else {
             $('#load-modal>.content').append(
