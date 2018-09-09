@@ -196,9 +196,6 @@ def personal_design(request):
     return render(request, 'design.html', context)
 
 
-def test(request):
-    return render(request, 'test.html')
-
 # Part related views
 @login_required
 def parts(request):
