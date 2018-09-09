@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^design/\d+/?$', design_views.personal_design),
     url(r'^design/share/\d+/?$', design_views.share_design),
     url(r'^interest/?$', account.views.interest),
+    path('login/', account.views.signin_view),
     path('signin/', account.views.signin_view),
     path('signup/', account.views.signup),
     url(r'^logout/?$', account.views.logout_view),
