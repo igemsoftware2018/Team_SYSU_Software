@@ -1453,7 +1453,14 @@ $('#chassis-item')
             .off('click')
             .on('click', function(){
                 $('#set-chassis-modal').modal('show');
-            })
+            });
+    })
+    .on('deselect', () => {
+        $('.SDinDesign-device')
+            .off('mouseenter')
+            .off('mouseleave')
+            .off('click');
+
     })
     .popup({
         content: 'Select the device and change its chassis.'
