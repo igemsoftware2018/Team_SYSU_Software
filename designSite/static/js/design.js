@@ -637,7 +637,7 @@ $('#search-users-dropdown').dropdown({
         url: '/api/users?username={query}',
         cache: false,
         beforeSend: (settings) => {
-            return settings.urlData.query.length < 3 ? false : settings;
+            return settings.urlData.query.length < 0 ? false : settings;
         },
         onResponse: (response) => ({
             success: response.success === true,
@@ -877,22 +877,36 @@ $('#ratio-dropdown')
         }
     });
 
-$('#part-type-dropdown')
-    .dropdown({
-        values: SDinDesign.partTypes.map((x, i) => ({
-            name: x,
-            value: x,
-            selected: i === 0
-        }))
-    });
-$('#part-role-dropdown')
-    .dropdown({
-        values: SDinDesign.partRoles.map((x, i) => ({
-            name: x,
-            value: x,
-            selected: i === 0
-        }))
-    });
+
+$('#gene-type-dropdown').dropdown({
+    values: (function(){
+        let ret = []
+        SDinDesign.partTypes.forEach(function(element, i){
+            if (SDinDesign.isGene(element))
+                ret.push({
+                    name: element,
+                    value: element,
+                })
+        })
+        ret[0].selected = true;
+        return ret;
+    }()),
+});
+
+$('#material-type-dropdown').dropdown({
+    values: (function(){
+        let ret = []
+        SDinDesign.partTypes.forEach(function(element, i){
+            if (!SDinDesign.isGene(element))
+                ret.push({
+                    name: element,
+                    value: element,
+                })
+        })
+        ret[0].selected = true;
+        return ret;
+    }()),
+})
 $('#part-safety-dropdown')
     .dropdown({
         values: SDinDesign.partSafetyLevels.map((x, i) => ({
@@ -1329,24 +1343,48 @@ function initPositionSize() {
 initPositionSize();
 
 $('#add-part-button').on('click', function () {
-    $('#new-part-modal')
-        .modal('show');
+    $('#choose-added-part-type').modal('show');
 }).popup({
     variation: 'flowing popup',
-    content: 'Add your custom part into our database!'
+    content: 'Add your custom gene or material into our database!'
 });
 
-$('#add-new-part')
+let addedPartType; // 0 -- Gene, 1 -- Material
+
+$('#add-gene-button').on('click', function() {
+    $('#choose-added-part-type').modal('hide');
+    addedPartType = 0;
+    $('#new-gene-modal').modal('show');
+})
+
+$('#add-material-button').on('click', function() {
+    $('#choose-added-part-type').modal('hide');
+    addedPartType = 1;
+    $('#new-material-modal').modal('show');
+})
+
+
+$('#add-new-gene, #add-new-material')
     .on('click', function () {
-        let data = {
-            role: $('#part-role-dropdown').dropdown('get value'),
-            name: $('#part-name').val(),
-            description: $('#part-description').val(),
-            type: $('#part-type-dropdown').dropdown('get value'),
-            sequence: $('#part-sequence').val(),
-            subparts: []
-        };
-        $('#new-part-modal').modal('hide');
+        let data;
+        if (addedPartType == 0)
+            data = {
+                name: $('#gene-name').val(),
+                description: $('#gene-description').val(),
+                type: $('#gene-type-dropdown').dropdown('get value'),
+                sequence: $('#gene-sequence').val(),
+                subparts: []
+            }
+        else
+            data = {
+                name: $('#material-name').val(),
+                description: $('#material-description').val(),
+                type: $('#material-type-dropdown').dropdown('get value'),
+                sequence: "",
+                subparts: [],
+            }
+        
+        $('#new-gene-modal, #new-material-modal').modal('hide');
         $('.ui.dimmer:first .loader')
             .text('Requesting server to add the new part, please wait...');
         $('.ui.dimmer:first').dimmer('show');

@@ -38,6 +38,36 @@ All response contains a status in json
 # Basic design views
 
 
+role_dict = {
+    'promoter': 'Promoter',
+    'Promoter': 'Promoter',
+    'RBS': 'RBS',
+    'CDS': 'CDS',
+    'terminator': 'Terminator',
+    'Terminator': 'Terminator',
+    'process': 'process',
+    'ther_DNA': 'User defined',
+    'other_DNA': 'User defined',
+    'complex': 'Complex',
+    'RNA': 'RNA',
+    'protein': 'Effector',
+    'protein-m': 'Effector',
+    'protein-l': 'Effector',
+    'protein-I': 'Effector',
+    'cell': 'User defined',
+    'chemical': 'User defined',
+    'material': 'Effector',
+    'light': 'Effector',
+    'Light': 'Effector',
+    'reporter': 'Reporter',
+    'composite': 'Composite',
+    'generator': 'Generator',
+    'inverter': 'Inverter Device',
+    'measurement': 'Measurement Device',
+    'signalling': 'Signalling Molecule',
+    'unknown': 'User defined'
+}
+
 TYPE_LIST = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
     'light', 'protein', 'process', 'RNA', 'protein-m', 'protein-l',
     'complex', 'other_DNA', 'composite', 'generator', 'reporter',
@@ -295,7 +325,7 @@ def part(request):
                 Name = data['name'],
                 Description = data['description'],
                 Type = data['type'], 
-                Role = data['role'],
+                Role = role_dict[data['type']],
                 Sequence = data['sequence'],
             )
             for x in data['subparts']:
