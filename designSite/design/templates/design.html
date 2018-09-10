@@ -50,6 +50,10 @@
           <!-- TODO: change this image please -->
           <img src="/static/img/design/delete.png" />
         </a>
+        <a id="chassis-item">
+            <!-- TODO: change this image please -->
+            <img src="/static/img/design/delete.png" />
+          </a>
       </span>
 
       <div id="toolbox" class="ui menu">
@@ -156,14 +160,14 @@
       <i id="part-panel-button" class="link icon angle double right"></i>
     </div>
     <div class="content">
-      <div>
+      <!-- <div>
         <h5>Chassis</h5><br>
       </div>
       <div class="ui compact floating selection dropdown" id="chassis-dropdown">
         <div class="text" id="chassis"></div>
         <i class="dropdown icon"></i>
       </div>
-      <div class="ui divider"></div>
+      <div class="ui divider"></div> -->
       <div>
         <h5>Parts</h5><br>
       </div>
@@ -517,7 +521,11 @@
   <!-- Load modal -->
   <div id="load-modal" class="ui tiny modal">
     <div class="content"></div>
-  </div>
+  </div><div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="save-as-new-circuit" class="ui white button">Save my new circuit!</div>
+      </div>
+    </div>
 
   <!-- Share modal -->
   <div id="share-modal" class="ui tiny modal">
@@ -558,6 +566,22 @@
       <div class="ui green ok inverted button" id="continue-save">
         Continue to save
         <i class="right chevron icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chassis modal -->
+  <div id="set-chassis-modal" class="ui tiny modal">
+    <div class="content">
+      <h5>Chassis</h5>
+      <div class="ui compact floating selection dropdown" id="chassis-dropdown">
+        <div class="text" id="chassis"></div>
+        <i class="dropdown icon"></i>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="set-chassis-button" class="ui white button">Confirm</div>
       </div>
     </div>
   </div>

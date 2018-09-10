@@ -966,26 +966,7 @@ $('#redo-button').on('click', function () {
 });
 
 // Part panel
-$('#chassis-dropdown').dropdown(
-    (function () {
-        let ret = {
-            values: []
-        }
-        CHASSIS.forEach(function (element) {
-            ret.values.push({
-                name: element,
-                value: element,
-            })
-        })
-        ret.values[0].selected = true;
-        ret.onChange = function (value) {
-            design.setChassis(value)
-        }
-        return ret;
-    })()
-).popup({
-    content: 'Choose your chassis.'
-});
+
 $('#part-panel')
     .resizable('option', 'minWidth', 200);
 $('#part-panel-button')
@@ -1428,6 +1409,7 @@ const simpleModes = {
     dragCanvas: $('#drag-canvas'),
     deleteItem: $('#delete-item'),
     inspectItem: $('#inspect-item'),
+    chassisItem: $('#chassis-item'),
 };
 const modes = $.extend(true, {
     addConnection: $('#connection-dropdown-button'),
@@ -1451,6 +1433,31 @@ function selectMode(mode) {
     button.addClass('active');
     button.trigger('select');
 }
+
+$('#chassis-item')
+    .on('click', () => {
+        selectMode('chassisItem')
+    })
+    .on('select', () => {
+        design.unHighlightDevice($('.SDinDesign-device, .SDinDesign-part'));
+        $('.SDinDesign-device').off('click');
+        $('.SDinDesign-device')
+            .off('mouseenter')
+            .on('mouseenter', function() {
+                design.highlightDevice($(this), 0.4);
+            })
+            .off('mouseleave')
+            .on('mouseleave', function() {
+                design.unHighlightDevice($(this));
+            })
+            .off('click')
+            .on('click', function(){
+                $('#set-chassis-modal').modal('show');
+            })
+    })
+    .popup({
+        content: 'Select the device and change its chassis.'
+    })
 
 $('#drag-item')
     .on('click', () => {
@@ -1800,13 +1807,15 @@ $('#clear-all-button')
     .popup({
         content: 'CLEAR THE CANVAS!'
     });
-$('#real-clear-all-button')
-    .on('click', () => {
-        design.clearAll();
-        $('#chassis-dropdown').dropdown(
-            'set selected', 'Escherichia Coli'
-        );
-    });
+
+
+// $('#real-clear-all-button')
+//     .on('click', () => {
+//         design.clearAll();
+//         $('#chassis-dropdown').dropdown(
+//             'set selected', 'Escherichia Coli'
+//         );
+//     });
 
 //TODO: only this place use Chart.js
 // Consider to remove Chart.js
@@ -1875,6 +1884,34 @@ $('#simulation-button')
     .popup({
         content: 'Run simulation on the design.'
     });
+
+
+// Chassis dropdown set
+$('#chassis-dropdown').dropdown(
+    (function () {
+        let ret = {
+            values: []
+        }
+        CHASSIS.forEach(function (element) {
+            ret.values.push({
+                name: element,
+                value: element,
+            })
+        })
+        ret.values[0].selected = true;
+        ret.onChange = function (value) {
+            design.setChassis(value)
+        }
+        return ret;
+    })()
+).popup({
+    content: 'Choose your chassis.'
+});
+
+$('#set-chassis-button').on('click', ()=>{
+    $('#set-chassis-modal').modal('hide');
+})
+
 
 $('#show-plasmid').on('click', function () {
     $('#plasmid-modal').modal('show');
