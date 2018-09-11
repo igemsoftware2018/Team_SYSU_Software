@@ -708,11 +708,15 @@ $('#save-circuit, #save-as-new-circuit').on('click', () => {
     $('.ui.dimmer:first .loader')
         .text('Saving your circuit to server, please wait...');
     $('.ui.dimmer:first').dimmer('show');
+    // design._design.name = $('#save-as-new-circuit-name').val();
+    // design._design.description = $('#save-as-new-circuit-description').val();
     let postData = design.design;
     postData.comment =  $('#update-comment').val();
     postData.id = save_mode == 0 ? design._id: -1;
-    if (postData.id === -1)
-        postData.description = $("#save-as-new-circuit-description").val()
+    if (postData.id === -1){
+        postData.description = $('#save-as-new-circuit-description').val();
+        postData.name = $('#save-as-new-circuit-name').val();
+    }
     // postData.circuit = {
     //     id: (save_mode == 0 ? design._id: -1),
     //     description 
