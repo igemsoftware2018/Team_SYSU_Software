@@ -35,9 +35,9 @@ $(function() {
 
 
 if (designId !== '' && parseInt(designId) !== -1) {
-    $.get(`/api/circuit?id=${designId}`, (value) => {
-        design = new SDinDesign('#canvas', value);
-    });
+    // $.get(`/api/circuit?id=${designId}`, (value) => {
+    //     design = new SDinDesign('#canvas', value);
+    // });
     $.ajax(`/api/circuit?id=${designId}`, {
         type: 'GET',
         async: false,
