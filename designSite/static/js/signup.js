@@ -19,7 +19,7 @@ $(document).ready(function () {
             }
         });
 
-    $('#register-button')
+    $('#signup-button')
         .on('click', function () {
             $('.ui.form').form('submit');
         });
