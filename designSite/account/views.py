@@ -31,6 +31,9 @@ def index(request):
     return render(request, 'index.html')
 
 
+def takeTime(elem):
+    return elem.Update_time
+
 @login_required
 def personal_index(request):
     # TODO: query parts and circuits
@@ -38,22 +41,45 @@ def personal_index(request):
     username = user.username
     part_query = Parts.objects.filter(Username=username)
     circuit_query = Circuit.objects.filter(Author=user)
+    authority_query = Authorities.objects.filter(User=user)
 
     parts = [{
         'ID': x.id,
         'Name': x.Name,
         'Role': x.Role,
+        'Type': x.Type,
         'Description': x.Description
     } for x in part_query]
-    circuits = [{
-        'ID': x.id,
-        'Name': x.Name,
-        'Version': 0, #TODO: no version.
-        'Description': x.Description
-    } for x in circuit_query]
+
+    circuits = []
+    for x in circuit_query:
+        circuit_list = Circuit.objects.filter(Name=x.Name).order_by('-Update_time')
+        circuits.append({
+            'ID': x.id,
+            'Name': x.Name,
+            'Author': x.Author.username,
+            'Description': x.Description,
+            'LastEditor': circuit_list[0].Editor.username,
+            'LastUpdateTime': circuit_list[0].Update_time
+        })
+    
+    shared_circuits = []
+    for x in authority_query:
+        circuit_list = Circuit.objects.filter(pk=x.Circuit_id).order_by('-Update_time')
+        logger.debug(circuit_list)
+        shared_circuits.append({
+            'ID': circuit_list[0].id,
+            'Name': circuit_list[0].Name,
+            'Author': circuit_list[0].Author.username if not circuit_list[0].Editor is None else 'None',
+            'Description': circuit_list[0].Description,
+            'LastEditor': circuit_list[0].Editor.username if not circuit_list[0].Editor is None else 'None',
+            'LastUpdateTime': circuit_list[0].Update_time
+        })
+
     logger.debug(part_query)
     logger.debug(circuit_query)
-    return render(request, 'personal_index.html', {'parts': parts, 'circuits': circuits})
+    logger.debug(authority_query)
+    return render(request, 'personal_index.html', {'parts': parts, 'circuits': circuits, 'share': shared_circuits})
 
 
 def signin_view(request):

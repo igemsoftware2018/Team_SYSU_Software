@@ -11,10 +11,13 @@
   {% if user.is_authenticated %}
   <div class="ui inverted vertical masthead center aligned segment">
     <div class="ui container">
-      <div class="ui large secondary inverted pointing menu">
+      <div class="ui large secondary inverted pointing tabular menu">
         <a class="item">
           <img id="logo" src="/static/img/logo.png">
         </a>
+        <a class="active item" data-tab="Parts">Parts</a>
+        <a class="item" data-tab="Circuits">Circuits</a>
+        <a class="item" data-tab="Shares">Shares</a>
         <div class="right item">
           <h5>Welcome, {{ user.username }}!</h5>
         </div>
@@ -29,56 +32,103 @@
         <a href="/" style="color:white">CO-RAD</a>
       </h1>
       <h2>Design and Collaborate, Analysis and Optimize.</h2>
-      <div id="design-button" class="ui huge primary button">Make new Design<i class="right arrow icon"></i></div>
+      <div id="design-button" class="ui huge primary button">
+        Make new Design
+        <i class="right arrow icon"></i>
+      </div>
     </div>
   </div>
 
-  <div class="ui vertical stripe segment">
-    <div class="ui middle aligned stackable grid container">
-      <div class="row">
-        <!--Private Parts panel-->
-        <div class="ui seven wide column card">
-          <div class="ui content">
-            <h5>Parts</h5>
-            {% if parts %}
-            {% for part in parts %}
-            <div class="ui segment" data-id="{{ part.ID }}" data-name="{{ part.Name }}">
-              <p><b>ID: </b>{{ part.ID }}</p>
-              <p><b>Name: </b>{{ part.Name }}</p>
-              <p><b>Role: </b>{{ part.Role }}</p>
-              <p><b>Description: </b>{{ part.Description }}</p>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p> You have no part added. </p>
-            {% endif %}
-          </div>
-        </div>
-
-        <div class="two wide column"></div>
-
-        <!--Private Circuit panel-->
-        <div class="ui seven wide column card">
-          <div class="ui content" id="circuit-card">
-            <h5>Circuits</h5>
-            {% if circuits %}
-            {% for circuit in circuits %}
-            <div class="ui segment" data-id="{{ circuit.ID }}" data-name="{{ circuit.Name }}">
-              <p><b>ID: </b>{{ circuit.ID }}</p>
-              <p><b>Name: </b>{{ circuit.Name }}</p>
-              <p><b>Version: </b>
-                <!--TODO: {{ circuit.Version }}-->
-              </p>
-              <p><b>Description: </b>{{ circuit.Description }}</p>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p> You have no circuit added.</p>
-            {% endif %}
-          </div>
-        </div>
-
-      </div>
+  <div class="ui bottom attached tab segment active" data-tab="Parts">
+    <div class="ui content">
+      <h5>Parts</h5>
+      {% if parts %}
+      <table class="ui sortable striped padded table" id="part-table">
+        <thead>
+          <tr>
+            <th class="sorted descending">ID</th>
+            <th class="sorted descending">Name</th>
+            <th class="sorted descending">Role</th>
+            <th class="sorted descending">Description</th>
+          </tr>
+        </thead>
+        {% for part in parts %}
+        <tbody data-id="{{ part.ID }}">
+          <td>{{ part.ID }}</td>
+          <td>{{ part.Name }}</td>
+          <td>{{ part.Role }}</td>
+          <td>{{ part.Description }}</td>
+        </tbody>
+        {% endfor %}
+      </table>
+      {% else %}
+      <div class="ui divider"></div>
+      <h5> You have no part added. </p>
+        {% endif %}
+    </div>
+  </div>
+  <div class="ui bottom attached tab segment" data-tab="Circuits">
+    <div class="ui content">
+      <h5>Master Circuits</h5>
+      {% if circuits %}
+      <table class="ui sortable selectable striped padded table" id="master-table">
+        <thead>
+          <tr>
+            <th class="sorted descending">ID</th>
+            <th class="sorted descending">Name</th>
+            <th class="sorted descending">Author</th>
+            <th class="sorted descending">Description</th>
+            <th class="sorted descending">Last Editor</th>
+            <th class="sorted descending">Last Update Time</th>
+          </tr>
+        </thead>
+        {% for circuit in circuits %}
+        <tbody data-id="{{ circuit.ID }}">
+          <td>{{ circuit.ID }}</td>
+          <td>{{ circuit.Name }}</td>
+          <td>{{ circuit.Author }}</td>
+          <td>{{ circuit.Description }}</td>
+          <td>{{ circuit.LastEditor }}</td>
+          <td>{{ circuit.LastUpdateTime }}</td>
+        </tbody>
+        {% endfor %}
+      </table>
+      {% else %}
+      <div class="ui divider"></div>
+      <h5> You have no circuit added.</h5>
+      {% endif %}
+    </div>
+  </div>
+  <div class="ui bottom attached tab segment" data-tab="Shares">
+    <div class="ui content" id="share-card">
+      <h5>Shared Circuits</h5>
+      {% if share %}
+      <table class="ui sortable selectable striped padded table" id="share-table">
+        <thead>
+          <tr>
+            <th class="sorted descending">ID</th>
+            <th class="sorted descending">Name</th>
+            <th class="sorted descending">Author</th>
+            <th class="sorted descending">Description</th>
+            <th class="sorted descending">Last Editor</th>
+            <th class="sorted descending">Last Update Time</th>
+          </tr>
+        </thead>
+        {% for circuit in share %}
+        <tbody data-id="{{ circuit.ID }}">
+          <td>{{ circuit.ID }}</td>
+          <td>{{ circuit.Name }}</td>
+          <td>{{ circuit.Author }}</td>
+          <td>{{ circuit.Description }}</td>
+          <td>{{ circuit.LastEditor }}</td>
+          <td>{{ circuit.LastUpdateTime }}</td>
+        </tbody>
+        {% endfor %}
+      </table>
+      {% else %}
+      <div class="ui divider"></div>
+      <h5> You have no shared circuit.</h5>
+      {% endif %}
     </div>
   </div>
 
@@ -93,14 +143,6 @@
 <script src="/static/semantic/dist/semantic.js"></script>
 <script src="/static/semantic/dist/components/popup.min.js"></script>
 <script src="/static/semantic/dist/components/tab.min.js"></script>
-<script>
-  $('#logout').on('click', function () {
-    window.location.href = '/logout';
-  });
-  $('#design-button').on('click', function () {
-    window.location.href = '/design';
-  });
-</script>
 <script src="/static/js/personal_index.js"></script>
 
 </html>
