@@ -562,7 +562,11 @@ def circuit(request):
             data = json.loads(request.POST['data'])
             name = data['name']
             new = (data['id'] == -1)
-
+            if name.strip() == '':
+                return JsonResponse({
+                    'status': -1,
+                    'error_msg': "ERROR: Empty Design Name. Fail to Save."
+                })
             # Judge if name has been replicated in db
             if Circuit.objects.filter(Name = name).count() > 0 and new:
                 return JsonResponse({
