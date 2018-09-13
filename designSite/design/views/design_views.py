@@ -144,38 +144,72 @@ def authority(request):
     '''
     POST method with json:
     {
-        users: [xxx, xxx],
         circuit: xxx,
-        authority: xxx
+        read: [xxx, xxx(username)],
+        write: [xxx, xxx(username)]
     }
     return json:
-    msg: xxx
+    {
+        msg: xxx
+    }
+
+    GET method with parameter:
+    circuit=xxx
+    url:
+    "/api/authority?circuit=xxx"
+    return json:
+    {
+        read: [xxx, xxx(username)]
+        write: [xxx, xxx(usernam)]
+    }
+
     '''
-    users = json.loads(request.POST['users'])
-    authority = request.POST['authority']
-    circuit = Circuit.objects.get(id=request.POST['circuit'])
-    for x in users:
-        logger.debug(x)
-        # Circuit owner
-        if x == circuit.Author.username:
-            continue
-        
-        # Not have authority
-        user = User.objects.get(username=x)
-        check = Authorities.objects.get_or_create(
-            User=user,
-            Circuit=circuit,
-            Authority = authority
-        )
-        # Already have authority
-        if check == False:
-            check.Authority = authority
-            check.save()
-    
-    return JsonResponse({
-        'msg': 'Success'
-    })
-    return render(request, 'design.html', context)
+    if request.method == 'POST':
+        reads = json.loads(request.POST['read'])
+        writes = json.loads(request.POST['write'])
+        circuit = Circuit.objects.get(id=request.POST['circuit'])
+        Authorities.objects.filter(Circuit=circuit).delete()
+        for username in reads + writes:
+            if username == request.user.username:
+                logger.debug('same user %s, skip', username)
+                continue
+            user = User.objects.get(username=username)
+            auth_str = "write" if username in writes else "read"
+            Authorities.objects.create(
+                User = user,
+                Circuit = circuit,
+                Authority = auth_str
+            )
+            logger.debug('user <%s> get authority <%s> at circuit <%s>', username, auth_str, circuit.id)
+        return JsonResponse({
+            'msg': 'Success'
+        })
+    elif request.method == 'GET':
+        designID = request.GET.get('circuit', '')
+        try:
+            read = []
+            write = []
+            designID = int(designID)
+            circuit = Circuit.objects.get(pk=designID)
+            authorities_query = Authorities.objects.filter(Circuit=circuit)
+            for authority in authorities_query:
+                if authority.Authority == 'read':
+                    read.append(authority.User.username)
+                else:
+                    write.append(authority.User.username)
+            return JsonResponse({
+                'read': read,
+                'write': write
+            })
+        except:
+            traceback.print_exc()
+            return JsonResopense({
+                'read': [],
+                'write': []
+            })
+    else:
+        debug.error('unknow request method')
+        return HttpResponseNotFound()
 
 def personal_design(request):
     designID = request.path.split('/')[-1] # the correct way to retrive path elements is split.
