@@ -520,7 +520,22 @@
 
   <!-- Load modal -->
   <div id="load-modal" class="ui tiny modal">
-    <div class="content"></div>
+    <div class="content">
+      <div class="load-filter">
+        <label>Your Circuits</label><br>
+        <div class="ui divider"></div>
+        <label>Filter: </label>
+        <input id="focus-taker" style="width: 0px; opacity: 0; cursor: default" />
+        <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
+          <div class="text" id="circuit-filter"></div>
+          <i class="dropdown icon"></i>
+        </div><br>
+        <div class="ui button" id="filter-clear">Clear </div>
+        <div class="ui divider"></div>
+      </div>
+      
+      <div class="user-circuits"></div>
+    </div>
   </div>
 
   <!-- Share modal -->
@@ -698,5 +713,4 @@
 <script src="/static/js/plasmid.js"></script>
 <script src="/static/js/canvas.js"></script>
 <script src="/static/js/design.js"></script>
-
 </html>

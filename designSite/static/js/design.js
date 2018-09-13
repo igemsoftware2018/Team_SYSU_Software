@@ -767,21 +767,8 @@ $('#load-button').on('click', () => {
     $('.ui.dimmer:first').dimmer('show');
     $.get('/api/get_saves', (v) => {
         $('.ui.dimmer:first').dimmer('hide');
-        $('#load-modal>.content').html('');
-        $('#load-modal>.content').append(
-            `<label>Your Circuits</label><br>
-            <div class="ui divider"></div>`
-        );
+        $('#load-modal>.content>.user-circuits').html('');
         if (v.circuits.length > 0) {
-            $('#load-modal>.content').append(
-                `<label>Filter: </label>
-                <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
-                    <div class="text" id="circuit-filter"></div>
-                    <i class="dropdown icon"></i>
-                </div><br>
-                <div class="ui button" id="filter-clear">Clear </div>
-                <div class="ui divider"></div>`
-            );
             let filter_data = [];
             let unique = {};
             v.circuits.forEach((c) => {
@@ -792,7 +779,7 @@ $('#load-button').on('click', () => {
                         <p><b>Description: </b>${c.description}</p>
                         <p><b>Version: </b><!--TODO: Version--></p>
                     </div>`;
-                $('#load-modal>.content').append(html);
+                $('#load-modal>.content>.user-circuits').append(html);
                 if (!unique[c.name]) {
                     filter_data.push({
                         name: c.name,
@@ -802,7 +789,7 @@ $('#load-button').on('click', () => {
                 }
             });
             $('#circuit-filter-dropdown').dropdown({
-                values: filter_data,
+                values: filter_data, 
                 onChange: function (value) {
                     if (value != '') {
                         $('#load-modal .segment').each(function (index, item) {
@@ -844,7 +831,7 @@ $('#load-button').on('click', () => {
                 });
             });
         } else {
-            $('#load-modal>.content').append(
+            $('#load-modal>.content>.user-circuits').append(
                 `<h5>Empty.</h5>`
             );
         }
