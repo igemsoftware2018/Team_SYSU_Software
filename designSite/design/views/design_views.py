@@ -69,17 +69,19 @@ role_dict = {
 }
 
 TYPE_LIST = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
-    'light', 'protein', 'process', 'RNA', 'protein-m', 'protein-l',
-    'complex', 'other_DNA', 'composite', 'generator', 'reporter',
-    'inverter', 'signalling', 'measurement', 'unknown']
+             'light', 'protein', 'process', 'RNA', 'protein-m', 'protein-l',
+             'complex', 'other_DNA', 'composite', 'generator', 'reporter',
+             'inverter', 'signalling', 'measurement', 'unknown']
+
 
 @login_required
 def design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': -1
-        }
+    }
     return render(request, 'design.html', context)
+
 
 @login_required
 def share_design(request):
@@ -89,7 +91,7 @@ def share_design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': designID
-        }
+    }
 
     # check whether this id exists
     try:
@@ -102,7 +104,7 @@ def share_design(request):
         traceback.print_exc()
         logger.error('unknown bugs')
         return HttpResponseNotFound()
-    
+
     # check authorities
     try:
         Authorities.objects.get(User=request_user, Circuit=circuit)
@@ -111,6 +113,8 @@ def share_design(request):
     return render(request, 'design.html', context)
 
 # share related views
+
+
 @login_required
 def users(request):
     '''
@@ -125,18 +129,19 @@ def users(request):
     logger.debug(query_user)
     logger.debug("test")
     if query_user is None or len(query_user) == 0:
-        return JsonResponse({ 'success' : False })
-    
-    query_set = User.objects.filter(username__contains = query_user)
+        return JsonResponse({'success': False})
+
+    query_set = User.objects.filter(username__contains=query_user)
 
     users = []
     for x in query_set:
-        users.append({ 'username': x.username })
-    
+        users.append({'username': x.username})
+
     return JsonResponse({
-        'success' : True,
+        'success': True,
         'users': users
     })
+
 
 @csrf_exempt
 @login_required
@@ -175,11 +180,12 @@ def authority(request):
                 continue
             user = User.objects.get(username=username)
             Authorities.objects.create(
-                User = user,
-                Circuit = circuit,
-                Authority = auth_str
+                User=user,
+                Circuit=circuit,
+                Authority=auth_str
             )
-            logger.debug('user <%s> get authority <%s> at circuit <%s>', username, auth_str, circuit.id)
+            logger.debug('user <%s> get authority <%s> at circuit <%s>',
+                         username, auth_str, circuit.id)
         return JsonResponse({
             'msg': 'Success'
         })
@@ -210,8 +216,10 @@ def authority(request):
         debug.error('unknow request method')
         return HttpResponseNotFound()
 
+
 def personal_design(request):
-    designID = request.path.split('/')[-1] # the correct way to retrive path elements is split.
+    # the correct way to retrive path elements is split.
+    designID = request.path.split('/')[-1]
     designID = int(designID)
     logger.debug('visiting design id=%s', designID)
     try:
@@ -231,7 +239,7 @@ def personal_design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': designID
-        }
+    }
     return render(request, 'design.html', context)
 
 
@@ -252,9 +260,9 @@ def parts(request):
     print(search_target)
     # Params empty
     if query_name is None or len(query_name) == 0:
-        return JsonResponse({ 'success': False })
+        return JsonResponse({'success': False})
 
-    query_set = Parts.objects.filter(Name__contains = query_name)
+    query_set = Parts.objects.filter(Name__contains=query_name)
 
     parts = []
     for x in query_set:
@@ -263,15 +271,16 @@ def parts(request):
         if x.IsPublic == 1:
             parts.append({'id': x.id, 'name': "%s" % (x.Name)})
         elif x.Username == request.user.username:
-            parts.append({'id': x.id, 'name': "%s (%s)" % (x.Name, x.Username)})
-        if len(parts) > 50: 
+            parts.append(
+                {'id': x.id, 'name': "%s (%s)" % (x.Name, x.Username)})
+        if len(parts) > 50:
             break
-
 
     return JsonResponse({
         'success': True,
         'parts': parts
     })
+
 
 def plasm_part(request):
     '''
@@ -282,7 +291,7 @@ def plasm_part(request):
     '''
     query_name = request.GET.get('name')
     try:
-        part = Parts.objects.get(Name = query_name)
+        part = Parts.objects.get(Name=query_name)
         return JsonResponse({
             'success': True,
             'seq': part.Sequence
@@ -292,6 +301,7 @@ def plasm_part(request):
             'success': False,
             'seq': 'No sequence found! Try another part name.'
         })
+
 
 @login_required
 def part(request):
@@ -329,18 +339,18 @@ def part(request):
             username = request.user.username
             data = json.loads(request.POST['data'])
             new_part = Parts.objects.create(
-                Username = username,
-                IsPublic = False,
-                Name = data['name'],
-                Description = data['description'],
-                Type = data['type'], 
-                Role = role_dict[data['type']],
-                Sequence = data['sequence'],
+                Username=username,
+                IsPublic=False,
+                Name=data['name'],
+                Description=data['description'],
+                Type=data['type'],
+                Role=role_dict[data['type']],
+                Sequence=data['sequence'],
             )
             for x in data['subparts']:
                 SubParts.objects.create(
-                    parent = new_part,
-                    child = x
+                    parent=new_part,
+                    child=x
                 )
             return JsonResponse({
                 'success': True,
@@ -353,7 +363,7 @@ def part(request):
     else:
         try:
             query_id = request.GET.get('id')
-            part = Parts.objects.get(pk = query_id)
+            part = Parts.objects.get(pk=query_id)
             part_dict = {
                 'id': part.id,
                 'name': part.Name,
@@ -361,38 +371,40 @@ def part(request):
                 'type': part.Type,
                 'sequence': part.Sequence,
                 'role': part.Role}
-            sub_query = SubParts.objects.filter(parent = part)
+            sub_query = SubParts.objects.filter(parent=part)
             part_dict['subparts'] = [{
                 'id': x.child.id,
                 'name': x.child.Name,
                 'description': x.child.Description,
                 'type': x.child.Type} for x in sub_query]
-            circuit_query = CircuitParts.objects.filter(Part = part).values('Circuit').distinct()
+            circuit_query = CircuitParts.objects.filter(
+                Part=part).values('Circuit').distinct()
             part_dict['works'] = []
             part_dict['papers'] = []
             for x in circuit_query:
-                circuit = Circuit.objects.get(pk = x['Circuit'])
+                circuit = Circuit.objects.get(pk=x['Circuit'])
                 if circuit.works_set.count() > 0:
                     w = circuit.works_set.all()[0]
                     part_dict['works'].append({
-                            'year' : w.Year,
-                            'teamname': w.Teamname,
-                            'id': w.TeamID
-                        })
+                        'year': w.Year,
+                        'teamname': w.Teamname,
+                        'id': w.TeamID
+                    })
                 elif circuit.papers_set.count() > 0:
                     w = circuit.papers_set.all()[0]
                     part_dict['papers'].append({
-                            'title': w.Title,
-                            'DOI': w.DOI,
-                            'authors': w.Authors,
-                            'id': w.id
-                        })
+                        'title': w.Title,
+                        'DOI': w.DOI,
+                        'authors': w.Authors,
+                        'id': w.id
+                    })
 
             part_dict['success'] = True
             return JsonResponse(part_dict)
         except:
             traceback.print_exc()
-            return JsonResponse({ 'success': False })
+            return JsonResponse({'success': False})
+
 
 def interact(request):
     '''
@@ -409,8 +421,8 @@ def interact(request):
     '''
     try:
         query_id = request.GET.get('id')
-        part = Parts.objects.get(pk = query_id)
-        query = PartsInteract.objects.filter(parent = part)
+        part = Parts.objects.get(pk=query_id)
+        query = PartsInteract.objects.filter(parent=part)
         parts = [
             {
                 'id': x.child.id,
@@ -423,11 +435,11 @@ def interact(request):
             } for x in query]
 
         return JsonResponse({
-                'parts': parts
-            })
+            'parts': parts
+        })
     except:
         raise
-        return JsonResponse({ 'success': False })
+        return JsonResponse({'success': False})
 
 
 # Circuit related views
@@ -521,22 +533,23 @@ def circuit(request):
     if request.method == 'GET':
         try:
             query_id = request.GET.get('id')
-            circuit = Circuit.objects.get(id = query_id)
-            parts_query = CircuitParts.objects.filter(Circuit = query_id)
+            circuit = Circuit.objects.get(id=query_id)
+            parts_query = CircuitParts.objects.filter(Circuit=query_id)
             parts = [{'id': x.Part.id, 'cid': x.id, 'name': x.Part.Name,
-                'description': x.Part.Description, 'type': x.Part.Type,
-                'X': x.X, 'Y': x.Y} for x in parts_query]
-            line_query = CircuitLines.objects.filter(Start__Circuit = query_id, \
-                    End__Circuit = query_id)
-            lines = [{'start': x.Start.id, 'end': x.End.id, 'type': x.Type} \
-                    for x in line_query]
-            devices_query = CircuitDevices.objects.filter(Circuit = query_id)
+                      'description': x.Part.Description, 'type': x.Part.Type,
+                      'X': x.X, 'Y': x.Y} for x in parts_query]
+            line_query = CircuitLines.objects.filter(Start__Circuit=query_id,
+                                                     End__Circuit=query_id)
+            lines = [{'start': x.Start.id, 'end': x.End.id, 'type': x.Type}
+                     for x in line_query]
+            devices_query = CircuitDevices.objects.filter(Circuit=query_id)
             devices = [{
                 'subparts': [i.id for i in x.Subparts.all()],
                 'X':x.X,
                 'Y': x.Y} for x in devices_query]
-            combines_query = CircuitCombines.objects.filter(Circuit = query_id)
-            combines = {x.Father.id: [i.id for i in x.Sons.all()] for x in combines_query}
+            combines_query = CircuitCombines.objects.filter(Circuit=query_id)
+            combines = {x.Father.id: [i.id for i in x.Sons.all()]
+                        for x in combines_query}
             chassis = circuit.Chassis.name
             protocol_query = Protocol.objects.get(Circuit=circuit)
             step_query = Step.objects.filter(Father=protocol_query)
@@ -544,9 +557,9 @@ def circuit(request):
                 'title': protocol_query.Title,
                 'description': protocol_query.Description,
                 'steps': [{
-                        'title': x.Title,
-                        'body': x.Body,
-                    } for x in step_query
+                    'title': x.Title,
+                    'body': x.Body,
+                } for x in step_query
                 ]
             }
             return JsonResponse({
@@ -577,23 +590,23 @@ def circuit(request):
                     'error_msg': "ERROR: Empty Design Name. Fail to Save."
                 })
             # Judge if name has been replicated in db
-            if Circuit.objects.filter(Name = name).count() > 0 and new:
+            if Circuit.objects.filter(Name=name).count() > 0 and new:
                 return JsonResponse({
                     'status': -1,
                     'error_msg': "Design Name has been used. Please Rename it."
                 })
             if not new:
-                old_circuit = Circuit.objects.filter(Name = name)[0]
+                old_circuit = Circuit.objects.filter(Name=name)[0]
             # New circuit
             circuit = Circuit.objects.create(
-                Name = name,
-                Description = data['description'] if new else old_circuit.Description,
-                Comment = "None" if new else data['comment'],
-                Author = request.user if new else old_circuit.Author,
-                Editor = request.user,
-                Chassis = Chassis.objects.get(name = data['chassis'])
+                Name=name,
+                Description=data['description'] if new else old_circuit.Description,
+                Comment="None" if new else data['comment'],
+                Author=request.user if new else old_circuit.Author,
+                Editor=request.user,
+                Chassis=Chassis.objects.get(name=data['chassis'])
             )
-            
+
             # New protocol and steps
             try:
                 protocol = Protocol.objects.create(
@@ -614,47 +627,48 @@ def circuit(request):
             cids = {}
             for x in data['parts']:
                 circuit_part = CircuitParts.objects.create(
-                    Part = Parts.objects.get(id = int(x['id'])),
-                    Circuit = circuit,
-                    X = x['X'] if 'X' in x else 0,
-                    Y = x['Y'] if 'Y' in x else 0)
+                    Part=Parts.objects.get(id=int(x['id'])),
+                    Circuit=circuit,
+                    X=x['X'] if 'X' in x else 0,
+                    Y=x['Y'] if 'Y' in x else 0)
                 cids[x['cid']] = circuit_part
             for x in data['lines']:
                 try:
                     CircuitLines.objects.get(
-                        Start = cids[x['start']],
-                        End = cids[x['end']],
-                        Type = x['type']
+                        Start=cids[x['start']],
+                        End=cids[x['end']],
+                        Type=x['type']
                     )
                 except:
                     CircuitLines.objects.create(
-                        Start = cids[x['start']],
-                        End = cids[x['end']],
-                        Type = x['type']
+                        Start=cids[x['start']],
+                        End=cids[x['end']],
+                        Type=x['type']
                     )
             for x in data['devices']:
-                cd = CircuitDevices.objects.create(Circuit = circuit)
+                cd = CircuitDevices.objects.create(Circuit=circuit)
                 for i in x['subparts']:
                     cd.Subparts.add(cids[i])
                 cd.X = x['X']
                 cd.Y = x['Y']
                 cd.save()
             for x in data['combines']:
-                cd = CircuitCombines.objects.create(Circuit = circuit, Father = x)
+                cd = CircuitCombines.objects.create(Circuit=circuit, Father=x)
                 for i in data['combines'][x]:
                     cd.Sons.add(cids[i])
                 cd.save()
             return JsonResponse({
-                    'status': 1,
-                    'circuit_id': circuit.id})
+                'status': 1,
+                'circuit_id': circuit.id})
         except:
             traceback.print_exc()
             return JsonResponse({
                 'status': 0
-                })
+            })
     else:
         return JsonResponse({
             'status': 0})
+
 
 def get_saves(request):
     '''
@@ -667,19 +681,20 @@ def get_saves(request):
             'Author': xxx(id)
         }]
     '''
-    query_set = Circuit.objects.filter(Author = request.user)
+    query_set = Circuit.objects.filter(Author=request.user)
     saves = [{
         'id': x.id,
         'name': x.Name,
         'description': x.Description,
         'author': x.Author.id if x.Author != None else None
-        } for x in query_set]
+    } for x in query_set]
     return JsonResponse({
-            'status': 1,
-            'circuits': saves})
+        'status': 1,
+        'circuits': saves})
 
 
 import numpy as np
+
 
 def simulation(request):
     '''
@@ -705,12 +720,15 @@ def simulation(request):
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 def plasmid_data(request):
-    
+
     with open(os.path.join(BASE_DIR, 'tools/plasmidData.json')) as f:
-        return JsonResponse({ 'data': json.load(f) })
+        return JsonResponse({'data': json.load(f)})
 
 # transform json data to sbol document
+
+
 @csrf_exempt
 def get_sbol_doc(request):
     if request.method == 'POST':
@@ -797,9 +815,10 @@ def get_sbol_doc(request):
             for index, stimulation in enumerate(data['stimulations']):
                 stimulatorName = stimulation['stimulator']
                 otherName = stimulation['other']
-                
+
                 if not stimulatorName in pro_fcs.keys():
-                    stimulator_fc = proModule.functionalComponents.create(stimulatorName)
+                    stimulator_fc = proModule.functionalComponents.create(
+                        stimulatorName)
                     stimulator_fc.definition = components[stimulatorName].identity
                     stimulator_fc.access = SBOL_ACCESS_PUBLIC
                     stimulator_fc.direction = SBOL_DIRECTION_IN_OUT
@@ -812,14 +831,17 @@ def get_sbol_doc(request):
                     other_fc.direction = SBOL_DIRECTION_IN_OUT
                     pro_fcs[otherName] = other_fc
 
-                proInteraction = proModule.interactions.create('stimulation_' + str(index))
+                proInteraction = proModule.interactions.create(
+                    'stimulation_' + str(index))
                 proInteraction.types = SBO_STIMULATION
 
-                stimulator_participation = proInteraction.participations.create(stimulatorName)
+                stimulator_participation = proInteraction.participations.create(
+                    stimulatorName)
                 stimulator_participation.roles = SBO_STIMULATOR
                 stimulator_participation.participant = pro_fcs[stimulatorName].identity
 
-                other_participation = proInteraction.participations.create(otherName)
+                other_participation = proInteraction.participations.create(
+                    otherName)
                 other_participation.roles = components[otherName].roles
                 other_participation.participant = pro_fcs[otherName].identity
 
@@ -831,9 +853,10 @@ def get_sbol_doc(request):
             for index, inhibition in enumerate(data['inhibitions']):
                 inhibitorName = inhibition['inhibitor']
                 otherName = inhibition['other']
-                
+
                 if not inhibitorName in inh_fcs.keys():
-                    inhibitor_fc = inhModule.functionalComponents.create(inhibitorName)
+                    inhibitor_fc = inhModule.functionalComponents.create(
+                        inhibitorName)
                     inhibitor_fc.definition = components[inhibitorName].identity
                     inhibitor_fc.access = SBOL_ACCESS_PUBLIC
                     inhibitor_fc.direction = SBOL_DIRECTION_IN_OUT
@@ -846,14 +869,17 @@ def get_sbol_doc(request):
                     other_fc.direction = SBOL_DIRECTION_IN_OUT
                     inh_fcs[otherName] = other_fc
 
-                inhInteraction = inhModule.interactions.create('inhibition_' + str(index))
+                inhInteraction = inhModule.interactions.create(
+                    'inhibition_' + str(index))
                 inhInteraction.types = SBO_INHIBITION
 
-                inhibitor_participation = inhInteraction.participations.create(inhibitorName)
+                inhibitor_participation = inhInteraction.participations.create(
+                    inhibitorName)
                 inhibitor_participation.roles = SBO_INHIBITOR
                 inhibitor_participation.participant = inh_fcs[inhibitorName].identity
 
-                other_participation = inhInteraction.participations.create(otherName)
+                other_participation = inhInteraction.participations.create(
+                    otherName)
                 other_participation.roles = components[otherName].roles
                 other_participation.participant = inh_fcs[otherName].identity
 
@@ -863,19 +889,22 @@ def get_sbol_doc(request):
             doc.addModuleDefinition(comModule)
 
             for index, combination in enumerate(data['combinations']):
-                comInteraction = comModule.interactions.create('combination_' + str(index))
+                comInteraction = comModule.interactions.create(
+                    'combination_' + str(index))
                 comInteraction.role = SBO_NONCOVALENT_BINDING
                 for reactant in combination['reactants']:
                     if not reactant in com_fcs.keys():
-                        reactant_fc = comModule.functionalComponents.create(reactant)
+                        reactant_fc = comModule.functionalComponents.create(
+                            reactant)
                         reactant_fc.definition = components[reactant].identity
                         reactant_fc.access = SBOL_ACCESS_PUBLIC
                         reactant_fc.direction = SBOL_DIRECTION_IN_OUT
                         com_fcs[reactant] = reactant_fc
-                    reactant_participation = comInteraction.participations.create(reactant)
+                    reactant_participation = comInteraction.participations.create(
+                        reactant)
                     reactant_participation.roles = SBO_REACTANT
                     reactant_participation.participant = com_fcs[reactant].identity
-                
+
                 product = combination['product']
                 if not product in com_fcs.keys():
                     product_fc = comModule.functionalComponents.create(product)
@@ -883,10 +912,10 @@ def get_sbol_doc(request):
                     product_fc.access = SBOL_ACCESS_PUBLIC
                     product_fc.direction = SBOL_DIRECTION_IN_OUT
                     com_fcs[product] = product_fc
-                    product_participation = comInteraction.participations.create(product)
+                    product_participation = comInteraction.participations.create(
+                        product)
                     product_participation.roles = SBO_PRODUCT
                     product_participation.participant = com_fcs[product].identity
-            
 
         # create sbol document
         circuit_name = data['circuit']['name']
@@ -894,7 +923,7 @@ def get_sbol_doc(request):
         result = doc.write(filename)
         print(result)
 
-        response = HttpResponse(open(filename,"rb"),content_type="text/xml")
+        response = HttpResponse(open(filename, "rb"), content_type="text/xml")
 
         if os.path.exists(filename):
             os.remove(filename)
@@ -1062,6 +1091,7 @@ sbo_dict = {
     'http://identifiers.org/biomodels.sbo/SBO:0000604': 'sideSubstrate'
 }
 
+
 @csrf_exempt
 def get_sbol_json(request):
     if request.method == 'POST':
@@ -1095,7 +1125,7 @@ def get_sbol_json(request):
                 line = {
                     "structure": []
                 }
-                if temp.roles: # components
+                if temp.roles:  # components
                     roleUri = temp.roles[0]
                     if (roleUri in so_dict.keys()):
                         component['role'] = so_dict[roleUri]
@@ -1105,23 +1135,29 @@ def get_sbol_json(request):
                     component['description'] = temp.description
                     sequenceUri = temp.sequences
                     if sequenceUri:
-                        component['sequence'] = doc.getSequence(sequenceUri[0]).elements
+                        component['sequence'] = doc.getSequence(
+                            sequenceUri[0]).elements
                     data['components'].append(component)
-                else: # lines
+                else:  # lines
                     line['name'] = temp.displayId
                     line_comp = {}
                     for comp in temp.components:
-                        line_comp[str(comp)] = doc.getComponentDefinition(comp.definition).displayId
+                        line_comp[str(comp)] = doc.getComponentDefinition(
+                            comp.definition).displayId
                     if temp.sequenceConstraints:
                         for index, constraint in enumerate(temp.sequenceConstraints):
                             if (index == 0):
-                                line['structure'].append(line_comp[constraint.subject])
-                                line['structure'].append(line_comp[constraint.object])
+                                line['structure'].append(
+                                    line_comp[constraint.subject])
+                                line['structure'].append(
+                                    line_comp[constraint.object])
                             else:
-                                line['structure'].append(line_comp[constraint.object])
+                                line['structure'].append(
+                                    line_comp[constraint.object])
                     else:
                         for comp in temp.components:
-                            line['structure'].append(doc.getComponentDefinition(comp.definition).displayId)
+                            line['structure'].append(
+                                doc.getComponentDefinition(comp.definition).displayId)
 
                     data['lines'].append(line)
             elif 'ModuleDefinition' in str(x):
@@ -1178,6 +1214,7 @@ CHASSIS_FORMAT = [
     '15: Blepharisma Nuclear Code'
 ]
 
+
 def chassis(request):
     if request.method == 'GET':
         return JsonResponse({
@@ -1185,12 +1222,15 @@ def chassis(request):
             'chassis_format': CHASSIS_FORMAT,
             'chassis': [x.name for x in Chassis.objects.all()]
         })
-        
+
 
 def get_chassis_info(name, read_format):
-    return json.loads(Chassis.objects.filter(name = name)[0].data)[read_format]
+    return json.loads(Chassis.objects.filter(name=name)[0].data)[read_format]
+
 
 import re
+
+
 @csrf_exempt
 def analysis_sequence(request):
     '''
@@ -1230,22 +1270,28 @@ def analysis_sequence(request):
 
         # for CAI
         def dna2rna(ch):
-            if ch in 'aA': return 'U'
-            if ch in 'tT': return 'A'
-            if ch in 'cC': return 'G'
-            if ch in 'gG': return 'C'
+            if ch in 'aA':
+                return 'U'
+            if ch in 'tT':
+                return 'A'
+            if ch in 'cC':
+                return 'G'
+            if ch in 'gG':
+                return 'C'
             raise Exception('invalid dna seq format {}'.format(ch))
         rna = list(map(dna2rna, seq.strip()))
-        # break every 3 elements into groups 
+        # break every 3 elements into groups
         # rna_codon = ['XXX', 'XXX', 'XXX']
         rna_codon = [''.join(rna[i:i+3]) for i in range(0, len(rna), 3)]
         logger.debug("rna_codon %s", rna_codon)
-        chassis_codon_table = json.loads(Chassis.objects.get(name=chassis).data) # get the json
-        chassis_codon_table = chassis_codon_table[chassis_format] # get the mode
+        chassis_codon_table = json.loads(
+            Chassis.objects.get(name=chassis).data)  # get the json
+        # get the mode
+        chassis_codon_table = chassis_codon_table[chassis_format]
 
-        max_frequency = {} # map amino_acid(str) to frequency(float)
-        codon2amino_acid = {} # map codon(str) to amino_acid(str)
-        codon2frequency = {} # map codon(str) to frequency(float)
+        max_frequency = {}  # map amino_acid(str) to frequency(float)
+        codon2amino_acid = {}  # map codon(str) to amino_acid(str)
+        codon2frequency = {}  # map codon(str) to frequency(float)
         # init the above dicts
         for item in chassis_codon_table:
             codon = item['codon']
@@ -1254,13 +1300,14 @@ def analysis_sequence(request):
             if max_frequency.get(amino_acid) is None:
                 max_frequency[amino_acid] = float(f)
             else:
-                max_frequency[amino_acid] = max(max_frequency[amino_acid], float(f))
+                max_frequency[amino_acid] = max(
+                    max_frequency[amino_acid], float(f))
             codon2amino_acid[codon] = amino_acid
             codon2frequency[codon] = float(f)
         logger.debug('max_frequency %s', max_frequency)
         logger.debug('codon2amino_acid %s ', codon2amino_acid)
         logger.debug('codon2frequency %s ', codon2frequency)
-        
+
         # calculate CAI
         weights = []
         for codon in rna_codon:
@@ -1268,9 +1315,11 @@ def analysis_sequence(request):
             amino = codon2amino_acid[codon]
             max_f = max_frequency[amino]
             weights.append(f/max_f)
+
         def product(iter):
             acc = 1
-            for i in iter: acc *= i
+            for i in iter:
+                acc *= i
             return acc
         CAI = product(weights) ** (1/len(weights)) * 100
         logger.debug('CAI %s', CAI)

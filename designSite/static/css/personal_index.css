@@ -8,3 +8,7 @@
 th, tr, h5{
     text-align: center;
 }
+
+.tabular item {
+    font-weight: bold;
+}

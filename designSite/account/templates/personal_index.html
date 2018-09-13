@@ -11,13 +11,10 @@
   {% if user.is_authenticated %}
   <div class="ui inverted vertical masthead center aligned segment">
     <div class="ui container">
-      <div class="ui large secondary inverted pointing tabular menu">
+      <div class="ui large secondary inverted menu">
         <a class="item">
           <img id="logo" src="/static/img/logo.png">
         </a>
-        <a class="active item" data-tab="Parts">Parts</a>
-        <a class="item" data-tab="Circuits">Circuits</a>
-        <a class="item" data-tab="Shares">Shares</a>
         <div class="right item">
           <h5>Welcome, {{ user.username }}!</h5>
         </div>
@@ -31,17 +28,26 @@
       <h1 class="ui inverted header">
         <a href="/" style="color:white">CO-RAD</a>
       </h1>
-      <h2>Design and Collaborate, Analysis and Optimize.</h2>
-      <div id="design-button" class="ui huge primary button">
+      <h3>Design and Collaborate, Analysis and Optimize.</h3>
+      <!-- <div id="design-button" class="ui huge primary button">
         Make new Design
         <i class="right arrow icon"></i>
+      </div> -->
+    </div><br>
+
+    <div class="ui container">
+      <div class="ui fluid three item inverted pointing tabular menu">
+        <a class="center active item" data-tab="Parts">My Parts</a>
+        <a class="item" data-tab="Circuits">My Circuits</a>
+        <a class="item" data-tab="Shares">Shared Circuits</a>
+        <a class="item" href="/design">New Design</a>
       </div>
     </div>
   </div>
 
   <div class="ui bottom attached tab segment active" data-tab="Parts">
     <div class="ui content">
-      <h5>Parts</h5>
+      <h5>My Parts</h5>
       {% if parts %}
       <table class="ui sortable striped padded table" id="part-table">
         <thead>
@@ -64,12 +70,12 @@
       {% else %}
       <div class="ui divider"></div>
       <h5> You have no part added. </p>
-      {% endif %}
+        {% endif %}
     </div>
   </div>
   <div class="ui bottom attached tab segment" data-tab="Circuits">
     <div class="ui content">
-      <h5>Master Circuits</h5>
+      <h5>My Circuits</h5>
       {% if circuits %}
       <table class="ui sortable selectable striped padded table" id="master-table">
         <thead>

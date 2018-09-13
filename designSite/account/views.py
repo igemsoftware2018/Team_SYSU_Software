@@ -36,7 +36,6 @@ def takeTime(elem):
 
 @login_required
 def personal_index(request):
-    # TODO: query parts and circuits
     user = request.user
     username = user.username
     part_query = Parts.objects.filter(Username=username)
@@ -53,7 +52,7 @@ def personal_index(request):
 
     circuits = []
     for x in circuit_query:
-        circuit_list = Circuit.objects.filter(Name=x.Name).order_by('-Update_time')
+        circuit_list = Circuit.objects.filter(Name=x.Name).distinct().order_by('-Update_time')
         circuits.append({
             'ID': x.id,
             'Name': x.Name,
@@ -65,7 +64,7 @@ def personal_index(request):
     
     shared_circuits = []
     for x in authority_query:
-        circuit_list = Circuit.objects.filter(pk=x.Circuit_id).order_by('-Update_time')
+        circuit_list = Circuit.objects.filter(pk=x.Circuit_id).distinct().order_by('-Update_time')
         logger.debug(circuit_list)
         shared_circuits.append({
             'ID': circuit_list[0].id,

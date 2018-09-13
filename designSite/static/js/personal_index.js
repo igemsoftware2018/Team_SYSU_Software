@@ -14,8 +14,9 @@ $(function () {
 $('#logout').on('click', function () {
     window.location.href = '/logout';
 });
-$('#design-button').on('click', function () {
-    window.location.href = '/design';
-});
+
+// $('#design-button').on('click', function () {
+//     window.location.href = '/design';
+// });
 
 $('.tabular.menu .item').tab();

@@ -27,9 +27,9 @@ $.ajax({
 
 
 // Hide save button when creating a new design
-$(function() {
+$(function () {
     let t = window.location.href.split('/');
-    if (t[t.length - 1] == "design" || (t[t.length - 2] == "design" &&  t[t.length - 1] == ""))
+    if (t[t.length - 1] == "design" || (t[t.length - 2] == "design" && t[t.length - 1] == ""))
         $("#save-button").hide();
 })
 
@@ -41,7 +41,7 @@ if (designId !== '' && parseInt(designId) !== -1) {
     $.ajax(`/api/circuit?id=${designId}`, {
         type: 'GET',
         async: false,
-        success: function(value) {
+        success: function (value) {
             design = new SDinDesign('#canvas', value);
 
         }
@@ -65,8 +65,9 @@ function protocolShuffleStepID() {
         $ele.find('span').html(`step ${idx + 1}`);
     });
 }
+
 function protocolAddLastStepHook() {
-    $('#protocol-step-mountpoint').children().last().find('i[name=protocol-step-delete]').on('click', function() {
+    $('#protocol-step-mountpoint').children().last().find('i[name=protocol-step-delete]').on('click', function () {
         $(this).parent().parent().remove();
         protocolShuffleStepID();
     });
@@ -90,7 +91,7 @@ const protocolStepHelper = (i) => {
     `;
 };
 // protocol button
-$('#protocol-step-add').on('click', function() {
+$('#protocol-step-add').on('click', function () {
     let $mountpoint = $('#protocol-step-mountpoint');
     let length = $mountpoint.children().length;
     $mountpoint.append(protocolStepHelper(length));
@@ -98,16 +99,16 @@ $('#protocol-step-add').on('click', function() {
     protocolAddLastStepHook();
 
 });
-$(function() {
+$(function () {
     $('#protocol-step-add').click();
 });
-$('#protocol-submit').on('click', function() {
+$('#protocol-submit').on('click', function () {
     let $m = $('#protocol-modal');
     design._design.protocol.title = $m.find('[name=title]').val();
     design._design.protocol.description = $m.find('[name=description]').val();
     let $mp = $('#protocol-step-mountpoint');
     let step_titles = $mp.find('input');
-    let step_desc = $mp.find('textarea'); 
+    let step_desc = $mp.find('textarea');
 
     // WARNING: this zip only use here. never use elsewhere.
     const zip = (iter1, iter2) => {
@@ -152,7 +153,7 @@ $('#protocol-modal').modal({
             $m.find('[name=description]').val(design._design.protocol.description);
             let $mp = $('#protocol-step-mountpoint');
             let step_titles = $mp.find('input');
-            let step_desc = $mp.find('textarea'); 
+            let step_desc = $mp.find('textarea');
 
             let pl = design.design.protocol.steps.length;
             let ml = step_titles.length;
@@ -170,7 +171,7 @@ $('#protocol-modal').modal({
                 }
             }
             let new_step_titles = $mp.find('input');
-            let new_step_desc = $mp.find('textarea'); 
+            let new_step_desc = $mp.find('textarea');
             for (let i = 0; i < pl; ++i) {
                 new_step_titles.eq(i).val(design.design.protocol.steps[i].title);
                 new_step_desc.eq(i).val(design.design.protocol.steps[i].body);
@@ -440,10 +441,10 @@ $('#analysis-button').on('click', function () {
 }).popup({
     content: 'Analysis your design.'
 });
-$('#add-to-sequence-button').on('click', function() {
+$('#add-to-sequence-button').on('click', function () {
     let seq = $('#selected-part-sequence').html();
     console.log(seq);
-    $('#analysis-sequence').val(function(i, text) {
+    $('#analysis-sequence').val(function (i, text) {
         return text + seq;
     });
 });
@@ -631,10 +632,10 @@ $('#analysis-sequence-button').on('click', function () {
 
 // Share
 function refresh() {
-    $.get('/api/authority?circuit=' + design._id, function(res) {
+    $.get('/api/authority?circuit=' + design._id, function (res) {
         if (res.read.length > 0) {
             $('#view-users').html(`<div class="ui list">`);
-            res.read.forEach(function(ele) {
+            res.read.forEach(function (ele) {
                 $('#view-users').append(
                     `<div class="item">
                         <div class="content"><i class="users icon"></i>${ele}</div>
@@ -646,7 +647,7 @@ function refresh() {
         }
         if (res.write.length > 0) {
             $('#edit-users').html(`<div class="ui list">`);
-            res.write.forEach(function(ele) {
+            res.write.forEach(function (ele) {
                 $('#edit-users').append(
                     `<div class="item">
                         <div class="content"><i class="users icon"></i>${ele}</div>
@@ -658,7 +659,7 @@ function refresh() {
         }
     });
 }
-$('#share-button').on('click', function() {
+$('#share-button').on('click', function () {
     refresh();
     $('#share-tab .item').tab();
     $('#share-modal').modal({
@@ -685,18 +686,18 @@ $('#search-users-dropdown').dropdown({
 }).popup({
     content: 'Search a user (Case Sensitive)'
 });
-$('#share-view-button, #share-edit-button').on('click', function(event) {
+$('#share-view-button, #share-edit-button').on('click', function (event) {
     if (design._id == -1) {
         alert('Please save your design first');
     } else if ($('#search-users-dropdown').dropdown('get value').length > 0) {
-        let data = { 
+        let data = {
             users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
             circuit: JSON.stringify(design._id),
             authority: JSON.stringify(
                 event.target.innerText === 'Share view' ? 'read' : 'write'
             )
         };
-        $.post('/api/authority', data, function(v) {
+        $.post('/api/authority', data, function (v) {
             refresh();
             alert(v.msg);
         });
@@ -711,13 +712,13 @@ $('#save-button').on('click', () => {
 }).popup({
     content: 'Save your design to server.'
 });
-$('#save-as-new-button').on('click', function() {
+$('#save-as-new-button').on('click', function () {
     save_mode = 1;
     if (!$('#save-as-new-circuit-name').val()) {
         $('#save-as-new-circuit-name').attr("placeholder", design.name);
     }
     $('#save-as-new-modal').modal('show');
-    
+
 }).popup({
     content: 'Save as a new design to the server'
 });
@@ -730,9 +731,9 @@ $('#save-circuit, #save-as-new-circuit').on('click', () => {
     // design._design.name = $('#save-as-new-circuit-name').val();
     // design._design.description = $('#save-as-new-circuit-description').val();
     let postData = design.design;
-    postData.comment =  $('#update-comment').val();
-    postData.id = save_mode == 0 ? design._id: -1;
-    if (postData.id === -1){
+    postData.comment = $('#update-comment').val();
+    postData.id = save_mode == 0 ? design._id : -1;
+    if (postData.id === -1) {
         postData.description = $('#save-as-new-circuit-description').val();
         postData.name = $('#save-as-new-circuit-name').val();
     }
@@ -749,7 +750,7 @@ $('#save-circuit, #save-as-new-circuit').on('click', () => {
         if (v.status === 1)
             $('.ui.dimmer:first .loader').text(`Success, circuit ID = ${v.circuit_id}, closing...`);
         else
-            $('.ui.dimmer:first .loader').text( (v.status == -1 ? v.error_msg : 'Failed, closing...') );
+            $('.ui.dimmer:first .loader').text((v.status == -1 ? v.error_msg : 'Failed, closing...'));
         setTimeout(() => {
             $('.ui.dimmer:first').dimmer('hide');
         }, 3000);
@@ -777,7 +778,7 @@ $('#load-button').on('click', () => {
                 <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
                     <div class="text" id="circuit-filter"></div>
                     <i class="dropdown icon"></i>
-                </div>
+                </div><br>
                 <div class="ui button" id="filter-clear">Clear </div>
                 <div class="ui divider"></div>`
             );
@@ -802,25 +803,25 @@ $('#load-button').on('click', () => {
             });
             $('#circuit-filter-dropdown').dropdown({
                 values: filter_data,
-                onChange: function(value) {
+                onChange: function (value) {
                     if (value != '') {
-                        $('#load-modal .segment').each(function(index, item) {
+                        $('#load-modal .segment').each(function (index, item) {
                             // console.log($(this).data('name'));
                             if ($(this).data('name') != value) {
-                                $(this).attr("style","display:none;");
+                                $(this).attr("style", "display:none;");
                             } else {
-                                $(this).attr("style","display:block;");
+                                $(this).attr("style", "display:block;");
                             }
                         });
                     } else {
-                        $(this).attr("style","display:block;");
+                        $(this).attr("style", "display:block;");
                     }
                 }
             });
-            $('#filter-clear').on('click', function() {
+            $('#filter-clear').on('click', function () {
                 $('#circuit-filter-dropdown').dropdown('clear');
-                $('#load-modal .segment').each(function(index, item) {
-                    $(this).attr("style","display:block;");
+                $('#load-modal .segment').each(function (index, item) {
+                    $(this).attr("style", "display:block;");
                 });
             });
             $('#load-modal .segment').on('click', function () {
@@ -902,9 +903,9 @@ $('#ratio-dropdown')
 
 
 $('#gene-type-dropdown').dropdown({
-    values: (function(){
+    values: (function () {
         let ret = []
-        SDinDesign.partTypes.forEach(function(element, i){
+        SDinDesign.partTypes.forEach(function (element, i) {
             if (SDinDesign.isGene(element))
                 ret.push({
                     name: element,
@@ -917,9 +918,9 @@ $('#gene-type-dropdown').dropdown({
 });
 
 $('#material-type-dropdown').dropdown({
-    values: (function(){
+    values: (function () {
         let ret = []
-        SDinDesign.partTypes.forEach(function(element, i){
+        SDinDesign.partTypes.forEach(function (element, i) {
             if (!SDinDesign.isGene(element))
                 ret.push({
                     name: element,
@@ -1355,13 +1356,13 @@ $('#add-part-button').on('click', function () {
 
 let addedPartType; // 0 -- Gene, 1 -- Material
 
-$('#add-gene-button').on('click', function() {
+$('#add-gene-button').on('click', function () {
     $('#choose-added-part-type').modal('hide');
     addedPartType = 0;
     $('#new-gene-modal').modal('show');
 })
 
-$('#add-material-button').on('click', function() {
+$('#add-material-button').on('click', function () {
     $('#choose-added-part-type').modal('hide');
     addedPartType = 1;
     $('#new-material-modal').modal('show');
@@ -1387,7 +1388,7 @@ $('#add-new-gene, #add-new-material')
                 sequence: "",
                 subparts: [],
             }
-        
+
         $('#new-gene-modal, #new-material-modal').modal('hide');
         $('.ui.dimmer:first .loader')
             .text('Requesting server to add the new part, please wait...');
@@ -1466,15 +1467,15 @@ $('#chassis-item')
         $('.SDinDesign-device').off('click');
         $('.SDinDesign-device')
             .off('mouseenter')
-            .on('mouseenter', function() {
+            .on('mouseenter', function () {
                 design.highlightDevice($(this), 0.4);
             })
             .off('mouseleave')
-            .on('mouseleave', function() {
+            .on('mouseleave', function () {
                 design.unHighlightDevice($(this));
             })
             .off('click')
-            .on('click', function(){
+            .on('click', function () {
                 $('#set-chassis-modal').modal('show');
             });
     })
@@ -1938,7 +1939,7 @@ $('#chassis-dropdown').dropdown(
     content: 'Choose your chassis.'
 });
 
-$('#set-chassis-button').on('click', ()=>{
+$('#set-chassis-button').on('click', () => {
     $('#set-chassis-modal').modal('hide');
 })
 
