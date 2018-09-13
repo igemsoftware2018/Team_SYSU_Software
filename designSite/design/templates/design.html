@@ -51,9 +51,9 @@
           <img src="/static/img/design/delete.png" />
         </a>
         <a id="chassis-item">
-            <!-- TODO: change this image please -->
-            <img src="/static/img/design/delete.png" />
-          </a>
+          <!-- TODO: change this image please -->
+          <img src="/static/img/design/delete.png" />
+        </a>
       </span>
 
       <div id="toolbox" class="ui menu">
@@ -127,7 +127,7 @@
     <a class="item" id="save-button">
       <img src="/static/img/design/save.png">
     </a>
-    <a class="item" id="save-as-new-button">  
+    <a class="item" id="save-as-new-button">
       <img src="/static/img/design/save.png">
     </a>
     <a class="item" id="export-button">
@@ -239,7 +239,7 @@
           <label>Gene Sequence</label>
           <textarea name="gene-sequence" id="gene-sequence" placeholder="Sequence"></textarea>
         </div>
-      </form> 
+      </form>
     </div>
     <div class="actions">
       <div class="ui one bottom attached big buttons">
@@ -250,31 +250,31 @@
 
   <!-- Creating new material modal -->
   <div id="new-material-modal" class="ui tiny modal">
-      <div class="content">
-        <form class="ui form">
-          <div class="field">
-            <label>Name</label>
-            <input type="text" name="name" id="material-name" placeholder="Material Name">
-          </div>
-          <div class="field">
-            <label>Description</label>
-            <textarea id="material-description" rows=2 placeholder="Description"></textarea>
-          </div>
-          <div class="field">
-            <label>Type</label>
-            <div class="ui floating selection dropdown" id="material-type-dropdown">
-              <i class="dropdown icon"></i>
-              <div class="default text">Material type</div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="actions">
-        <div class="ui one bottom attached big buttons">
-          <div id="add-new-material" class="ui white button">Add this material to database!</div>
+    <div class="content">
+      <form class="ui form">
+        <div class="field">
+          <label>Name</label>
+          <input type="text" name="name" id="material-name" placeholder="Material Name">
         </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="material-description" rows=2 placeholder="Description"></textarea>
+        </div>
+        <div class="field">
+          <label>Type</label>
+          <div class="ui floating selection dropdown" id="material-type-dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Material type</div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="add-new-material" class="ui white button">Add this material to database!</div>
       </div>
     </div>
+  </div>
 
   <!-- click and get part's detail modal -->
   <div id="inspect-item-modal" class="ui tiny modal">
@@ -378,8 +378,8 @@
         </div>
 
         <div class="field" id="protocol-step-mountpoint">
-        <!-- step item here -->
-  
+          <!-- step item here -->
+
         </div>
 
         <div class="ui right floated primary button" id="protocol-step-add"> Add </div>
@@ -521,147 +521,167 @@
   <!-- Load modal -->
   <div id="load-modal" class="ui tiny modal">
     <div class="content"></div>
-  </div><div class="actions">
-      <div class="ui one bottom attached big buttons">
-        <div id="save-as-new-circuit" class="ui white button">Save my new circuit!</div>
-      </div>
-    </div>
+  </div>
 
   <!-- Share modal -->
   <div id="share-modal" class="ui tiny modal">
     <div class="content">
-      <select id="search-users-dropdown" class="ui fluid search dropdown"  multiple="">
-        <i class="dropdown icon"></i>
-        <div class="default text">Search User...</div>
-      </select>{% csrf_token %}
+      <div class="ui vertical masthead center aligned segment">
+        <div class="ui container">
+          <div class="ui tabular menu" id="share-tab">
+            <a class="active item" data-tab="View">View</a>
+            <a class="item" data-tab="Edit">Edit</a>
+          </div>
+        </div><br>
 
-      <div class="ui divider"></div>
-      
-      <h5 id="share-info"></h5>
+        <select id="search-users-dropdown" class="ui fluid search dropdown" multiple="">
+          <i class="dropdown icon"></i>
+          <div class="default text">Search User...</div>
+        </select>{% csrf_token %}
 
-      <div class="ui divider"></div>
+        <div class="ui divider"></div>
 
-      <div class="ui primary button" id="share-view-button">Share view</div>
-      <div class="ui primary button" id="share-edit-button">Share edit</div>
-    </div>
-  </div>
+        <div class="ui bottom attached tab segment active" data-tab="View">
+          <div class="ui content">
+            <h5 class="ui center aligned">Viewers</h5>
 
-  <!-- High risk modal -->
-  <div id="safety-modal" class="ui basic modal">
-    <div class="ui icon header">
-      <i class="checkmark icon"></i>
-      You have finished your circuit, congratulations!
-    </div>
-    <div class="content">
-      <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in
-        real world
-        application.
-      </p>
-    </div>
-    <div class="actions">
-      <div class="ui red basic cancel inverted button">
-        <i class="left chevron icon"></i>
-        Back to design
-      </div>
-      <div class="ui green ok inverted button" id="continue-save">
-        Continue to save
-        <i class="right chevron icon"></i>
-      </div>
-    </div>
-  </div>
+            <div class="ui divider"></div>
 
-  <!-- Chassis modal -->
-  <div id="set-chassis-modal" class="ui tiny modal">
-    <div class="content">
-      <h5>Chassis</h5>
-      <div class="ui compact floating selection dropdown" id="chassis-dropdown">
-        <div class="text" id="chassis"></div>
-        <i class="dropdown icon"></i>
-      </div>
-    </div>
-    <div class="actions">
-      <div class="ui one bottom attached big buttons">
-        <div id="set-chassis-button" class="ui white button">Confirm</div>
-      </div>
-    </div>
-  </div>
+            <div id="view-users"></div><br>
 
-  <!-- Plasmid modal -->
-  <!--   from 2015 SYSU-Software C.O.R.E. -->
-  <div id="plasmid-modal" class="ui tiny modal">
-    <div ng-app="myApp" ng-controller="PlasmidCtrl">
-      <div class="content">
-        <div class="plasmid-container">
-          <plasmidapi name="api"></plasmidapi>
-          <plasmid id="pdemo" sequencelength="{[currentPlasmid.length]}" plasmidheight="420" plasmidwidth="500">
-            <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="120">
-              <tracklabel text="{[currentPlasmid.name]}" labelstyle='font-size:20px;font-weight:400'></tracklabel>
-              <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
-
-              <!-- draw the plasmid bone markers and labels -->
-              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4"
-                arrowstartlength="-4" markerstyle="{[m.markerStyleIn]}">
-                <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}"
-                  showline="1" linevadjust="-5" lineclass="labelline" style='font-size:17px'></markerlabel>
-              </trackmarker>
-
-              <!-- draw the marker regions -->
-              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.markerStyleOut]}"
-                wadjust="-5" vadjust="25"></trackmarker>
-              <trackscale interval="100" style='stroke:#999' ticksize="3"></trackscale>
-            </plasmidtrack>
-
-            <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="110" width="10">
-              <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}"
-                sequence="{[m.sequence]}" ng-mousedown="showSequence(m)">
-                <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
-                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}"
-                  wadjust="-5" vadjust="-5"></trackmarker>
-              </trackmarker>
-              <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
-            </plasmidtrack>
-          </plasmid>
-          <div class="p" ng-hide="myHide" ng-model="myValue" style="padding: 10px; font-size: 1rem; line-height: 1.2rem; word-wrap: break-word">
-            {[myValue]}
+            <div class="ui primary button" id="share-view-button">Share view</div>
           </div>
         </div>
 
-        <div class="plasmid-edit">
-          <form class="ui form">
-            <div class="field">
-              <select class="ui dropdown" ng-model="curPlaIndex" ng-options="plasmids.indexOf(a) as a.name for a in plasmids">
-                <option value="">Choose a plasmid</option>
-              </select>
-            </div>
-            <div class="field">
-              <select class="ui dropdown" ng-model="curPartType" ng-options="x for x in partType">
-                <option value="">Choose a part type </option>
-              </select>
-            </div>
-            <div class="field">
-              <input placeholder="Part name" id="plasmid-part-name" type="text" ng-model="curPartName">
-            </div>
-            <div class="field">
-              <input placeholder="Part begin" id="plasmid-part-begin" type="text" ng-model="currentPartBegin">
-            </div>
-            <div class="field">
-              <input placeholder="Part end" id="plasmid-part-end" type="text" ng-model="curPartEnd">
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="actions">
-        <div class="ui three bottom attached big buttons">
-          <div class="ui white button" ng-click="addNewPart()">ADD</div>
-          <div class="ui white button" ng-click="goBack()">BACK</div>
-          <div class="ui white button" ng-click="clearAllPart()">RESET</div>
+        <div class="ui bottom attached tab segment" data-tab="Edit">
+          <div class="ui content">
+            <h5 class="ui center aligned">Editors</h5>
+
+            <div class="ui divider"></div>
+
+            <div id="edit-users"></div><br>
+
+            <div class="ui primary button" id="share-edit-button">Share edit</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- High risk modal -->
+    <div id="safety-modal" class="ui basic modal">
+      <div class="ui icon header">
+        <i class="checkmark icon"></i>
+        You have finished your circuit, congratulations!
+      </div>
+      <div class="content">
+        <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in
+          real world
+          application.
+        </p>
+      </div>
+      <div class="actions">
+        <div class="ui red basic cancel inverted button">
+          <i class="left chevron icon"></i>
+          Back to design
+        </div>
+        <div class="ui green ok inverted button" id="continue-save">
+          Continue to save
+          <i class="right chevron icon"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chassis modal -->
+    <div id="set-chassis-modal" class="ui tiny modal">
+      <div class="content">
+        <h5>Chassis</h5>
+        <div class="ui compact floating selection dropdown" id="chassis-dropdown">
+          <div class="text" id="chassis"></div>
+          <i class="dropdown icon"></i>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui one bottom attached big buttons">
+          <div id="set-chassis-button" class="ui white button">Confirm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plasmid modal -->
+    <!--   from 2015 SYSU-Software C.O.R.E. -->
+    <div id="plasmid-modal" class="ui tiny modal">
+      <div ng-app="myApp" ng-controller="PlasmidCtrl">
+        <div class="content">
+          <div class="plasmid-container">
+            <plasmidapi name="api"></plasmidapi>
+            <plasmid id="pdemo" sequencelength="{[currentPlasmid.length]}" plasmidheight="420" plasmidwidth="500">
+              <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="120">
+                <tracklabel text="{[currentPlasmid.name]}" labelstyle='font-size:20px;font-weight:400'></tracklabel>
+                <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
+
+                <!-- draw the plasmid bone markers and labels -->
+                <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4"
+                  arrowstartlength="-4" markerstyle="{[m.markerStyleIn]}">
+                  <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}"
+                    showline="1" linevadjust="-5" lineclass="labelline" style='font-size:17px'></markerlabel>
+                </trackmarker>
+
+                <!-- draw the marker regions -->
+                <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.markerStyleOut]}"
+                  wadjust="-5" vadjust="25"></trackmarker>
+                <trackscale interval="100" style='stroke:#999' ticksize="3"></trackscale>
+              </plasmidtrack>
+
+              <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="110" width="10">
+                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}"
+                  sequence="{[m.sequence]}" ng-mousedown="showSequence(m)">
+                  <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
+                  <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}"
+                    wadjust="-5" vadjust="-5"></trackmarker>
+                </trackmarker>
+                <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
+              </plasmidtrack>
+            </plasmid>
+            <div class="p" ng-hide="myHide" ng-model="myValue" style="padding: 10px; font-size: 1rem; line-height: 1.2rem; word-wrap: break-word">
+              {[myValue]}
+            </div>
+          </div>
+
+          <div class="plasmid-edit">
+            <form class="ui form">
+              <div class="field">
+                <select class="ui dropdown" ng-model="curPlaIndex" ng-options="plasmids.indexOf(a) as a.name for a in plasmids">
+                  <option value="">Choose a plasmid</option>
+                </select>
+              </div>
+              <div class="field">
+                <select class="ui dropdown" ng-model="curPartType" ng-options="x for x in partType">
+                  <option value="">Choose a part type </option>
+                </select>
+              </div>
+              <div class="field">
+                <input placeholder="Part name" id="plasmid-part-name" type="text" ng-model="curPartName">
+              </div>
+              <div class="field">
+                <input placeholder="Part begin" id="plasmid-part-begin" type="text" ng-model="currentPartBegin">
+              </div>
+              <div class="field">
+                <input placeholder="Part end" id="plasmid-part-end" type="text" ng-model="curPartEnd">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="actions">
+          <div class="ui three bottom attached big buttons">
+            <div class="ui white button" ng-click="addNewPart()">ADD</div>
+            <div class="ui white button" ng-click="goBack()">BACK</div>
+            <div class="ui white button" ng-click="clearAllPart()">RESET</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 </body>
-<script src="/static/js/vue.js"></script>
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
 <script src="/static/js/jquery.mousewheel.min.js"></script>

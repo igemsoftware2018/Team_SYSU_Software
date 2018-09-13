@@ -144,9 +144,9 @@ def authority(request):
     '''
     POST method with json:
     {
+        users: [xxx, xxx(username)],
         circuit: xxx,
-        read: [xxx, xxx(username)],
-        write: [xxx, xxx(username)]
+        authority: xxx
     }
     return json:
     {
@@ -165,16 +165,15 @@ def authority(request):
 
     '''
     if request.method == 'POST':
-        reads = json.loads(request.POST['read'])
-        writes = json.loads(request.POST['write'])
+        users = json.loads(request.POST['users'])
         circuit = Circuit.objects.get(id=request.POST['circuit'])
+        auth_str = json.loads(request.POST['authority'])
         Authorities.objects.filter(Circuit=circuit).delete()
-        for username in reads + writes:
+        for username in users:
             if username == request.user.username:
                 logger.debug('same user %s, skip', username)
                 continue
             user = User.objects.get(username=username)
-            auth_str = "write" if username in writes else "read"
             Authorities.objects.create(
                 User = user,
                 Circuit = circuit,
@@ -189,7 +188,7 @@ def authority(request):
         try:
             read = []
             write = []
-            designID = int(designID)
+            logger.debug(designID)
             circuit = Circuit.objects.get(pk=designID)
             authorities_query = Authorities.objects.filter(Circuit=circuit)
             for authority in authorities_query:
@@ -203,7 +202,7 @@ def authority(request):
             })
         except:
             traceback.print_exc()
-            return JsonResopense({
+            return JsonResponse({
                 'read': [],
                 'write': []
             })

@@ -259,7 +259,7 @@ class SDinDesign {
         return data;
     }
     set design(design) {
-        console.log(design);
+        // console.log(design);
         this._jsPlumb.deleteEveryConnection();
         $('.SDinDesign-part, .SDinDesign-device').remove();
 

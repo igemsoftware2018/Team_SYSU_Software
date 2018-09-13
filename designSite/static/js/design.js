@@ -628,16 +628,51 @@ $('#analysis-sequence-button').on('click', function () {
     });
 });
 
+
 // Share
+function refresh() {
+    $.get('/api/authority?circuit=' + design._id, function(res) {
+        if (res.read.length > 0) {
+            $('#view-users').html(`<div class="ui list">`);
+            res.read.forEach(function(ele) {
+                $('#view-users').append(
+                    `<div class="item">
+                        <div class="content"><i class="users icon"></i>${ele}</div>
+                    </div>`);
+            });
+            $('#view-users').append(`</div>`);
+        } else {
+            $('#view-users').html('<h5 class="ui center aligned">Share your design to others!</h5>');
+        }
+        if (res.write.length > 0) {
+            $('#edit-users').html(`<div class="ui list">`);
+            res.write.forEach(function(ele) {
+                $('#edit-users').append(
+                    `<div class="item">
+                        <div class="content"><i class="users icon"></i>${ele}</div>
+                    </div>`);
+            });
+            $('#edit-users').append(`</div>`);
+        } else {
+            $('#edit-users').html('<h5 class="ui center aligned">Share your design to others!</h5>');
+        }
+    });
+}
 $('#share-button').on('click', function() {
-    $('#share-modal').modal('show');
+    refresh();
+    $('#share-tab .item').tab();
+    $('#share-modal').modal({
+        onHide: function () {
+            $('#search-users-dropdown').dropdown('clear');
+        }
+    }).modal('show');
 });
 $('#search-users-dropdown').dropdown({
     apiSettings: {
         url: '/api/users?username={query}',
         cache: false,
         beforeSend: (settings) => {
-            return settings.urlData.query.length < 0 ? false : settings;
+            return settings.urlData.query.length < 1 ? false : settings;
         },
         onResponse: (response) => ({
             success: response.success === true,
@@ -650,41 +685,26 @@ $('#search-users-dropdown').dropdown({
 }).popup({
     content: 'Search a user (Case Sensitive)'
 });
-$('#share-view-button').on('click', function() {
+$('#share-view-button, #share-edit-button').on('click', function(event) {
     if (design._id == -1) {
         alert('Please save your design first');
-    } else {
+    } else if ($('#search-users-dropdown').dropdown('get value').length > 0) {
         let data = { 
             users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
             circuit: JSON.stringify(design._id),
-            authority: JSON.stringify('read')
+            authority: JSON.stringify(
+                event.target.innerText === 'Share view' ? 'read' : 'write'
+            )
         };
-        console.log(data);
         $.post('/api/authority', data, function(v) {
-            $('#share-info').html(v.msg);
+            refresh();
+            alert(v.msg);
         });
     }
 });
-$('#share-edit-button').on('click', function() {
-    if (design._id == -1) {
-        alert('Please save your design first');
-    } else {
-        let data = { 
-            users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
-            circuit: JSON.stringify(design._id),
-            authority: JSON.stringify('write')
-        };
-        console.log(data);
-        $.post('/api/authority', data, function(v) {
-            $('#share-info').html(v.msg);
-        });
-    }
-});
-
 
 $('#save-button').on('click', () => {
     save_mode = 0;
-    // $('#safety-modal').modal('show');
     $('#save-circuit-name').val(design.name);
     $('#save-circuit-description').val(design.description);
     $('#save-modal').modal('show');
@@ -697,7 +717,6 @@ $('#save-as-new-button').on('click', function() {
         $('#save-as-new-circuit-name').attr("placeholder", design.name);
     }
     $('#save-as-new-modal').modal('show');
-    // $('#safety-modal').modal('show');
     
 }).popup({
     content: 'Save as a new design to the server'

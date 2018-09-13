@@ -63,7 +63,7 @@ app.controller('PlasmidCtrl', function($scope, $http){
 
     // 获得质粒数据
     $http.get('/api/plasmid_data').then(function(data){
-        console.log(data);
+        // console.log(data);
         $scope.plasmids = data.data.data;
     });
     $scope.$watch('curPlaIndex', function(newValue,oldValue, scope) {

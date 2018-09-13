@@ -403,3 +403,8 @@ div h5,
 #analysis-modal .selection.dropdown {
   width: 100%;
 }
+
+.tab {
+  padding: 0 !important;
+  border: 0 !important;
+}
