@@ -71,6 +71,7 @@ def personal_index(request):
             'Name': circuit_list[0].Name,
             'Author': circuit_list[0].Author.username if not circuit_list[0].Editor is None else 'None',
             'Description': circuit_list[0].Description,
+            'Authority': x.Authority,
             'LastEditor': circuit_list[0].Editor.username if not circuit_list[0].Editor is None else 'None',
             'LastUpdateTime': circuit_list[0].Update_time
         })
