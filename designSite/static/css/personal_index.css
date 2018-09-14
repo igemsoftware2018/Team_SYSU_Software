@@ -1,5 +1,6 @@
 #master-table tbody:hover,
-#share-table tbody:hover {
+#share-table tbody:hover, 
+#circuits-table tbody:hover {
     border-color: rgba(255,0,0,0.3);
     background-color: rgba(255,0,0,0.05);
     cursor: pointer;

@@ -89,7 +89,7 @@
           </tr>
         </thead>
         {% for circuit in circuits %}
-        <tbody data-id="{{ circuit.ID }}">
+        <tbody data-name="{{ circuit.Name }}">
           <td>{{ circuit.ID }}</td>
           <td>{{ circuit.Name }}</td>
           <td>{{ circuit.Author }}</td>
@@ -122,7 +122,7 @@
           </tr>
         </thead>
         {% for circuit in share %}
-        <tbody data-id="{{ circuit.ID }}">
+        <tbody data-name="{{ circuit.Name }}">
           <td>{{ circuit.ID }}</td>
           <td>{{ circuit.Name }}</td>
           <td>{{ circuit.Author }}</td>
@@ -137,6 +137,14 @@
       <div class="ui divider"></div>
       <h5> You have no shared circuit.</h5>
       {% endif %}
+    </div>
+  </div>
+
+  <div id="circuits-modal" class="ui modal">
+    <div class="ui content">
+      <h5></h5>
+      <table class="ui sortable selectable striped padded table" id="circuits-table">
+      </table>
     </div>
   </div>
 

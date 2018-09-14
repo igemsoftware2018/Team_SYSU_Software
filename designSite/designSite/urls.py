@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'api/authority$', design_views.authority),
     url(r'api/parts$', design_views.parts),
     url(r'api/part$', design_views.part),
+    url(r'api/circuits$', design_views.circuits),
     url(r'api/circuit$', design_views.circuit),
     url(r'api/get_saves$', design_views.get_saves),
     url(r'api/interact$', design_views.interact),

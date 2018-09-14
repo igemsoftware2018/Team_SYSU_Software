@@ -447,13 +447,45 @@ def interact(request):
 
 
 # Circuit related views
+def circuits(request):
+    '''
+    GET method with param:
+        name=xxx
+    return json:{
+        name: xxx,
+        circuits: [{
+            ID: xxx,
+            Editor: xxx,
+            UpdateTime: xxx,
+            Comment: xxx
+        }]
+    }
+    '''
+    name = json.loads(request.GET['name'])
+    circuit_query = Circuit.objects.filter(Name=name)
+    circuits = [{
+        'ID': x.id,
+        'Editor': x.Editor.username if not x.Editor is None else 'None',
+        'UpdateTime': x.Update_time,
+        'Comment': x.Comment
+    } for x in circuit_query]
+
+    return JsonResponse({
+        'name': name,
+        'circuits': circuits
+    })
+
 
 def circuit(request):
     '''
-    !!!!! The following return format is out-of-date!!!!!!
     GET method with param:
         id=xxx
     return json:{
+        status: 1,
+        id: xxx,
+        name: xxx,
+        description: xxx,
+        comment: xxx,
         parts: [{
             'id': xxx, # id of part on Parts table
             'cid': xxx, # id for circuit, used in lines
