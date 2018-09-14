@@ -1582,6 +1582,7 @@ $('#connection-dropdown')
 $('#connection-dropdown-button')
     .on('click', () => {
         selectMode('addConnection');
+        newConnectionType = 'stimulation';
     })
     .on('select', () => {
         console.log('Begin adding new connection.');
