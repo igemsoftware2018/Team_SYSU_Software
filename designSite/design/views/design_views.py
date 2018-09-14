@@ -90,7 +90,8 @@ def share_design(request):
     logger.debug('share request at %s', designID)
     context = {
         'type_list': TYPE_LIST,
-        'designID': designID
+        'designID': designID,
+        'write_authority': False
     }
 
     # check whether this id exists
@@ -107,7 +108,10 @@ def share_design(request):
 
     # check authorities
     try:
-        Authorities.objects.get(User=request_user, Circuit=circuit)
+        authority_query = Authorities.objects.get(User=request_user, Circuit=circuit)
+        logger.debug('share authority is <%s> ', authority_query.Authority)
+        if authority_query.Authority == 'write':
+            context['write_authority'] = True
     except ObjectDoesNotExist:
         return HttpResponseForbidden()
     return render(request, 'design.html', context)
