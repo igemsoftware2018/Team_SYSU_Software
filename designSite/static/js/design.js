@@ -3,6 +3,8 @@
 /* eslint-disable no-console */
 /* global SDinDesign, Chart, html2canvas echarts*/
 
+$.getScript('/static/js/echarts.js');
+
 let NUM_OF_TYPE = 20;
 
 let designId = $('#canvas-box').attr('design-id');
