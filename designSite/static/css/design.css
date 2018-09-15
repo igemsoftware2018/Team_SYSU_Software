@@ -410,3 +410,8 @@ div h5,
   padding: 0 !important;
   border: 0 !important;
 }
+
+#username {
+  margin-right: 1.5em;
+  color: white;
+}

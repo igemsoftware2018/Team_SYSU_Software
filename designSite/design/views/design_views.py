@@ -78,7 +78,8 @@ TYPE_LIST = ['CDS', 'RBS', 'promoter', 'terminator', 'material',
 def design(request):
     context = {
         'type_list': TYPE_LIST,
-        'designID': -1
+        'designID': -1,
+        'username': request.user.username
     }
     return render(request, 'design.html', context)
 
@@ -91,7 +92,8 @@ def share_design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': designID,
-        'write_authority': False
+        'write_authority': False,
+        'username': request.user.username
     }
 
     # check whether this id exists
@@ -242,7 +244,8 @@ def personal_design(request):
         return HttpResponseNotFound()
     context = {
         'type_list': TYPE_LIST,
-        'designID': designID
+        'designID': designID,
+        'username': request.user.username
     }
     return render(request, 'design.html', context)
 
