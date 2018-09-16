@@ -18,22 +18,25 @@ from django.urls import path
 from django.conf.urls import url
 from django.conf.urls import include
 from design.views import design_views
+from search.views import search_views
+from account.views import account_views
 
 import account.views
 
 urlpatterns = [
-    path('', account.views.index),
     path('admin/', admin.site.urls),
-    url(r'^index/?$', account.views.personal_index),
+    path('search/', search_views.search),
+    path('', account_views.index),
+    path('login/', account_views.signin_view),
+    path('signin/', account_views.signin_view),
+    path('signup/', account_views.signup),
+    path('account/', include('account.urls')),
+    url(r'^index/?$', account_views.personal_index),
     url(r'^design/?$', design_views.design),
     url(r'^design/\d+/?$', design_views.personal_design),
     url(r'^design/share/\d+/?$', design_views.share_design),
-    url(r'^interest/?$', account.views.interest),
-    path('login/', account.views.signin_view),
-    path('signin/', account.views.signin_view),
-    path('signup/', account.views.signup),
-    url(r'^logout/?$', account.views.logout_view),
-    path('account/', include('account.urls')),
+    url(r'^interest/?$', account_views.interest),
+    url(r'^logout/?$', account_views.logout_view),
 ] + [
     # API urls
     url(r'api/users$', design_views.users),

@@ -39,6 +39,7 @@
       {% if user.is_authenticated %}
       <div id="index-button" class="ui primary button">Index Page</div>
       <div id="design-button" class="ui primary button">New Design</div>
+      <div id="search-button" class="ui primary button">Search</div>
       {% endif %}
     </div>
   </div>
@@ -66,6 +67,9 @@
   $('#design-button').on('click', function () {
     window.location.href = '/design';
   });
+  $('#search-button').on('click', function() {
+    window.location.href = '/search';
+  })
 </script>
 
 </html>

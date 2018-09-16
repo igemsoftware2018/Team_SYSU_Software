@@ -24,7 +24,7 @@ body {
   font-family: OCRAStd;
   font-size: 80px;
   color: white;
-  margin-left: 50px;
+  /* margin-left: 50px; */
 }
 .content img {
   height: 130px;
@@ -49,7 +49,7 @@ input::-webkit-input-placeholder {
 }
 
 .back {
-  margin-right: 300;
+  margin-right: 250;
   text-decoration: underline;
   font-family: 'Times New Roman', Times, serif;
   font-size: 30px;
