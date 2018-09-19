@@ -8,16 +8,18 @@
 </head>
 
 <body>
+  <!-- Search top bar -->
   <div class="ui center aligned container top-bar">
     <img id="logo" class="button" src="/static/img/logo.png">
     <div class="ui icon input">
       <input name="keyword" placeholder="Search..." type="text">
-      <i class="search icon"></i>
+      <i class="search icon" id="search"></i>
     </div>
     <label id="design" class="button">DESIGN</label>
     <label id="account" class="button">ACCOUNT</label>
   </div>
 
+  <!-- Guide bar -->
   <div class="ui breadcrumb">
     <a class="active section">Paper</a>
     <div class="divider"> | </div>
@@ -26,65 +28,79 @@
     <a class="section">Upload</a>
   </div>
 
-  <div class="ui vertical stripe segment">
-    <div class="ui middle aligned stackable grid container">
-      <div class="row head">
+  <!-- Search Content segment -->
+  <div id="content-segment" class="ui vertical stripe segment visible"></div>
+
+  <!-- Item Detail segment -->
+  <div id="item-segment" class="ui vertical stripe segment invisible">
+    <div class="ui container">
+      <!-- Title -->
+      <div class="head">
         <label>E.colipse-Who's your pABA:intelligent sun protection</label>
+        <i class="big icon close"></i>
       </div>
-      <div class="row">
-        <div class="three wide column">
-          <img src="/static/img/design/unknown.png" class="ui small bordered rounded image">
+
+      <!-- Info -->
+      <div class="ui text container">
+        <label>Team: 123</label>
+        <label>Year: 123</label>
+        <img src="/static/img/design/unknown.png">
+        <p>to detect hazardous levels of sun radiation ...</p>
+      </div>
+
+
+      <!-- Second Row -->
+      <div class="second row">
+        <div class="two wide column">
+          <img src="/static/img/design/unknown.png" class="ui middle bordered rounded image">
+          <img src="/static/img/design/unknown.png" class="ui middle bordered rounded image">
         </div>
-        <div class="eight wide column description">
-          <div class="ui text container">
-            <label class="team">Team: ETH_Zurich</label>
-            <label class="year">Year: 2017</label>
-            <img src="/static/img/design/unknown.png" class="ui tiny bordered rounded image">
-          </div>
-          <p>to detect hazardous levels of sun radiation ...</p>
+
+        <div class="two wide column">
+          <table class="ui celled table">
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Number">123</td>
+                <td data-label="Name">xxx</td>
+                <td data-label="Type">yyy</td>
+              </tr>
+              <tr>
+                <td data-label="Number">123</td>
+                <td data-label="Name">xxx</td>
+                <td data-label="Type">yyy</td>
+              </tr>
+              <tr>
+                <td data-label="Number">123</td>
+                <td data-label="Name">xxx</td>
+                <td data-label="Type">yyy</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+
+      <!-- Third Row -->
+      <div class="ui container third row">
+        <img src="/static/img/design/unknown.png">
+        <p>To detect hazardous levels of sum radiation, their system was based on UVR-8, a UV sensing protein from
+          plants
+          and they fused UVR. To detect hazardous levels of sun radiation, their system was based on UVR-8, a UV
+          sensing
+          protein from plants and they fused UVR-8. To detect hazardous levels of sum radiation, their system was based
+          on UVR-8, a UV sensing protein from
+          plants
+          and they fused UVR. To detect hazardous levels of sun radiation, their system was based on UVR-8, a UV
+          sensing
+          protein from plants and they fused UVR-8 ...</p>
       </div>
     </div>
-
-    <div class="ui middle aligned stackable grid container">
-      <div class="row head">
-        <label>E.colipse-Who's your pABA:intelligent sun protection</label>
-      </div>
-      <div class="row">
-        <div class="three wide column">
-          <img src="/static/img/design/unknown.png" class="ui small bordered rounded image">
-        </div>
-        <div class="eight wide column description">
-          <div class="ui text container">
-            <label class="team">Team: ETH_Zurich</label>
-            <label class="year">Year: 2017</label>
-            <img src="/static/img/design/unknown.png" class="ui tiny bordered rounded image">
-          </div>
-          <p>to detect hazardous levels of sun radiation ...</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ui middle aligned stackable grid container">
-      <div class="row head">
-        <label>E.colipse-Who's your pABA:intelligent sun protection</label>
-      </div>
-      <div class="row">
-        <div class="three wide column">
-          <img src="/static/img/design/unknown.png" class="ui small bordered rounded image">
-        </div>
-        <div class="eight wide column description">
-          <div class="ui text container">
-            <label class="team">Team: ETH_Zurich</label>
-            <label class="year">Year: 2017</label>
-            <img src="/static/img/design/unknown.png" class="ui tiny bordered rounded image">
-          </div>
-          <p>to detect hazardous levels of sun radiation ...</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
 </body>
 
 <script src="/static/js/jquery.min.js"></script>
@@ -94,9 +110,5 @@
 <script src="/static/semantic/dist/components/popup.min.js"></script>
 <script src="/static/semantic/dist/components/tab.min.js"></script>
 <script src="/static/js/search.js"></script>
-<script>
-  $('.modal')
-    .addClass('active');
-</script>
 
 </html>

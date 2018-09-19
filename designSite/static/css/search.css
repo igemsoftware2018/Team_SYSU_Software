@@ -2,6 +2,7 @@ body {
   background-color: #C7C5C6;
 }
 
+/* Top Bar */
 .top-bar img {
   height: 100px;
   width: 100px;
@@ -43,6 +44,7 @@ input:-webkit-autofill {
   cursor: pointer;
 }
 
+/* Guide */
 .breadcrumb {
   text-align: center;
   display: block !important;
@@ -53,6 +55,7 @@ input:-webkit-autofill {
   color: white !important;
 }
 
+/* Result Segment */
 .segment>.container {
   background-color: #DAD8DB;
   border: 2px solid white;
@@ -66,6 +69,7 @@ input:-webkit-autofill {
 
 .head label {
   text-decoration: underline;
+  line-height: 5rem;
   font-family: 'Times New Roman', Times, serif;
   font-size: 50px;
   color: rgb(39, 34, 143);
@@ -92,4 +96,92 @@ input:-webkit-autofill {
 
 .text.container img {
   display: inline;
+}
+
+.invisible {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+/* Item Detail Segment */
+#item-segment>div>div {
+  padding: 0 1rem 0 1rem !important;
+}
+
+.head i {
+  color: rgb(39, 34, 143);
+  padding: 0 0 2rem 2rem;
+}
+
+.head i:hover {
+  cursor: pointer;
+}
+
+.ui.container {
+  width: 1200px !important;
+  min-width: 1200px !important;
+}
+
+.text.container label,
+.text.container p {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 38px;
+  color: rgb(96, 96, 96);
+}
+
+.text.container img {
+  width: 25;
+  height: 25;
+}
+
+.second {
+  height: 450;
+}
+
+.two.wide.column {
+  float: left !important;
+}
+
+.two.wide.column>img {
+  width: 350;
+  height: 200;
+  margin-top: 1rem;
+}
+
+.ui.celled.table {
+  width: 500;
+  max-width: 500;
+  height: 450;
+  max-height: 450;
+  margin-left: 10rem;
+  background-color: #DAD8DB;
+}
+
+.ui.table thead th {
+  background-color: #DAD8DB !important;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 26px;
+  color: rgb(96, 96, 96);
+}
+
+.third {
+  width: 100%;
+}
+
+.third>p {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 38px;
+  color: rgb(96, 96, 96);
+}
+
+.third>img {
+  float: right;
+  width: 500;
+  max-width: 500;
+  height: 230;
+  max-height: 230;
+  margin-right: 5rem;
 }
