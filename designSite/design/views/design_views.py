@@ -1383,6 +1383,19 @@ def analysis_sequence(request):
 
 @login_required
 def api_real_time(request):
+    '''
+    /api/realtime/xxx
+    GET
+    {
+        'design_data': 'xxx' // (not used in backend) JSON.parse() -> design.design,
+        'first_time': 'xxx' // json.loads -> boolean
+    }
+    POST
+    {
+        'design_data': 'xxx' // (not used in backend) design.design -> JSON.stringify
+        'first_time': 'xxx' // boolean -> JSON.stringify
+    }
+    '''
     if request.method == 'GET':
         designID = request.path.split('/')[-1]
         logger.debug("api real time GET, designID = %s", designID)
@@ -1403,6 +1416,19 @@ def api_real_time(request):
         logger.debug("api real time POST at designID %s", designID)
         logger.debug('new design is %s', design_post)
         circuit = Circuit.objects.get(pk=designID) # must successful.
+        # testing write authority
+        if request.user != circuit.Author:
+            try:
+                auth_query = Authorities.objects.get(
+                    User=request.user,
+                    Circuit=circuit
+                )
+                auth = auth_query.Authority
+                if (auth != 'write'):
+                    return JsonResponse({'errno':1, 'msg': 'not right to write'})
+            except ObjectDoesNotExist:
+                return JsonResponse({'errno':1, 'msg': 'not right to access'})
+        # alter design.design json in db
         try:
             rtd = RealtimeDesign.objects.get(Circuit=circuit)
             if (not is_first_time):
