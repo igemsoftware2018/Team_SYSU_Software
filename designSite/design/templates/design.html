@@ -111,7 +111,26 @@
           <div class="default text">Ratio</div>
         </div>
       </span>
-
+      {% if realtime %}
+        <span class="item">
+          {% if write_authority %}
+            <a id="realtime-button">
+              <img src="/static/img/design/simulate.png" />
+            </a>
+          {% else %}
+          <span> <b style="color:white;">Following.</b> </span>
+          {% endif %}
+          <a id="realtime-exit">
+            <img src="/static/img/design/delete.png">
+          </a>
+        </span>
+      {% else %}
+        <span class="item">
+          <a id="realtime-enter">
+            <img src="/static/img/design/simulate.png" />
+          </a>
+        </span>
+      {% endif %}
       <span id="logo" class="item">
         <a href="/account/">
           <b>
@@ -718,4 +737,7 @@
 <script src="/static/js/plasmid.js"></script>
 <script src="/static/js/canvas.js"></script>
 <script src="/static/js/design.js"></script>
+{% if realtime %}
+<script src="/static/js/realtime.js"></script>
+{% endif %}
 </html>

@@ -1947,3 +1947,30 @@ $(window)
     });
 
 selectMode('modifyItem');
+
+$('#realtime-enter')
+    .on('click', function() {
+        console.log('click realtime enter button');
+        if (design.design.id == -1) {
+            alert('please save your design before entering magic realtime space!');
+            return;
+        }
+
+        $.post({
+            url: `/api/realtime/${design.design.id}`,
+            data: {
+                'design_data': JSON.stringify(design.design),
+                'first_time': JSON.stringify(true),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            }
+        });
+
+        // below codes just INSERT 'realtime' at the LAST SECOND position.
+        // eg /design/1667 to /design/realtime/1667
+        let pn = window.location.pathname.split('/');
+        pn.splice(pn.length-1, 0, 'realtime');
+        window.location.pathname = pn.join('/');
+    })
+    .popup({
+        content: 'click to go into realtime mode'
+    });

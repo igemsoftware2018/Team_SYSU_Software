@@ -112,3 +112,7 @@ class Authorities(models.Model):
     User = models.ForeignKey('User', on_delete=models.CASCADE)
     Circuit = models.ForeignKey('Circuit', on_delete=models.CASCADE)
     Authority = models.CharField(max_length=10) # string field: 'read', 'write'
+
+class RealtimeDesign(models.Model):
+    Circuit = models.OneToOneField('Circuit', on_delete=models.CASCADE)
+    Design = models.TextField()

@@ -34,7 +34,9 @@ urlpatterns = [
     url(r'^index/?$', account_views.personal_index),
     url(r'^design/?$', design_views.design),
     url(r'^design/\d+/?$', design_views.personal_design),
+    url(r'^design/realtime/\d+/?$', design_views.personal_design),
     url(r'^design/share/\d+/?$', design_views.share_design),
+    url(r'^design/share/realtime/\d+/?$', design_views.share_design),
     url(r'^interest/?$', account_views.interest),
     url(r'^logout/?$', account_views.logout_view),
 ] + [
@@ -54,6 +56,7 @@ urlpatterns = [
     url(r'api/sbol_json$', design_views.get_sbol_json),
     url(r'api/chassis$', design_views.chassis),
     url(r'api/analysis$', design_views.analysis_sequence),
+    url(r'api/realtime/\d+/?$', design_views.api_real_time),
     # url(r'api/tag_favorite$', design_views.tag_favorite),
     # url(r'api/get_favorite$', design_views.get_favorite),
     # url(r'api/part_favorite$', design_views.part_favorite),

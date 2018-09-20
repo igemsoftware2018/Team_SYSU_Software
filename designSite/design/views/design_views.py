@@ -83,17 +83,23 @@ def design(request):
     }
     return render(request, 'design.html', context)
 
-
 @login_required
 def share_design(request):
+    '''
+    called when a share design is visited.
+    /design/share/xxx
+    /design/share/realtime/xxx
+    '''
     request_user = request.user
     designID = request.path.split('/')[-1]
-    logger.debug('share request at %s', designID)
+    isRealtime = request.path.split('/')[-2] == 'realtime'
+    logger.debug('share request at %s, realtime = %s ', designID, isRealtime)
     context = {
         'type_list': TYPE_LIST,
         'designID': designID,
         'write_authority': False,
-        'username': request.user.username
+        'username': request.user.username,
+        'realtime': isRealtime
     }
 
     # check whether this id exists
@@ -219,15 +225,17 @@ def authority(request):
                 'write': []
             })
     else:
-        debug.error('unknow request method')
+        logger.error('unknow request method')
         return HttpResponseNotFound()
 
 
+@login_required
 def personal_design(request):
     # the correct way to retrive path elements is split.
     designID = request.path.split('/')[-1]
     designID = int(designID)
-    logger.debug('visiting design id=%s', designID)
+    isRealtime = request.path.split('/')[-2] == 'realtime'
+    logger.debug('visiting design id=%s, realtime = %s', designID, isRealtime)
     try:
         circuit = Circuit.objects.get(pk=designID)
         user = request.user
@@ -245,7 +253,9 @@ def personal_design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': designID,
-        'username': request.user.username
+        'username': request.user.username,
+        'write_authority': True,
+        'realtime': isRealtime
     }
     return render(request, 'design.html', context)
 
@@ -1369,4 +1379,43 @@ def analysis_sequence(request):
             'CAI': CAI,
             'CG': CG,
             'msg': 'success'
+        })
+
+@login_required
+def api_real_time(request):
+    if request.method == 'GET':
+        designID = request.path.split('/')[-1]
+        logger.debug("api real time GET, designID = %s", designID)
+        circuit = Circuit.objects.get(pk=designID)
+        try:
+            realtime_design_query = RealtimeDesign.objects.get(Circuit=circuit)
+            design_query = realtime_design_query.Design
+            return JsonResponse({
+                'design_data': design_query
+            })
+        except ObjectDoesNotExist:
+            return JsonResponse({})
+        return JsonResponse({})
+    elif request.method == 'POST':
+        design_post = request.POST['design_data']
+        is_first_time = json.loads(request.POST['first_time'])
+        designID = request.path.split('/')[-1]
+        logger.debug("api real time POST at designID %s", designID)
+        logger.debug('new design is %s', design_post)
+        circuit = Circuit.objects.get(pk=designID) # must successful.
+        try:
+            rtd = RealtimeDesign.objects.get(Circuit=circuit)
+            if (not is_first_time):
+                rtd.Design = design_post
+                rtd.save()
+                logger.debug('not first time. update')
+            else:
+                logger.debug('first time. skip to update')
+        except ObjectDoesNotExist:
+            RealtimeDesign.objects.create(
+                Circuit=circuit,
+                Design=design_post
+            )
+        return JsonResponse({
+            'msg': 'hello'
         })
