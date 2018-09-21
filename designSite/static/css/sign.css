@@ -26,10 +26,12 @@ body {
   color: white;
   /* margin-left: 50px; */
 }
-.content img {
-  height: 130px;
-  width: 130px;
-  margin-bottom: -40px;
+
+.logo {
+  height: 6rem;
+  width: 10rem;
+  margin-left: -2rem;
+  margin-bottom: -1rem;
 }
 
 .content .ui.form {

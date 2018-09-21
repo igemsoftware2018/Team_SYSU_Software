@@ -18,8 +18,11 @@
 
 #logo {
   margin-left: auto;
-  /* height: 1.75rem;
-  width: auto */
+}
+
+#logo>a>img {
+  height: 2.5rem;
+  width: 5rem;
 }
 
 .window {

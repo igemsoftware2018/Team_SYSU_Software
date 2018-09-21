@@ -1,3 +1,8 @@
+.logo {
+    height: 2.5rem;
+    width: 5rem !important;
+}
+
 #master-table tbody:hover,
 #share-table tbody:hover, 
 #circuits-table tbody:hover {
