@@ -148,8 +148,8 @@ $('#search').on('click', function () {
     $('#item-segment .ui.container').append(html);
 
     $('.head i').on('click', function () {
-      $('#item-segment').removeClass('invisible').addClass('invisible');
-      $('#content-segment').removeClass('visible').addClass('visible');
+      $('#item-segment').removeClass('visible').addClass('invisible');
+      $('#content-segment').removeClass('invisible').addClass('visible');
     });
   });
 });
