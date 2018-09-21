@@ -185,17 +185,19 @@ def authority(request):
         users = json.loads(request.POST['users'])
         circuit = Circuit.objects.get(id=request.POST['circuit'])
         auth_str = json.loads(request.POST['authority'])
-        Authorities.objects.filter(Circuit=circuit).delete()
         for username in users:
             if username == request.user.username:
                 logger.debug('same user %s, skip', username)
                 continue
+
             user = User.objects.get(username=username)
-            Authorities.objects.create(
+            # Overlay save authority of the user or create
+            obj, check = Authorities.objects.get_or_create(
                 User=user,
-                Circuit=circuit,
-                Authority=auth_str
+                Circuit=circuit
             )
+            obj.Authority = auth_str
+            obj.save()
             logger.debug('user <%s> get authority <%s> at circuit <%s>',
                          username, auth_str, circuit.id)
         return JsonResponse({

@@ -127,9 +127,14 @@ input:-webkit-autofill {
 
 .text.container label,
 .text.container p {
+  padding-bottom: 2rem;
   font-family: 'Times New Roman', Times, serif;
   font-size: 38px;
   color: rgb(96, 96, 96);
+}
+
+.text.container p {
+  margin-top: 2rem;
 }
 
 .text.container img {
@@ -172,6 +177,7 @@ input:-webkit-autofill {
 }
 
 .third>p {
+  padding-top: 2rem;
   font-family: 'Times New Roman', Times, serif;
   font-size: 38px;
   color: rgb(96, 96, 96);
@@ -179,9 +185,10 @@ input:-webkit-autofill {
 
 .third>img {
   float: right;
+  padding-right: 5rem;
+  padding-top: 2rem;
   width: 500;
   max-width: 500;
   height: 230;
   max-height: 230;
-  margin-right: 5rem;
 }
