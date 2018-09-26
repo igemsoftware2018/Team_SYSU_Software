@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Signup - CO-RAD</title>
-  
+
   <link rel="shortcut icon" href="/static/img/favicon.png">
   <link rel="stylesheet" href="/static/css/fontsize.css">
   <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
@@ -15,71 +15,66 @@
 </head>
 
 <body>
-  <div class="ui main center aligned container">
-
-  </div>
-</body>
-
-<div class="ui active tiny modal" id="signup-modal">
-  {% if user.is_authenticated %}
-  <div class="content">
-    <div class="ui center aligned container">
-      <p>You've login.</p>
-    </div>
-  </div>
-  {% else %}
-  <div class="content">
-    <div class="ui center aligned container">
-      <div class="ui center aligned">
-        <a href="/"><img class="logo" src="/static/img/logo.png"></a>
-        <label class="ui center aligned">Sign up</label>
+  <div class="signup">
+    <div class="border-div"></div>
+    {% if user.is_authenticated %}
+    <div class="content">
+      <div class="ui center aligned container">
+        <p>You've login.</p>
       </div>
+    </div>
+    {% else %}
+    <div class="content">
+      <div class="ui center aligned container">
+        <div class="ui center aligned">
+          <a href="/"><img class="logo" src="/static/img/logo.png"></a>
+          <label class="ui center aligned">Sign up</label>
+        </div>
 
-      <form class="ui form" action="/signup/" method="POST">
-        {% csrf_token %}
-        <div class="field">
-          <input type="text" id="username" name="username" placeholder="Username">
-        </div>
-        <div class="field">
-          <input type="text" id="email" name="email" placeholder="Email">
-        </div>
-        <div class="field">
-          <input type="password" id="password" name="password" placeholder="Password">
-        </div>
-        <div class="field">
-          <input type="password" id="password2" placeholder="Confirm password">
-        </div>
-        <div class="field">
-          <input type="text" id="org" name="org" placeholder="Organization / Team">
-        </div>
-        <div class="field">
-          <input type="text" id="igem" name="igem" placeholder="iGEM Account Email">
-        </div>
-        <div class="ui {% if messages %}visible {% endif %}error message">
-          {% if messages %}
-          <ul class="list">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </div>
-      </form>
-      <br />
-      <!-- <p class="small">If you signup an account or log in CO-RAD, it indicates that you agree <a id="policy">our
+        <form class="ui form" action="/signup/" method="POST">
+          {% csrf_token %}
+          <div class="field">
+            <input type="text" id="username" name="username" placeholder="Username">
+          </div>
+          <div class="field">
+            <input type="text" id="email" name="email" placeholder="Email">
+          </div>
+          <div class="field">
+            <input type="password" id="password" name="password" placeholder="Password">
+          </div>
+          <div class="field">
+            <input type="password" id="password2" placeholder="Confirm password">
+          </div>
+          <div class="field">
+            <input type="text" id="org" name="org" placeholder="Organization / Team">
+          </div>
+          <div class="field">
+            <input type="text" id="igem" name="igem" placeholder="iGEM Account Email">
+          </div>
+          <div class="ui {% if messages %}visible {% endif %}error message">
+            {% if messages %}
+            <ul class="list">
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </form>
+        <br />
+        <!-- <p class="small">If you signup an account or log in CO-RAD, it indicates that you agree <a id="policy">our
           policies</a>.</p> -->
 
-      <!-- Button panel -->
-      <div id="action-panel">
-        <a class="back" href="/signin">Have an account? Sign in now!</a>
-        <a id="signup-button" class="next">Next</a>
+        <!-- Button panel -->
+        <div id="action-panel">
+          <a class="back" href="/signin">Have an account? Sign in now!</a>
+          <a id="signup-button" class="next">Next</a>
+        </div>
       </div>
     </div>
+    {% endif %}
   </div>
-  {% endif %}
-
-</div>
-
+</body>
 <!-- <div class="ui tiny modal" id="policy-modal">
   <div class="content">
     <p><b>Welcome to CO-RAD!</b> CO-RAD is open and free for everyone who is interested in synthetic biology.</p>

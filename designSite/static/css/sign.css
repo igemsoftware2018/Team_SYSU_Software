@@ -1,49 +1,72 @@
 @font-face {
   /* font-properties */
   font-family: OCRAStd;
-  src:url('../font/OCRAStd.otf');
+  src: url('../font/OCRAStd.otf');
 }
 
 body {
-  background-color: #F7F7F7;
+  size: 100%;
+  background: url('../img/sign/background.jpg');
+  background-size: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.ui.modal {
-  top: auto !important;
-  width: 650 !important;
-  margin-left: -300px !important;
-  border-radius: 0% !important;
-  border: 3px solid	#C6C6C6;
+.border-div {
+  width: 600px;
+  height: 300px;
+  border: 3px solid;
+  margin: -20 0 0 20;
 }
 
-.modal>.content {
-  background-color:	#B1B1B1 !important;
+.signin {
+  width: 600px;
+  height: 300px;
+  border-radius: 0%;
+  border: 3px solid rgb(60, 57, 52);
+  background-color: transparent;
+  margin: auto;
+}
+
+.content {
+  margin-top: -270px;
+  margin-left: 20px;
+  background-color: transparent !important;
 }
 
 .content label {
   font-family: OCRAStd;
-  font-size: 80px;
-  color: white;
-  /* margin-left: 50px; */
+  font-size: 50px;
+  font-weight: bold;
+  color: rgb(60, 57, 52);
 }
 
 .logo {
   height: 6rem;
-  width: 10rem;
+  width: 11rem;
   margin-left: -2rem;
-  margin-bottom: -1rem;
+  margin-bottom: -2rem;
 }
 
 .content .ui.form {
   margin: 25 0 1rem !important;
 }
 
-.content input {
-  background-color:	#E7E5E6 !important;
+form input,
+#username,
+#password {
+  width: 400px !important;
+  border: 2px solid rgb(60, 57, 52) !important;
+}
+
+#username:-webkit-autofill,
+#password:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset !important;
 }
 
 input::-webkit-input-placeholder {
-  color: #B1B1B1 !important;
+  color: rgb(48, 80, 168) !important;
 }
 
 .ui.main.container {
@@ -51,17 +74,19 @@ input::-webkit-input-placeholder {
 }
 
 .back {
-  margin-right: 250;
+  margin-right: 200px;
   text-decoration: underline;
   font-family: 'Times New Roman', Times, serif;
-  font-size: 30px;
-  color: white;
+  font-size: 25px;
+  color: rgb(168, 49, 64);
 }
+
 .next {
   display: inline;
   font-family: OCRAStd;
-  font-size: 45px;
-  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(60, 57, 52);
 }
 
 .next:hover {
