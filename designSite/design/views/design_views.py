@@ -230,6 +230,59 @@ def authority(request):
         logger.error('unknow request method')
         return HttpResponseNotFound()
 
+def takeUpdateTime(elem):
+    return elem['UpdateTime']
+
+@login_required
+def authority_circuits(request):
+    '''
+    GET method with parameter:
+    circuit=xxx
+    url:
+    "/api/authority_circuits?circuit=xxx"
+    return json:{
+        name: xxx,
+        circuits: [{
+            ID: xxx,
+            Editor: xxx,
+            UpdateTime: xxx,
+            Comment: xxx
+        }]
+    }
+    '''
+    if request.method == 'GET':
+        design_name = json.loads(request.GET.get('name', ''))
+        user = request.user
+        logger.debug(design_name)
+        logger.debug(user)
+
+        circuit_query = Circuit.objects.filter(Name=design_name, Author=user)
+        authority_query = Authorities.objects.filter(User=user)
+
+        # Owner Circuit
+        circuits = [{
+            'ID': x.id,
+            'Editor': x.Editor.username if not x.Editor is None else 'None',
+            'UpdateTime': x.Update_time,
+            'Comment': x.Comment
+        } for x in circuit_query]
+        
+
+        # Authoritificated Circuit
+        for design in authority_query:
+            if design.Circuit.Name == design_name:
+                circuits.append({
+                    'ID': design.Circuit.id,
+                    'Editor': design.Circuit.Editor.username if not design.Circuit.Editor is None else 'None',
+                    'UpdateTime': design.Circuit.Update_time,
+                    'Comment': design.Circuit.Comment
+                })
+        circuits.sort(key=takeUpdateTime)
+
+        return JsonResponse({
+            'name': design_name,
+            'circuits': circuits
+        })
 
 @login_required
 def personal_design(request):
