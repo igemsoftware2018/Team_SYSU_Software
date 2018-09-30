@@ -10,7 +10,40 @@
 </head>
 
 <body>
-  <div class="ui inverted vertical masthead center aligned segment">
+  {% if user.is_authenticated %}
+  <div class="header">
+    <a href="/">
+      <img class="logo" src="/static/img/logo.png">
+    </a>
+    <div class="index-button">
+      <h5>Welcome, <span class="username">{{ user.username }}</span> !</h5>
+      <a id="logout" class="ui button">Log Out</a>
+    </div>
+  </div>
+
+  <div class="page-two">
+    <div id="design-button" class="ui button">New Design</div>
+    <p class="design-descrip">You can create a new circuit design.</p>
+    <h1 class="app-name">CO-RAD</h1>
+    <div id="search-button" class="ui button">Search</div>
+    <div id="index-button" class="ui button">Index Page</div>
+  </div>
+  {% else %}
+  <div class="header">
+    <a href="/">
+      <img class="logo" src="/static/img/logo.png">
+    </a>
+    <div class="index-button">
+      <a id="signin" class="ui button">Sign In</a>
+      <a id="signup" class="ui button">Sign Up</a>
+    </div>
+  </div>
+
+  <div class="page">
+    <h1 class="app-name">CO-RAD</h1>
+  </div>
+  {% endif %}
+  <!-- <div class="ui inverted vertical masthead center aligned segment">
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
         <a class="item" href="/">
@@ -45,7 +78,7 @@
       <div id="search-button" class="ui primary button">Search</div>
       {% endif %}
     </div>
-  </div>
+  </div> -->
 </body>
 
 <script src="/static/js/jquery.min.js"></script>
@@ -70,7 +103,7 @@
   $('#design-button').on('click', function () {
     window.location.href = '/design';
   });
-  $('#search-button').on('click', function() {
+  $('#search-button').on('click', function () {
     window.location.href = '/search';
   })
 </script>

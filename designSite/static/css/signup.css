@@ -1,4 +1,4 @@
-.signup{
+.signup {
   width: 600px;
   height: 600px;
   border-radius: 0%;
@@ -16,9 +16,6 @@
 }
 
 .back {
-  margin-right: 70;
-  text-decoration: underline;
+  margin-right: 70px;
   font-family: 'Times New Roman', Times, serif;
-  font-size: 25px;
-  color: rgb(168,49,64);
 }

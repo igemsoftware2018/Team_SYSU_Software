@@ -56,16 +56,19 @@ body {
 form input,
 #username,
 #password {
+  /* font-family: OCRAStd; */
   width: 400px !important;
   border: 2px solid rgb(60, 57, 52) !important;
 }
 
 #username:-webkit-autofill,
 #password:-webkit-autofill {
+  /* font-family: OCRAStd; */
   box-shadow: 0 0 0px 1000px white inset !important;
 }
 
 input::-webkit-input-placeholder {
+  /* font-family: OCRAStd; */
   color: rgb(48, 80, 168) !important;
 }
 
