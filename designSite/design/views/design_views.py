@@ -1447,3 +1447,69 @@ def api_real_time(request):
         return JsonResponse({
             'msg': 'hello'
         })
+
+
+@login_required
+def api_live_canvas(request):
+    '''
+    /api/liveCanvas/{designId}[/Order]
+    GET
+    {
+        'path' : [[['x', 'y'],],], // path list to show
+    }
+    POST
+    {
+        'path' : [['x', 'y'],] // drawn path
+    }
+    may combine with realtime
+    '''
+    if request.method == 'GET':
+        designID = request.path.split('/')[-1]
+        if 'Order' not in request.GET.keys():
+            return JsonResponse({})
+        orderID = request.GET['Order']
+        try:
+            pathToDraw = LiveCanvas.objects.filter(Order__gt=orderID)
+            if len(pathToDraw) == 0:
+                return JsonResponse({'latestOrder': 'latest'})
+            latestOrder = list(pathToDraw.values('Order'))[-1]['Order']
+            drawList = []
+            for path in list(pathToDraw.values('Path', 'Type')):
+                drawList.append({
+                    'drawType' : path['Type'],
+                    'drawPath': json.loads(path['Path'])
+                })
+            return JsonResponse({
+                'drawList' : drawList,
+                'latestOrder': latestOrder
+                })
+        except ObjectDoesNotExist:
+            return JsonResponse({})
+        return JsonResponse({})
+    elif request.method == 'POST':
+        designID = request.path.split('/')[-1]
+        drawPath = request.POST['path']
+        drawType = request.POST['type']
+        # testing write authority
+        '''
+        if request.user != circuit.Author:
+            try:
+                auth_query = Authorities.objects.get(
+                    User=request.user,
+                    Circuit=circuit
+                )
+                auth = auth_query.Authority
+                if (auth != 'write'):
+                    return JsonResponse({'errno': 1, 'msg': 'not right to write'})
+            except ObjectDoesNotExist:
+                return JsonResponse({'errno': 1, 'msg': 'not right to access'})
+        '''
+        # alter design.design json in db
+        LiveCanvas.objects.create(
+            Path=drawPath,
+            Design=designID,
+            Type=drawType
+        )
+        return JsonResponse({
+            'msg': 'success'
+        })

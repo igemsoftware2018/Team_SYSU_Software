@@ -124,6 +124,28 @@
             <img src="/static/img/design/delete.png">
           </a>
         </span>
+        {% if write_authority %}
+        <span class="item">
+          <a id="live-canvas-show">
+            <i class="edit icon"></i>
+          </a>
+          <a id="live-canvas-pen">
+            <i class="write icon"></i>
+          </a>
+          <a id="live-canvas-erase">
+            <i class="erase icon"></i>
+          </a>
+          <a id="live-canvas-clear">
+            <i class="remove icon"></i>
+          </a>
+        </span>
+        {% else %}
+        <span class="item">
+          <a id="live-canvas-show">
+            <i class="edit icon"></i>
+          </a>
+        </span>
+        {% endif %}
       {% else %}
         <span class="item">
           <a id="realtime-enter">
@@ -173,6 +195,7 @@
 
   <!-- Main canvas -->
   <div id="canvas-box" design-id="{{ designID }}">
+    <canvas class="live-canvas hidden" id="live-canvas" width="100%" height="100%"></canvas>
     <div id="canvas"></div>
   </div>
 
@@ -719,7 +742,7 @@
         </div>
       </div>
     </div>
-
+    
 </body>
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
@@ -739,5 +762,6 @@
 <script src="/static/js/design.js"></script>
 {% if realtime %}
 <script src="/static/js/realtime.js"></script>
+<script src="/static/js/live-canvas.js"></script>
 {% endif %}
 </html>

@@ -8,8 +8,18 @@ $('#realtime-button')
         isRealtimeReading = !isRealtimeReading;
         if (isRealtimeReading) {
             $('#canvas').css('background', 'rgba(255, 255, 255, 0.3)');
+
+            //for live canvas
+
+            unloadLiveCanvasDraw();
+            initLiveCanvasShow();
         } else {
             $('#canvas').css('background', 'rgba(255, 255, 255, 0)');
+
+            //for live canvas
+
+            unloadLiveCanvasShow()
+            initLiveCanvasDraw();
         }
     })
     .popup({
@@ -69,6 +79,12 @@ $('#realtime-exit')
         let pn = window.location.pathname.split('/');
         pn.splice(pn.length-2, 1); // remove second to last
         window.location.pathname = pn.join('/');
+        
+        //for live canvas
+
+        unloadLiveCanvasDraw();
+        unloadLiveCanvasShow()
+        $('#live-canvas').addClass('hidden');
     })
     .popup({
         content: 'exit real time share.'

@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'api/chassis$', design_views.chassis),
     url(r'api/analysis$', design_views.analysis_sequence),
     url(r'api/realtime/\d+/?$', design_views.api_real_time),
+    url(r'api/liveCanvas/\d+/.*?$', design_views.api_live_canvas),
     # url(r'api/tag_favorite$', design_views.tag_favorite),
     # url(r'api/get_favorite$', design_views.get_favorite),
     # url(r'api/part_favorite$', design_views.part_favorite),

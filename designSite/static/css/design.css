@@ -418,3 +418,11 @@ div h5,
   margin-right: 1.5em;
   color: white;
 }
+
+.live-canvas {
+  position: absolute;
+}
+
+.live-canvas.hidden {
+  display: none;
+}

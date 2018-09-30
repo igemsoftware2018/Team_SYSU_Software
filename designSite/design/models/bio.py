@@ -116,3 +116,9 @@ class Authorities(models.Model):
 class RealtimeDesign(models.Model):
     Circuit = models.OneToOneField('Circuit', on_delete=models.CASCADE)
     Design = models.TextField()
+
+class LiveCanvas(models.Model):
+    Design = models.TextField()
+    Path = models.TextField()
+    Type = models.TextField(default='draw')
+    Order = models.BigAutoField(primary_key=True)
