@@ -1,4 +1,131 @@
+.body {
+  size: 100%;
+}
+
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .logo {
-  height: 2.5rem;
-  width: 5rem !important;
+  height: 75px;
+  width: 150px !important;
+  margin-top: 10px;
+  margin-left: 100px;
+}
+
+.index-button {
+  margin-top: 30px;
+  margin-right: 80px;
+  margin-bottom: 10px;
+}
+
+
+#signin {
+  background: white;
+  color: #a83140;
+  border: 4px solid #a83140;
+  border-radius: 0%;
+  margin-right: 50px;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.index-button>h5 {
+  display: inline;
+  margin-right: 50px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 25px;
+}
+
+.username {
+  color: #a83140;
+  text-decoration: underline;
+}
+
+#signup,
+#logout {
+  background: white;
+  color: #3050a8;
+  border: 4px solid #3050a8;
+  border-radius: 0%;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#signup:hover,
+#logout:hover,
+#signin:hover {
+  background: grey;
+}
+
+.page,
+.page-two {
+  width: auto;
+  height: -webkit-fill-available;
+  background-image: url(../img/index/background_not_center.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+}
+
+.page>.app-name {
+  color: #ffffff;
+  text-align: center;
+  padding-top: 240px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 100px;
+}
+
+.page-two {
+  background-image: url(../img/index/background2.jpg);
+}
+
+.page-two>.app-name {
+  color: #ffffff;
+  padding-top: 150px;
+  padding-left: 100px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 100px;
+}
+
+#design-button,
+#search-button,
+#index-button,
+.design-descrip {
+  float: right;
+  background: transparent;
+  margin: 50 20 0 0;
+  color: #ffffff;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 50px;
+  font-weight: normal;
+}
+
+.design-descrip {
+  font-size: 25px;
+  margin: 155 -380 0 0;
+}
+
+#search-button {
+  margin: 120 480 0 0;
+  color: #000000;
+  font-size: 45px;
+}
+
+#index-button {
+  font-size: 100px;
+  margin: 250 -550 0 0;
+}
+
+#design-button:hover {
+  box-shadow: 2px 2px 2px #ffffff;
+}
+
+#search-button:hover,
+#index-button:hover {
+  box-shadow: 2px 2px 2px #000000;
 }

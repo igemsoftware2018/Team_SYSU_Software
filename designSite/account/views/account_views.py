@@ -41,6 +41,7 @@ def personal_index(request):
     part_query = Parts.objects.filter(Username=username)
     circuit_query = Circuit.objects.filter(Author=user)
     authority_query = Authorities.objects.filter(User=user)
+    logger.debug(user)
 
     parts = [{
         'ID': x.id,

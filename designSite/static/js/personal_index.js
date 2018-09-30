@@ -1,5 +1,5 @@
 function get_circuits(name, authority) {
-    $.get('/api/circuits', {name:JSON.stringify(name)}, function (res) {
+    $.get('/api/authority_circuits', {name:JSON.stringify(name)}, function (res) {
         if (res.circuits.length > 0) {
             $('#circuits-modal div h5').html(`Ciruit Name: ${name}`);
             let html = 
