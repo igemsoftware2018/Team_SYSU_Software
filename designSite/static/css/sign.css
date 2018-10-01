@@ -30,8 +30,9 @@ body {
 }
 
 .content {
-  margin-top: -270px;
   margin-left: 20px;
+  padding-top: 10px;
+  padding-right: 35px;
   background-color: transparent !important;
 }
 

@@ -16,63 +16,64 @@
 
 <body>
   <div class="signup">
-    <div class="border-div"></div>
-    {% if user.is_authenticated %}
-    <div class="content">
-      <div class="ui center aligned container">
-        <p>You've login.</p>
-      </div>
-    </div>
-    {% else %}
-    <div class="content">
-      <div class="ui center aligned container">
-        <div class="ui center aligned">
-          <a href="/"><img class="logo" src="/static/img/logo.png"></a>
-          <label class="ui center aligned">Sign up</label>
-        </div>
-
-        <form class="ui form" action="/signup/" method="POST">
-          {% csrf_token %}
-          <div class="field">
-            <input type="text" id="username" name="username" placeholder="Username">
-          </div>
-          <div class="field">
-            <input type="text" id="email" name="email" placeholder="Email">
-          </div>
-          <div class="field">
-            <input type="password" id="password" name="password" placeholder="Password">
-          </div>
-          <div class="field">
-            <input type="password" id="password2" placeholder="Confirm password">
-          </div>
-          <div class="field">
-            <input type="text" id="org" name="org" placeholder="Organization / Team">
-          </div>
-          <div class="field">
-            <input type="text" id="igem" name="igem" placeholder="iGEM Account Email">
-          </div>
-          <div class="ui {% if messages %}visible {% endif %}error message">
-            {% if messages %}
-            <ul class="list">
-              {% for message in messages %}
-              <li>{{ message }}</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </div>
-        </form>
-        <br />
-        <!-- <p class="small">If you signup an account or log in CO-RAD, it indicates that you agree <a id="policy">our
-          policies</a>.</p> -->
-
-        <!-- Button panel -->
-        <div id="action-panel">
-          <a class="back" href="/signin">Have an account? Sign in now!</a>
-          <a id="signup-button" class="next">Next</a>
+    <div class="border-div">
+      {% if user.is_authenticated %}
+      <div class="content">
+        <div class="ui center aligned container">
+          <p>You've login.</p>
         </div>
       </div>
+      {% else %}
+      <div class="content">
+        <div class="ui center aligned container">
+          <div class="ui center aligned">
+            <a href="/"><img class="logo" src="/static/img/logo.png"></a>
+            <label class="ui center aligned">Sign up</label>
+          </div>
+
+          <form class="ui form" action="/signup/" method="POST">
+            {% csrf_token %}
+            <div class="field">
+              <input type="text" id="username" name="username" placeholder="Username">
+            </div>
+            <div class="field">
+              <input type="text" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="field">
+              <input type="password" id="password" name="password" placeholder="Password">
+            </div>
+            <div class="field">
+              <input type="password" id="password2" placeholder="Confirm password">
+            </div>
+            <div class="field">
+              <input type="text" id="org" name="org" placeholder="Organization / Team">
+            </div>
+            <div class="field">
+              <input type="text" id="igem" name="igem" placeholder="iGEM Account Email">
+            </div>
+            <div class="ui {% if messages %}visible {% endif %}error message">
+              {% if messages %}
+              <ul class="list">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+          </form>
+          <br />
+          <!-- <p class="small">If you signup an account or log in CO-RAD, it indicates that you agree <a id="policy">our
+                policies</a>.</p> -->
+
+          <!-- Button panel -->
+          <div id="action-panel">
+            <a class="back" href="/signin">Have an account? Sign in now!</a>
+            <a id="signup-button" class="next">Next</a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
-    {% endif %}
   </div>
 </body>
 <!-- <div class="ui tiny modal" id="policy-modal">

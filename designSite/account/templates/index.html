@@ -11,11 +11,11 @@
 
 <body>
   {% if user.is_authenticated %}
-  <div class="header">
-    <a href="/">
+  <div class="ui large top fixed menu">
+    <a class="item" href="/">
       <img class="logo" src="/static/img/logo.png">
     </a>
-    <div class="index-button">
+    <div class="right item">
       <h5>Welcome, <span class="username">{{ user.username }}</span> !</h5>
       <a id="logout" class="ui button">Log Out</a>
     </div>
@@ -29,11 +29,11 @@
     <div id="index-button" class="ui button">Index Page</div>
   </div>
   {% else %}
-  <div class="header">
-    <a href="/">
+  <div class="ui large top fixed menu">
+    <a class="item" href="/">
       <img class="logo" src="/static/img/logo.png">
     </a>
-    <div class="index-button">
+    <div class="right item">
       <a id="signin" class="ui button">Sign In</a>
       <a id="signup" class="ui button">Sign Up</a>
     </div>
@@ -105,7 +105,11 @@
   });
   $('#search-button').on('click', function () {
     window.location.href = '/search';
-  })
+  });
+  $('.ui.sticky')
+    .sticky({
+      context: '#example1'
+    });
 </script>
 
 </html>

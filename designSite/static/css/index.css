@@ -2,25 +2,12 @@
   size: 100%;
 }
 
-.header{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
 .logo {
   height: 75px;
   width: 150px !important;
   margin-top: 10px;
   margin-left: 100px;
 }
-
-.index-button {
-  margin-top: 30px;
-  margin-right: 80px;
-  margin-bottom: 10px;
-}
-
 
 #signin {
   background: white;
@@ -33,9 +20,10 @@
   font-size: 20px;
 }
 
-.index-button>h5 {
+.right.item>h5 {
   display: inline;
   margin-right: 50px;
+  padding-top: 15px;
   font-family: 'Times New Roman', Times, serif;
   font-size: 25px;
 }
@@ -68,7 +56,7 @@
   height: -webkit-fill-available;
   background-image: url(../img/index/background_not_center.jpg);
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: 100%;
 
 }
 
