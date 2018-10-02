@@ -5,12 +5,15 @@ body {
   background-repeat: no-repeat;
 }
 
+h1, h2, h3, h4, h5, h6{
+  color: white;
+}
 /* Top Bar */
 #top-bar {  
   background: rgba(0, 0, 0, 0.4);
 }
 
-#top-bar h3 {
+#top-bar {
   color: white;
   font-size: 32px;
 }
@@ -36,8 +39,15 @@ body {
   transform: translateY(-50%);
 }
 
-#search-title {
+#search-title-1 {
   font-size:80px;
+  color:white;
+  padding: 30px;
+  text-shadow: black 0.1em 0.1em 0.2em;
+}
+
+#search-title-2 {
+  font-size:50px;
   color:white;
   padding: 30px;
   text-shadow: black 0.1em 0.1em 0.2em;
@@ -55,8 +65,12 @@ body {
   -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 8px;    
 }
 
+
 .ui .breadcrumb a span {
   color: white;
-  font-size: 28px;
+  font-size: 28px;  
+}
+
+.my_main_wrapper {
   
 }
