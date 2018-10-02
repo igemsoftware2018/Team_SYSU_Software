@@ -119,7 +119,6 @@ def load_parts(parts_floder_path):
     print('Error: {0:6d}'.format(errors))
     all_parts = {p.Name: p for p in Parts.objects.all()}
     load_part_secondName(parts_floder_path, all_parts)
-    load_part_score_and_Safety(parts_floder_path, all_parts)
     load_part_info(parts_floder_path, all_parts)
 
 def load_part_secondName(parts_floder_path, all_parts):
@@ -142,29 +141,6 @@ def load_part_secondName(parts_floder_path, all_parts):
     atomic_save(parts)
     print('Error: {0:6d}'.format(errors))
 
-def load_part_score_and_Safety(parts_floder_path, all_parts):
-    files = ["part_score.csv", "part_safety.csv"]
-    for name in files:
-        parts = []
-        filepath = join(parts_floder_path, name)
-        reader = csv.reader(open(filepath, encoding='utf-8'))
-        print('  Loading %s...' % filepath)
-        errors = 0
-        next(reader)
-        for row in reader:
-            part = all_parts[row[0]]
-            try:
-                if name == "part_score.csv":
-                    part.Score = row[1]
-                else:
-                    part.Safety = row[1]
-                parts.append(part)
-            except:
-                errors += 1
-                pass
-        print('Saving ...')
-        atomic_save(parts)
-        print('Error: {0:6d}'.format(errors))
 
 def load_part_info(parts_floder_path, all_parts):
     files = ["partsinfo.csv", "other_DNA_info.csv"]
@@ -209,59 +185,7 @@ def load_part_info(parts_floder_path, all_parts):
     atomic_save(part_subparts)
     print('Error: {0:6d}'.format(err2))
 
-def load_partsInteration(folderpath):
-    all_parts = {p.Name: p for p in Parts.objects.all()}
-    errors = 0
-    parts_interact = []
-    for root, dirs, files in os.walk(folderpath):
-        for name in files:
-            filepath = os.path.join(root, name)
-            print('  Loading %s...' % filepath)
-            csv_reader = csv.reader(open(filepath, "r", encoding='utf-8'))
-            for row in csv_reader:
-                try:
-                    parent_part = all_parts[row[0].strip()]
-                    child_part = all_parts[row[1].strip()]
-                    interactType = row[2].strip()
-                    score = -1.0
-                    if "Final-1.csv" in name:
-                        score = float(row[3])
-                    parts_interact.append(PartsInteract(
-                        parent = parent_part,
-                        child = child_part,
-                        # TODO
-                        # Type mapping
-                        InteractType = interactType,
-                        Score = score
-                    ))
-                except Exception as err:
-                    errors += 1
-                    print(err)
-    print('Saving parts interaction...')
-    atomic_save(parts_interact)
-    print('Error: {0:6d}'.format(errors))
 
-def load_partsParameter(folderpath):
-    all_parts = {p.Name: p for p in Parts.objects.all()}
-    errors = 0
-    parts = []
-    for root, dirs, files in os.walk(folderpath):
-        for name in files:
-            filepath = os.path.join(root, name)
-            print('  Loading %s...' % filepath)
-            csv_reader = csv.reader(open(filepath, "r", encoding='utf-8'))
-            next(csv_reader)
-            for row in csv_reader:
-                try:
-                    part = all_parts[row[0].strip()]
-                    part.Parameter = row[1].strip()
-                    parts.append(part)
-                except Exception as err:
-                    errors += 1
-                    print(err)
-    print('Saving parts Parameter...')
-    atomic_save(parts)
-    print('Error: {0:6d}'.format(errors))
 
 #load works data
 def load_works(works_floder_path):
@@ -1013,7 +937,7 @@ def final():
 
 def pre_load_data(currentpath, Imgpath):
     load_parts(os.path.join(currentpath, 'parts'))
-    load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     load_partsParameter(os.path.join(currentpath, 'partsParameter'))
     load_works(os.path.join(currentpath, 'works'))
     load_Trelation(os.path.join(currentpath, 'TeamRelation'))

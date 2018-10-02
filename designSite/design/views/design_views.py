@@ -478,40 +478,40 @@ def part(request):
             return JsonResponse({'success': False})
 
 
-def interact(request):
-    '''
-    GET /api/interact?id=xxx:
-    return json:
-        parts:[{
-            'id': xxx,
-            'name': xxx,
-            'type': xxx,
-            'description': xxx,
-            'interactType': xxx,
-            'score': xxx
-        },...]
-    '''
-    try:
-        query_id = request.GET.get('id')
-        part = Parts.objects.get(pk=query_id)
-        query = PartsInteract.objects.filter(parent=part)
-        parts = [
-            {
-                'id': x.child.id,
-                'BBa': x.child.Name,
-                'name': x.child.secondName,
-                'type': x.child.Type,
-                'description': x.child.Description,
-                'interactType': x.InteractType,
-                'score': x.Score
-            } for x in query]
+# def interact(request):
+#     '''
+#     GET /api/interact?id=xxx:
+#     return json:
+#         parts:[{
+#             'id': xxx,
+#             'name': xxx,
+#             'type': xxx,
+#             'description': xxx,
+#             'interactType': xxx,
+#             'score': xxx
+#         },...]
+#     '''
+#     try:
+#         query_id = request.GET.get('id')
+#         part = Parts.objects.get(pk=query_id)
+#         query = PartsInteract.objects.filter(parent=part)
+#         parts = [
+#             {
+#                 'id': x.child.id,
+#                 'BBa': x.child.Name,
+#                 'name': x.child.secondName,
+#                 'type': x.child.Type,
+#                 'description': x.child.Description,
+#                 'interactType': x.InteractType,
+#                 'score': x.Score
+#             } for x in query]
 
-        return JsonResponse({
-            'parts': parts
-        })
-    except:
-        raise
-        return JsonResponse({'success': False})
+#         return JsonResponse({
+#             'parts': parts
+#         })
+#     except:
+#         raise
+#         return JsonResponse({'success': False})
 
 
 # Circuit related views
@@ -1566,3 +1566,4 @@ def api_live_canvas(request):
         return JsonResponse({
             'msg': 'success'
         })
+
