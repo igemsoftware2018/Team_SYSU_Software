@@ -10,14 +10,15 @@ $('#realtime-button')
             $('#canvas').css('background', 'rgba(255, 255, 255, 0.3)');
 
             //for live canvas
-
+            $('#live-canvas').removeClass('draw');
+            $('#live-canvas').removeClass('erase');
             unloadLiveCanvasDraw();
             initLiveCanvasShow();
         } else {
             $('#canvas').css('background', 'rgba(255, 255, 255, 0)');
 
             //for live canvas
-
+            $('#live-canvas').addClass('draw');
             unloadLiveCanvasShow()
             initLiveCanvasDraw();
         }

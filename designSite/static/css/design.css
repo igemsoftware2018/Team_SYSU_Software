@@ -423,6 +423,14 @@ div h5,
   position: absolute;
 }
 
+.live-canvas.draw {
+  cursor: url(/static/cursor/pen.png), auto;
+}
+
+.live-canvas.erase {
+  cursor: url(/static/cursor/eraser.png), auto;
+}
+
 .live-canvas.hidden {
   display: none;
 }
