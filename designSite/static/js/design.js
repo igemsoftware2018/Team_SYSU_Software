@@ -1140,11 +1140,17 @@ $('.list .master.checkbox')
         onChecked: function () {
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('check');
+            $childCheckbox.siblings('label').each(function () {
+                $(this).removeClass('unchecked').addClass('checked');
+            });
         },
         // uncheck all children
         onUnchecked: function () {
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('uncheck');
+            $childCheckbox.siblings('label').each(function () {
+                $(this).removeClass('checked').addClass('unchecked');
+            });
         }
     });
 
@@ -1178,6 +1184,17 @@ $('.list .child.checkbox')
             } else {
                 $parentCheckbox.checkbox('set indeterminate');
             }
+        },
+        onChecked: function () {
+            $(this).siblings('label').each(function () {
+                $(this).removeClass('unchecked').addClass('checked');
+            });
+        },
+        // uncheck all children
+        onUnchecked: function () {
+            $(this).siblings('label').each(function () {
+                $(this).removeClass('unchecked').addClass('unchecked');
+            });
         }
     });
 

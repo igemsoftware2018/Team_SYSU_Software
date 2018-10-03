@@ -40,9 +40,6 @@
         <a id="drag-item">
           <img src="/static/img/design/icons/pointer.png">
         </a>
-        <!-- <a id="drag-canvas">
-          <img src="/static/img/design/icons/move.png">
-        </a> -->
         <a id="inspect-item">
           <img src="/static/img/design/icons/view_components.png" />
         </a>
@@ -105,18 +102,6 @@
         </span>
       </div>
 
-      <!-- <span class="item">
-        <a id="zoom-in">
-          <img src="/static/img/design/icons/zoomin.png">
-        </a>
-        <a id="zoom-out">
-          <img src="/static/img/design/icons/zoomout.png">
-        </a>
-        <div class="ui compact floating selection dropdown" id="ratio-dropdown">
-          <i class="dropdown icon"></i>
-          <div class="default text">Ratio</div>
-        </div>
-      </span> -->
       {% if realtime %}
       {% if write_authority %}
       <span class="item">
@@ -124,26 +109,21 @@
           <img src="/static/img/design/icons/realtime.png" />
         </a>
         <a id="live-canvas-pen">
-          <!-- <i class="write icon"></i> -->
           <img src="/static/img/design/icons/pencil.png" />
         </a>
         <a id="live-canvas-erase">
-          <!-- <i class="erase icon"></i> -->
           <img src="/static/img/design/icons/eraser.png" />
         </a>
         <a id="live-canvas-clear">
           <img src="/static/img/design/icons/clear.png" />
-          <!-- <i class="remove icon"></i> -->
         </a>
         <a id="live-canvas-show">
-          <!-- <i class="edit icon"></i> -->
           <img src="/static/img/design/icons/start.png" />
         </a>
       </span>
       {% else %}
       <span class="item">
         <a id="live-canvas-show">
-          <!-- <i class="edit icon"></i> -->
           <img src="/static/img/design/icons/start.png" />
         </a>
       </span>
@@ -212,10 +192,7 @@
       <div>
         <div class="search-header">Search</div>
         <img id="advanced-search-button" src="/static/img/design/icons/search.png">
-        <!-- <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div> -->
-
         <br>
-        <!-- <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div> -->
       </div>
       <div id="search-parts-dropdown" class="ui fluid search selection dropdown">
         <i class="dropdown icon"></i>
@@ -235,7 +212,6 @@
           <div class="ui center aligned container">
             <p id="part-type"></p>
           </div>
-          <!-- <div class="ui divider"></div> -->
           <h5 class="ui header description">DESCRIPTION</h5>
           <div id="part-info-des">
             <p></p>
@@ -378,14 +354,14 @@
       <div class="ui divider"></div>
 
       <form id="analysis-form" class="ui form">
-        <label>DNA Sequence</label>
+        <label class="ui header">DNA Sequence</label>
         <textarea id="analysis-sequence" placeholder="Please input DNA sequence" rows="4"></textarea>
       </form>
 
       <div class="ui divider"></div>
 
       <div>
-        <label>Circuit Part import</label><br>
+        <label class="ui header">Circuit Part import</label><br>
         <div class="ui compact floating selection dropdown" id="analysis-part-dropdown">
           <div class="text" id="analysis-part"></div>
           <i class="dropdown icon"></i>
@@ -398,7 +374,7 @@
 
       <div class="ui divider"></div>
 
-      <label>Chassis Selection</label><br>
+      <label class="ui header">Chassis Selection</label><br>
       <div class="ui compact floating selection dropdown" id="analysis-chassis-dropdown">
         <div class="text" id="analysis-chassis"></div>
         <i class="dropdown icon"></i>
@@ -406,7 +382,7 @@
 
       <div class="ui divider"></div>
 
-      <label>Chassis Mode Selection</label><br>
+      <label class="ui header">Chassis Mode Selection</label><br>
       <div class="ui compact floating selection dropdown" id="analysis-chassis-mode-dropdown">
         <div class="text" id="analysis-chassis-mode"></div>
         <i class="dropdown icon"></i>
@@ -414,7 +390,7 @@
 
       <div class="ui divider"></div>
 
-      <label>Result Chart</label><br>
+      <label class="ui header">Result Chart</label><br>
       <div id="myChart" style="width:500px; height:300px"></div>
 
       <div class="ui divider"></div>
@@ -474,18 +450,18 @@
   </div>
 
   <!-- Advanced Search Modal -->
-  <div id="advanced-search-modal" class="ui tiny modal">
+  <div id="advanced-search-modal" class="ui small modal">
     <div class="content">
-      <h5 class="ui white header">Advanced Search</h5>
+      <h4 class="ui white header">Advanced Search</h4>
       <div class="ui celled relaxed list">
         <div class="item">
           <div class="ui master checkbox">
             <input type="checkbox" name="All" checked>
             <label>All</label>
           </div>
-          <div class="list">
+          <div class="list ui grid">
             {% for item in type_list %}
-            <div class="item">
+            <div class="item one wide cloumn segment">
               <div class="ui child checkbox">
                 <input type="checkbox" name="{{ item }}">
                 <label>{{ item }}</label>
@@ -584,9 +560,9 @@
   <div id="load-modal" class="ui tiny modal">
     <div class="content">
       <div class="load-filter">
-        <label>Your Circuits</label><br>
+        <label class="ui header">Your Circuits</label><br>
         <div class="ui divider"></div>
-        <label>Filter: </label>
+        <label class="ui header">Filter: </label>
         <input id="focus-taker" style="width: 0px; opacity: 0; cursor: default" />
         <div class="ui fluid compact floating selection dropdown" id="circuit-filter-dropdown">
           <div class="text" id="circuit-filter"></div>
