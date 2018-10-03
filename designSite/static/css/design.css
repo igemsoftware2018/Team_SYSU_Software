@@ -555,4 +555,14 @@ div h5,
   width: 35%;
   float: right;
   margin: 1em;
+  opacity: 0.8;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
