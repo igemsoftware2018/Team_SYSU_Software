@@ -177,7 +177,7 @@
 
   <!-- Main canvas -->
   <div id="canvas-box" design-id="{{ designID }}">
-    <canvas class="live-canvas hidden" id="live-canvas" width="100%" height="100%"></canvas>
+    
     <div id="canvas">
       <div class="ui message info-box" id="info-box">
         <div class="header">
@@ -211,6 +211,7 @@
           <li>You are in <b id="bi-mode">{}</b> mode.</li>
         </ul>
       </div>
+      <canvas class="live-canvas hidden" id="live-canvas" width="100%" height="100%"></canvas>
     </div>
   </div>
 
@@ -765,10 +766,10 @@
         </div>
       </div>
     </div>
-
+    <div id="username-hack">{{username}}</div>
+    <div id="authorname-hack">{{authorname}}</div>
 </body>
-<div id="username-hack">{{username}}</div>
-<div id="authorname-hack">{{authorname}}</div>
+
 
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
