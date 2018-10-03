@@ -494,9 +494,12 @@ div h5,
 }
 
 
-.SDinDesign-device.jtk-draggable.ui-droppable,
-.pusher {
+.SDinDesign-device.jtk-draggable.ui-droppable {
   background-color: #f8e7e9;
+}
+
+.pusher {
+  background-color: #f8e7e9 !important;
 }
 
 .SDinDesign-part p {
