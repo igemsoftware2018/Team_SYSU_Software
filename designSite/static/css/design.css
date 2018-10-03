@@ -353,7 +353,6 @@ div.part-helper>div.ui.image>img {
 .modal:not(.basic) .content,
 .modal:not(.basic) .actions {
   border: 0 !important;
-  /* background-color: #44afe4 !important; */
   background-color: #7fa7d3 !important;
 }
 
@@ -382,8 +381,8 @@ div.part-helper>div.ui.image>img {
   padding: 0;
 }
 
-.modal:not(.basic) .header,
-.modal:not(.basic) label {
+.modal:not(.basic) .header
+/*.modal:not(.basic) label*/ {
   color: white !important;
 }
 
@@ -413,7 +412,6 @@ div.part-helper>div.ui.image>img {
 }
 
 .ui.vertical.menu {
-  /* padding-top: 4.5rem; */
   width: 5rem;
 }
 
@@ -438,7 +436,6 @@ div.ui.fixed.menu {
 #fav-win,
 #part-panel,
 #part-src-seg,
-/* #part-info-tab, */
 .ui.top.attached.tabular.menu div {
   background-color: #7fa7d3 !important;
 }
@@ -474,9 +471,32 @@ div h5,
   margin-top: calc(0% - 45px);
 }
 
+.ui.white.header {
+  text-align: center;
+  font-size: 30px;
+}
+
+.item.cloumn {
+  min-width: 180px;
+  margin-left: 10px;
+  margin-top: 5px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.checked {
+  color: #000000 !important;
+}
+
+.unchecked {
+  color: grey !important;
+}
+
+
 .SDinDesign-device.jtk-draggable.ui-droppable,
 .pusher {
-  background-color: #f8e7e9 !important;
+  background-color: #f8e7e9;
 }
 
 .SDinDesign-part p {

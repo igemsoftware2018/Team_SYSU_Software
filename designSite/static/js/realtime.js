@@ -2,12 +2,12 @@
 /* eslint-disable no-console */
 /* exported my_syn */
 let isRealtimeReading = true;
-$('#canvas').css('background', 'rgba(255, 255, 255, 0.3)');
+$('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
 $('#realtime-button')
     .on('click', function() {
         isRealtimeReading = !isRealtimeReading;
         if (isRealtimeReading) {
-            $('#canvas').css('background', 'rgba(255, 255, 255, 0.3)');
+            $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
 
             //for live canvas
             $('#live-canvas').removeClass('draw');
@@ -15,7 +15,7 @@ $('#realtime-button')
             unloadLiveCanvasDraw();
             initLiveCanvasShow();
         } else {
-            $('#canvas').css('background', 'rgba(255, 255, 255, 0)');
+            $('#canvas').css('background', '');
 
             //for live canvas
             $('#live-canvas').addClass('draw');
