@@ -2016,3 +2016,10 @@ $('#realtime-enter')
 
 let bi_user_text = $('#bi-user').text()
 $('#bi-user').text(bi_user_text.replace('{}', authorname));
+
+$('#info-box').on('mouseover', function() {
+    //$(this).css('background', 'rgba(255, 255, 255, 0.3');
+    $(this).css('opacity', '0.2');
+}).on('mouseleave', function() {
+    $(this).css('opacity', '0.8');
+});
