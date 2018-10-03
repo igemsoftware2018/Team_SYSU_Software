@@ -49,6 +49,15 @@
         <a id="delete-item">
           <img src="/static/img/design/icons/delete.png">
         </a>
+        {% if realtime %}
+        <a id="realtime-exit">
+          <img src="/static/img/design/icons/close_realtime.png" />
+        </a>
+        {% else %}
+        <a id="realtime-enter">
+          <img src="/static/img/design/icons/open_realtime.png" />
+        </a>
+        {% endif %}
         <a id="chassis-item">
           <img src="/static/img/design/icons/change_chassis.png" />
         </a>
@@ -109,20 +118,11 @@
         </div>
       </span> -->
       {% if realtime %}
+      {% if write_authority %}
       <span class="item">
-        {% if write_authority %}
         <a id="realtime-button">
           <img src="/static/img/design/icons/realtime.png" />
         </a>
-        {% else %}
-        <span> <b style="color:white;">Following.</b> </span>
-        {% endif %}
-        <a id="realtime-exit">
-          <img src="/static/img/design/delete.png">
-        </a>
-      </span>
-      {% if write_authority %}
-      <span class="item">
         <a id="live-canvas-pen">
           <!-- <i class="write icon"></i> -->
           <img src="/static/img/design/icons/pencil.png" />
@@ -149,11 +149,11 @@
       </span>
       {% endif %}
       {% else %}
-      <span class="item">
+      <!-- <span class="item">
         <a id="realtime-enter">
           <img src="/static/img/design/icons/realtime.png" />
         </a>
-      </span>
+      </span> -->
       {% endif %}
       <span id="logo" class="item">
         <b>
