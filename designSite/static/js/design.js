@@ -1049,6 +1049,9 @@ function stickPartPanel() {
         });
 }
 
+// set this to let the right Penel responsive
+$(window).resize(stickPartPanel);
+
 function unstickPartPanel() {
     partPanelStickedToRight = false;
     let win = $('#part-panel');
