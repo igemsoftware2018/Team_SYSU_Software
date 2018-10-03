@@ -1,4 +1,11 @@
-.menu a>img {
+@font-face {
+  /* font-properties */
+  font-family: OCRAStd;
+  src: url('../font/OCRAStd.otf');
+}
+
+.menu a>img,
+.controller a>img {
   width: 1.75rem;
   height: 1.75rem;
   margin-right: 0.75rem;
@@ -6,7 +13,8 @@
   transition: all 0.2s ease;
 }
 
-.menu a.active>img {
+.menu a.active>img,
+.controller a.active>img {
   filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.7));
   /*Highlight the mode button*/
   transition: all 0.2s ease;
@@ -66,13 +74,64 @@
   font-size: 1rem;
 }
 
+#search-parts-dropdown {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+#part-info-tab {
+  background-color: #ffffff !important;
+  min-height: 400px;
+}
+
+#part-info-tab>img {
+  padding-top: 1rem;
+}
+
+#part-info-tab>.description {
+  height: 50px;
+  padding: 12px;
+  margin-top: 5px;
+  background-color: #c0a6a9;
+  border: 1px solid #000000;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.ui.top.attached.tabular.menu {
+  background-color: #c0a6a9;
+  border: 1px solid #000000 !important;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.ui.top.attached.tabular.menu>.active.item {
+  background-color: transparent !important;
+  border: none;
+}
+
+.controller {
+  position: absolute;
+  bottom: 0px;
+  margin-left: -1rem;
+  padding: 1rem 0 0.5rem 1rem;
+  width: 100%;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+}
+
+.controller a>img {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-bottom: -0.5rem;
+}
+
 #part-info-des {
   max-height: 150px;
   overflow-y: auto;
 }
 
 .ui.tabular.menu>.item {
-  background-color: #c6daec;
   cursor: pointer;
 }
 
@@ -209,7 +268,7 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
 }
 
 .canvas {
-  background-color: #9cabd4;
+  background-color: #f8e7e9; /*canvas background*/
   position: relative;
   overflow: hidden;
   /* opacity: 0.7; */
@@ -218,7 +277,7 @@ div.ui.fixed.menu>div.container>.item>div.ui.dropdown {
 #canvas {
   width: 100%;
   height: 100%;
-  background-color: #9cabd4;
+  background-color: #f8e7e9; /*canvas background*/
   /* opacity: 0.7; */
 }
 
@@ -294,7 +353,8 @@ div.part-helper>div.ui.image>img {
 .modal:not(.basic) .content,
 .modal:not(.basic) .actions {
   border: 0 !important;
-  background-color: #44afe4 !important;
+  /* background-color: #44afe4 !important; */
+  background-color: #7fa7d3 !important;
 }
 
 .modal:not(.basic) .content:nth-child(2) {
@@ -363,18 +423,24 @@ div.part-helper>div.ui.image>img {
 }
 
 #toolbox,
-div.ui.fixed.menu,
+div.ui.fixed.menu {
+  background-color: #ffffff;
+}
+
+div.ui.fixed.menu {
+  border: 1px solid #000000 !important;
+}
+
 .ui.vertical.menu {
-  background-color: #4a4392;
-  /* opacity: 0.75; */
+  background-color: #a83140;
 }
 
 #fav-win,
 #part-panel,
 #part-src-seg,
-#part-info-tab,
+/* #part-info-tab, */
 .ui.top.attached.tabular.menu div {
-  background-color: #667ec5;
+  background-color: #7fa7d3 !important;
 }
 
 .ui.top.attached.tabular.menu .active.item,
@@ -384,16 +450,37 @@ div h5,
 #part-info-tab div p,
 #part-type,
 #part-info-name {
+  color: black;
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.search-header {
   color: white;
+  font-family: OCRAStd;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.default.text {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+#advanced-search-button {
+  float: right;
+  width: 2rem;
+  height: 2rem;
+  margin-top: calc(0% - 45px);
 }
 
 .SDinDesign-device.jtk-draggable.ui-droppable,
 .pusher {
-  background-color: #9cabd4 !important;
+  background-color: #f8e7e9 !important;
 }
 
 .SDinDesign-part p {
-  color: white;
+  color: #000000;
 }
 
 .ui.divider {
@@ -416,7 +503,12 @@ div h5,
 
 #username {
   margin-right: 1.5em;
-  color: white;
+  color: #000000;
+}
+
+#username>span {
+  color: #a83140;
+  text-decoration: underline;
 }
 
 .live-canvas {

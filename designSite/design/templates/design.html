@@ -20,19 +20,19 @@
     <div class="ui container">
       <span class="item">
         <a id="operation">
-          <img src="/static/img/design/menu.png">
+          <img src="/static/img/design/icons/menu.png">
         </a>
       </span>
 
       <span class="item">
         <a id="undo-button">
-          <img src="/static/img/design/undo.png">
+          <img src="/static/img/design/icons/undo.png">
         </a>
         <a id="redo-button">
-          <img src="/static/img/design/redo.png">
+          <img src="/static/img/design/icons/todo.png">
         </a>
         <a id="clear-all-button">
-          <img src="/static/img/design/clearall.png">
+          <img src="/static/img/design/icons/clearall.png">
         </a>
       </span>
 
@@ -40,30 +40,27 @@
         <a id="drag-item">
           <img src="/static/img/design/pointer.png">
         </a>
-        <a id="drag-canvas">
-          <img src="/static/img/design/move.png">
+        <!-- <a id="drag-canvas">
+          <img src="/static/img/design/icons/move.png">
+        </a> -->
+        <a id="inspect-item">
+          <img src="/static/img/design/icons/view_components.png" />
         </a>
         <a id="delete-item">
-          <img src="/static/img/design/delete.png">
-        </a>
-        <a id="inspect-item">
-          <!-- TODO: change this image please -->
-          <img src="/static/img/design/delete.png" />
+          <img src="/static/img/design/icons/delete.png">
         </a>
         <a id="chassis-item">
-          <!-- TODO: change this image please -->
-          <img src="/static/img/design/delete.png" />
+          <img src="/static/img/design/icons/change_chassis.png" />
         </a>
       </span>
 
       <div id="toolbox" class="ui menu">
         <span class="item">
           <a id="add-part-button">
-            <img src="/static/img/design/plus.png">
+            <img src="/static/img/design/icons/plus.png">
           </a>
-
           <div id="connection-dropdown" class="ui dropdown">
-            <img id="connection-dropdown-button" src="/static/img/design/connection.png">
+            <img id="connection-dropdown-button" src="/static/img/design/icons/connection.png">
             <div class="menu">
               <div class="item" data-value="stimulation">
                 <i class="blue right arrow icon"></i>
@@ -82,80 +79,85 @@
           </div>
 
           <a id="interactive-button">
-            <img src="/static/img/design/interact.png">
+            <img src="/static/img/design/icons/check_connection.png">
           </a>
 
           <a id="simulation-button">
-            <img src="/static/img/design/simulate.png">
+            <img src="/static/img/design/icons/simulation.png">
           </a>
 
           <a id="protocol-button">
-            <img src="/static/img/design/protocol.png">
+            <img src="/static/img/design/icons/protocol.png">
           </a>
 
           <a id="analysis-button">
-            <img src="/static/img/design/simulate.png">
+            <img src="/static/img/design/icons/analysis.png">
           </a>
         </span>
       </div>
 
-      <span class="item">
+      <!-- <span class="item">
         <a id="zoom-in">
-          <img src="/static/img/design/zoomin.png">
+          <img src="/static/img/design/icons/zoomin.png">
         </a>
         <a id="zoom-out">
-          <img src="/static/img/design/zoomout.png">
+          <img src="/static/img/design/icons/zoomout.png">
         </a>
         <div class="ui compact floating selection dropdown" id="ratio-dropdown">
           <i class="dropdown icon"></i>
           <div class="default text">Ratio</div>
         </div>
-      </span>
+      </span> -->
       {% if realtime %}
-        <span class="item">
-          {% if write_authority %}
-            <a id="realtime-button">
-              <img src="/static/img/design/simulate.png" />
-            </a>
-          {% else %}
-          <span> <b style="color:white;">Following.</b> </span>
-          {% endif %}
-          <a id="realtime-exit">
-            <img src="/static/img/design/delete.png">
-          </a>
-        </span>
+      <span class="item">
         {% if write_authority %}
-        <span class="item">
-          <a id="live-canvas-show">
-            <i class="edit icon"></i>
-          </a>
-          <a id="live-canvas-pen">
-            <i class="write icon"></i>
-          </a>
-          <a id="live-canvas-erase">
-            <i class="erase icon"></i>
-          </a>
-          <a id="live-canvas-clear">
-            <i class="remove icon"></i>
-          </a>
-        </span>
+        <a id="realtime-button">
+          <img src="/static/img/design/icons/realtime.png" />
+        </a>
         {% else %}
-        <span class="item">
-          <a id="live-canvas-show">
-            <i class="edit icon"></i>
-          </a>
-        </span>
+        <span> <b style="color:white;">Following.</b> </span>
         {% endif %}
+        <a id="realtime-exit">
+          <img src="/static/img/design/delete.png">
+        </a>
+      </span>
+      {% if write_authority %}
+      <span class="item">
+        <a id="live-canvas-pen">
+          <!-- <i class="write icon"></i> -->
+          <img src="/static/img/design/icons/pencil.png" />
+        </a>
+        <a id="live-canvas-erase">
+          <!-- <i class="erase icon"></i> -->
+          <img src="/static/img/design/icons/eraser.png" />
+        </a>
+        <a id="live-canvas-clear">
+          <img src="/static/img/design/icons/clear.png" />
+          <!-- <i class="remove icon"></i> -->
+        </a>
+        <a id="live-canvas-show">
+          <!-- <i class="edit icon"></i> -->
+          <img src="/static/img/design/icons/start.png" />
+        </a>
+      </span>
       {% else %}
-        <span class="item">
-          <a id="realtime-enter">
-            <img src="/static/img/design/simulate.png" />
-          </a>
-        </span>
+      <span class="item">
+        <a id="live-canvas-show">
+          <!-- <i class="edit icon"></i> -->
+          <img src="/static/img/design/icons/start.png" />
+        </a>
+      </span>
+      {% endif %}
+      {% else %}
+      <span class="item">
+        <a id="realtime-enter">
+          <img src="/static/img/design/icons/realtime.png" />
+        </a>
+      </span>
       {% endif %}
       <span id="logo" class="item">
         <b>
-          <span id="username"> hello, {{ username }} </span>
+          <span id="username"> Welcome, <span> {{ username }} </span> ! </span>
         </b>
         <a href="/account/">
           <img src="/static/img/logo.png">
@@ -166,30 +168,30 @@
 
   <div class="ui labeled left inline vertical sidebar menu">
     <a class="item" id="load-button">
-      <img src="/static/img/design/load.png">
+      <img src="/static/img/design/icons/load.png">
     </a>
     {% if write_authority %}
     <a class="item" id="save-button">
-      <img src="/static/img/design/save.png">
+      <img src="/static/img/design/icons/save.png">
     </a>
     {% endif %}
     <a class="item" id="save-as-new-button">
-      <img src="/static/img/design/save.png">
+      <img src="/static/img/design/icons/save.png">
     </a>
     <a class="item" id="export-button">
-      <img src="/static/img/design/export-json.png">
+      <img src="/static/img/design/icons/export_json.png">
     </a>
     <a class="item" id="upload-button">
-      <img src="/static/img/design/import-json.png">
+      <img src="/static/img/design/icons/import_json.png">
     </a>
     <a class="item" id="share-button">
-      <img src="/static/img/design/share.png">
+      <img src="/static/img/design/icons/share.png">
     </a>
     <a class="item" id="sbol-json-button">
-      <img src="/static/img/design/import-sbol.png">
+      <img src="/static/img/design/icons/import_sbol.png">
     </a>
     <a class="item" id="json-sbol-button">
-      <img src="/static/img/design/export-sbol.png">
+      <img src="/static/img/design/icons/export_sbol.png">
     </a>
   </div>
 
@@ -207,29 +209,25 @@
       <i id="part-panel-button" class="link icon angle double right"></i>
     </div>
     <div class="content">
-      <!-- <div>
-        <h5>Chassis</h5><br>
-      </div>
-      <div class="ui compact floating selection dropdown" id="chassis-dropdown">
-        <div class="text" id="chassis"></div>
-        <i class="dropdown icon"></i>
-      </div>
-      <div class="ui divider"></div> -->
       <div>
-        <h5>Parts</h5><br>
+        <div class="search-header">Search</div>
+        <img id="advanced-search-button" src="static/img/design/icons/search.png">
+        <!-- <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div> -->
+
+        <br>
+        <!-- <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div> -->
       </div>
       <div id="search-parts-dropdown" class="ui fluid search selection dropdown">
         <i class="dropdown icon"></i>
         <div class="default text">Search BBa...</div>
       </div>
       <br>
-      <div id="advanced-search-button" class="ui inverted mini basic button">Advanced Search</div>
 
       <div class="ui divider"></div>
 
       <div class="tab-context">
         <div class="ui top attached tabular menu">
-          <div class="active item" data-tab="info-tab">Part information</div>
+          <div class="active item" data-tab="info-tab">PART INFORMATION</div>
         </div>
         <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
           <img id="part-info-img" class="ui centered tiny image" src="/static/img/design/unknown.png" alt="">
@@ -237,15 +235,32 @@
           <div class="ui center aligned container">
             <p id="part-type"></p>
           </div>
-          <div class="ui divider"></div>
+          <!-- <div class="ui divider"></div> -->
+          <h5 class="ui header description">DESCRIPTION</h5>
           <div id="part-info-des">
-            <h5 class="ui header">Description:</h5>
             <p></p>
             <div class="mini ui button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source
               Circuit</div>
           </div>
         </div>
       </div>
+
+      <div class="controller">
+        <a id="drag-canvas">
+          <img src="/static/img/design/icons/move.png">
+        </a>
+        <a id="zoom-in">
+          <img src="/static/img/design/icons/zoomin.png">
+        </a>
+        <a id="zoom-out">
+          <img src="/static/img/design/icons/zoomout.png">
+        </a>
+        <div class="ui compact floating selection dropdown" id="ratio-dropdown">
+          <i class="dropdown icon"></i>
+          <div class="default text">Ratio</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -580,7 +595,7 @@
         <div class="ui button" id="filter-clear">Clear </div>
         <div class="ui divider"></div>
       </div>
-      
+
       <div class="user-circuits"></div>
     </div>
   </div>
@@ -742,7 +757,7 @@
         </div>
       </div>
     </div>
-    
+
 </body>
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
@@ -764,4 +779,5 @@
 <script src="/static/js/realtime.js"></script>
 <script src="/static/js/live-canvas.js"></script>
 {% endif %}
+
 </html>

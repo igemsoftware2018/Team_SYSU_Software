@@ -1126,6 +1126,9 @@ function uncollapsed() {
         });
 }
 
+$('#advanced-search-button').popup({
+    content: 'Search Options'
+});
 
 // Initialize the checkboxes
 $('#advanced-search-modal .checkbox').checkbox('set checked');
@@ -1509,7 +1512,7 @@ $('#drag-canvas')
         design.disableDrag();
     })
     .popup({
-        content: 'Drag and move canvas. (Ctrl)'
+        content: 'Drag and move canvas.'
     });
 $('#inspect-item')
     .on('click', () => {
@@ -1972,5 +1975,5 @@ $('#realtime-enter')
         window.location.pathname = pn.join('/');
     })
     .popup({
-        content: 'click to go into realtime mode'
+        content: 'Click to go into realtime mode'
     });
