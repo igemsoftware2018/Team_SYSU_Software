@@ -2,26 +2,36 @@
 /* eslint-disable no-console */
 /* exported my_syn */
 let isRealtimeReading = true;
+let $bi_user_read = $('#bi-user-read');
+let $bi_user_write = $('#bi-user-write');
+
+$bi_user_write.hide();
+
 $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
 $('#realtime-button')
-    .on('click', function() {
-        isRealtimeReading = !isRealtimeReading;
-        if (isRealtimeReading) {
-            $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
+.on('click', function() {
+    isRealtimeReading = !isRealtimeReading;
+    if (isRealtimeReading) {
+        $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
 
-            //for live canvas
-            $('#live-canvas').removeClass('draw');
-            $('#live-canvas').removeClass('erase');
-            unloadLiveCanvasDraw();
-            initLiveCanvasShow();
-        } else {
-            $('#canvas').css('background', '');
+        //for live canvas
+        $('#live-canvas').removeClass('draw');
+        $('#live-canvas').removeClass('erase');
+        unloadLiveCanvasDraw();
+        initLiveCanvasShow();
 
-            //for live canvas
+        $bi_user_read.toggle();
+        $bi_user_write.toggle();
+    } else {
+        $('#canvas').css('background', '');
+
+        //for live canvas
             $('#live-canvas').addClass('draw');
             unloadLiveCanvasShow()
             initLiveCanvasDraw();
         }
+        $bi_user_read.toggle();
+        $bi_user_write.toggle();
     })
     .popup({
         content: 'click me to toggle following or not.'

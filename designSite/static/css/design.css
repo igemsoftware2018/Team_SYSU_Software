@@ -546,3 +546,10 @@ div h5,
 .live-canvas.hidden {
   display: none;
 }
+
+#info-box {
+  top: 3.5em;
+  width: 35%;
+  float: right;
+  margin: 1em;
+}

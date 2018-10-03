@@ -79,7 +79,9 @@ def design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': -1,
-        'username': request.user.username
+        'username': request.user.username,
+        'sharing': False,
+        'authorname': request.user.username
     }
     return render(request, 'design.html', context)
 
@@ -99,14 +101,16 @@ def share_design(request):
         'designID': designID,
         'write_authority': False,
         'username': request.user.username,
-        'realtime': isRealtime
+        'realtime': isRealtime,
+        'sharing': True
     }
-
+    circuit_authorname = None
     # check whether this id exists
     try:
         circuit = Circuit.objects.get(pk=designID)
         if circuit.Author == request_user:
             return redirect(os.path.join('/design/', designID))
+        circuit_authorname = circuit.Author.username
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
     except:
@@ -114,6 +118,8 @@ def share_design(request):
         logger.error('unknown bugs')
         return HttpResponseNotFound()
 
+    assert circuit_authorname is not None
+    context['authorname'] = circuit_authorname
     # check authorities
     try:
         authority_query = Authorities.objects.get(User=request_user, Circuit=circuit)
@@ -309,8 +315,10 @@ def personal_design(request):
         'type_list': TYPE_LIST,
         'designID': designID,
         'username': request.user.username,
+        'authorname': request.user.username,
         'write_authority': True,
-        'realtime': isRealtime
+        'realtime': isRealtime,
+        'sharing': False
     }
     return render(request, 'design.html', context)
 
@@ -1566,3 +1574,4 @@ def api_live_canvas(request):
         return JsonResponse({
             'msg': 'success'
         })
+

@@ -1,6 +1,8 @@
 {% load static %}
 
 <html>
+  <div hidden id="username-hack">{{username}}</div>
+  <div hidden id="authorname-hack">{{authorname}}</div>
 
 <head>
   <title>Designer</title>
@@ -178,7 +180,40 @@
   <!-- Main canvas -->
   <div id="canvas-box" design-id="{{ designID }}">
     <canvas class="live-canvas hidden" id="live-canvas" width="100%" height="100%"></canvas>
-    <div id="canvas"></div>
+    <div id="canvas">
+      <div class="ui message info-box" id="info-box">
+        <div class="header">
+          Basic Information
+        </div>
+        <ul class="list">
+          <!-- if is in realtime mode -->
+          {% if realtime %}
+          <li id="bi-user-read"> You are in <b>realtime</b> mode and following other
+            peers' alteration in real time. All of your operation will be <b>overriden</b> </li>
+          <li id="bi-user-write"> You are in <b>realtime</b> mode and all your operations
+            will <b>be seen</b> by other peers instantly.</li>
+          {% endif %}
+
+
+          <!-- if your are viewing a share design -->
+          {% if sharing %}
+          <!-- if u have write permission -->
+          {% if write_authority %}
+            <li> you are viewing user <b id="bi-user">{}</b> 's design with permission to <b>WRITE</b></li>
+          <!-- u have read permission -->
+          {% else %}
+            <li id="bi-user"> you are viewing user <b id="bi-user">{}</b> 's design with permission to <b>READ</b> </li>
+          {% endif %}
+          {% else %}
+          <!-- u are viewing ur own design -->
+          <li> You are viewing your own design. Feel free to edit! </li>
+          {% endif %}
+
+
+          <li>You are in <b id="bi-mode">{}</b> mode.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <!-- Part panel (right) -->
@@ -205,8 +240,7 @@
       <div class="tab-context">
         <div class="ui top attached tabular menu">
           <div class="active item" data-tab="info-tab">PART INFORMATION</div>
-        </div>
-        <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
+        </div> <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
           <img id="part-info-img" class="ui centered tiny image" src="/static/img/design/unknown.png" alt="">
           <h5 id="part-info-name" class="ui center aligned header"></h5>
           <div class="ui center aligned container">

@@ -15,6 +15,9 @@ let CHASSIS_FORMAT;
 
 let save_mode = 0;
 
+let username = $('#username-hack').text();
+let authorname = $('#authorname-hack').text();
+
 
 $.ajax({
     type: 'GET',
@@ -1456,6 +1459,16 @@ let newConnectionType, newConnectionStep;
 let newConnectionSource, newConnectionTarget;
 let previewConnection = {};
 
+const mode2str = {
+    modifyItem: 'Drag',
+    dragCanvas: 'Drag ALL',
+    deleteItem: 'Delete',
+    inspectItem: 'Inspect',
+    chassisItem: 'Setting Chassis',
+    addConnection: 'Add Connection',
+    chooseInteractive: 'Chose Interactive'
+};
+
 function selectMode(mode) {
     if (currentMode === mode)
         return;
@@ -1468,6 +1481,8 @@ function selectMode(mode) {
     button = modes[mode];
     button.addClass('active');
     button.trigger('select');
+
+    $('#bi-mode').text(mode2str[mode])
 }
 
 $('#chassis-item')
@@ -1997,3 +2012,7 @@ $('#realtime-enter')
     .popup({
         content: 'Click to go into realtime mode'
     });
+
+
+let bi_user_text = $('#bi-user').text()
+$('#bi-user').text(bi_user_text.replace('{}', authorname));
