@@ -1,3 +1,6 @@
+let $msg_modal = $('#msg-modal');
+let $msg_body = $('#msg-body');
+let $msg_head = $('#msg-header')
 function get_circuits(name, authority) {
     $.get('/api/authority_circuits', {
         name: JSON.stringify(name)
@@ -82,6 +85,8 @@ function refresh() {
 
         $('.authority-delete').on('click', function () {
             let username = $(this).parent()[0].innerText;
+            $msg_body.text('Your alteration is sending to the server.');
+            $msg_modal.modal('show');
             $.ajax({
                 type: 'DELETE',
                 url: '/api/authority_delete',
@@ -90,10 +95,15 @@ function refresh() {
                     'design': id,
                 },
                 success: (res) => {
+                    setTimeout(() => {
+                        $msg_body.text('Success.')
+                        setTimeout(() => {
+                            $msg_modal.modal('hide');
+                        }, 2000);
+                    }, 500);
                     // res.status == 0 -> error
                     // res.status == 1 -> success
                     refresh(id);
-                    alert(res.msg);
                 }
             })
         });
@@ -118,8 +128,14 @@ $('#search-users-dropdown').dropdown({
 }).popup({
     content: 'Search a user (Case Sensitive)'
 });
+
+$('#msg-modal').modal({
+    allowMultiple: true
+});
 $('#share-view-button, #share-edit-button').on('click', function (event) {
     if ($('#search-users-dropdown').dropdown('get value').length > 0) {
+        $msg_body.text('Your alteration is sending to the server.');
+        $msg_modal.modal('show');
         let data = {
             users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
             circuit: JSON.stringify(id),
@@ -128,8 +144,13 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
             )
         };
         $.post('/api/authority', data, function (v) {
+            setTimeout(() => {
+                $msg_body.text('Success');
+                setTimeout(() => {
+                    $msg_modal.modal('hide');
+                }, 2000);
+            }, 500);
             refresh();
-            alert(v.msg);
         });
     }
 });
