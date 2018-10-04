@@ -164,9 +164,11 @@
     <a class="item" id="upload-button">
       <img src="/static/img/design/icons/import_json.png">
     </a>
+    {% if not sharing %}
     <a class="item" id="share-button">
       <img src="/static/img/design/icons/share.png">
     </a>
+    {% endif %}
     <a class="item" id="sbol-json-button">
       <img src="/static/img/design/icons/import_sbol.png">
     </a>
