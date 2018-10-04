@@ -201,7 +201,7 @@ function initLiveCanvasShow() {
                 curOrder = data['latestOrder'];
                 if (fetchRenderList.length !== 0)
                     renderList = renderList.concat(fetchRenderList);
-                if (tempOrder === 0) {
+                if (curOrder - tempOrder > 5) {
                     while (renderList.length !== 0) {
                         try {
                             renderLiveCanvas();

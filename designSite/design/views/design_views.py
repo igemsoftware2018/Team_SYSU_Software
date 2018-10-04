@@ -1547,20 +1547,21 @@ def api_live_canvas(request):
     may combine with realtime
     '''
     if request.method == 'GET':
-        designID = request.path.split('/')[-1]
+        designID = request.path.split('/')[-2]
         if 'Order' not in request.GET.keys():
             return JsonResponse({})
         orderID = request.GET['Order']
         try:
-            pathToDraw = LiveCanvas.objects.filter(Order__gt=orderID)
+            pathToDraw = LiveCanvas.objects.filter(Design__exact=designID, Order__gt=orderID)
             if len(pathToDraw) == 0:
                 return JsonResponse({'latestOrder': 'latest'})
             latestOrder = list(pathToDraw.values('Order'))[-1]['Order']
             drawList = []
-            for path in list(pathToDraw.values('Path', 'Type')):
+            for path in list(pathToDraw.values('Path', 'Type', 'Design')):
                 drawList.append({
                     'drawType' : path['Type'],
-                    'drawPath': json.loads(path['Path'])
+                    'drawPath': json.loads(path['Path']),
+                    'designID' : path['Design']
                 })
             return JsonResponse({
                 'drawList' : drawList,
@@ -1570,7 +1571,7 @@ def api_live_canvas(request):
             return JsonResponse({})
         return JsonResponse({})
     elif request.method == 'POST':
-        designID = request.path.split('/')[-1]
+        designID = request.path.split('/')[-2]
         drawPath = request.POST['path']
         drawType = request.POST['type']
         # testing write authority
@@ -1590,7 +1591,7 @@ def api_live_canvas(request):
         # alter design.design json in db
         LiveCanvas.objects.create(
             Path=drawPath,
-            Design=designID,
+            Design=str(designID),
             Type=drawType
         )
         return JsonResponse({
