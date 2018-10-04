@@ -538,12 +538,12 @@ div h5,
   position: absolute;
 }
 
-.live-canvas.draw {
-  cursor: url(/static/cursor/pen.png), auto;
+.draw {
+  cursor: url(/static/cursor/pen.png), auto !important;
 }
 
-.live-canvas.erase {
-  cursor: url(/static/cursor/eraser.png), auto;
+.erase {
+  cursor: url(/static/cursor/eraser.png), auto !important;
 }
 
 .live-canvas.hidden {

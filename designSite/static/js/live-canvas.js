@@ -26,10 +26,71 @@ function resizeCanvas() {
     //initLiveCanvasShow();
 };
 resizeCanvas();
+function drawOnCanvas(e) {
+    var move_x = e.clientX - $('#live-canvas')[0].offsetLeft + document.body.scrollLeft;
+    var move_y = e.clientY - $('#live-canvas')[0].offsetTop + document.body.scrollTop;
+
+    var info_x = e.clientX - $('#info-box')[0].offsetLeft + document.body.scrollLeft;
+    var info_y = e.clientY - $('#info-box')[0].offsetTop + document.body.scrollTop;
+
+    if (info_x >= 0 && info_x <= $('#info-box').outerWidth() && info_y > 0 && info_y <= $('#info-box').outerHeight()) {
+        $('#info-box').css({ 'opacity': '0.2' });
+    } else {
+        $('#info-box').css({ 'opacity': '0.8' });
+    }
+
+    posList.push([move_x, move_y]);
+    if (onErase) {
+        cvs.clearRect(move_x, move_y, eraseWeight, eraseWeight);
+    } else {
+        cvs.lineTo(move_x, move_y);
+        cvs.stroke();
+    }
+}
+
+function finishDraw(e) {
+    if (onErase) {
+        $('.SDinDesign-part').removeClass('erase');
+        $('.SDinDesign-device').removeClass('erase');
+    } else {
+        $('.SDinDesign-part').removeClass('draw');
+        $('.SDinDesign-device').removeClass('draw');
+    }
+    $('#info-box').css({ 'opacity': '0.8' });
+    cvs.closePath();
+
+    console.log(posList);
+    if (onErase) {
+        curDrawType = 'erase';
+    } else {
+        curDrawType = 'draw';
+    }
+
+    $.post({
+        url: `/api/liveCanvas/${design.design.id}/`,
+        data: {
+            'path': JSON.stringify(posList),
+            'type': curDrawType,
+            csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+        },
+    });
+    posList = [];
+
+    $('#live-canvas').unbind("mousemove mouseup");
+    $('.SDinDesign-part').unbind("mousemove mouseup");
+    $('.SDinDesign-device').unbind("mousemove mouseup");
+}
 
 function initLiveCanvasDraw() {
     onErase = false;
     $('#live-canvas').mousedown(function (e) {
+        if (onErase) {
+            $('.SDinDesign-part').addClass('erase');
+            $('.SDinDesign-device').addClass('erase');
+        } else {
+            $('.SDinDesign-part').addClass('draw');
+            $('.SDinDesign-device').addClass('draw');
+        }
         var start_x = e.clientX - $('#live-canvas')[0].offsetLeft + document.body.scrollLeft;
         var start_y = e.clientY - $('#live-canvas')[0].offsetTop + document.body.scrollTop;
 
@@ -48,55 +109,24 @@ function initLiveCanvasDraw() {
             cvs.lineWidth = penWeight;
         }
         
-
-
+        $('.SDinDesign-device').mousemove(function (e) {
+            drawOnCanvas(e);
+        });
+        $('.SDinDesign-part').mousemove(function (e) {
+            drawOnCanvas(e);
+        });
         $('#live-canvas').mousemove(function (e) {
-
-            var move_x = e.clientX - $('#live-canvas')[0].offsetLeft + document.body.scrollLeft;
-            var move_y = e.clientY - $('#live-canvas')[0].offsetTop + document.body.scrollTop;
-
-            var info_x = e.clientX - $('#info-box')[0].offsetLeft + document.body.scrollLeft;
-            var info_y = e.clientY - $('#info-box')[0].offsetTop + document.body.scrollTop;
-            
-            if (info_x >= 0 && info_x <= $('#info-box').outerWidth() && info_y > 0 && info_y <= $('#info-box').outerHeight()) {
-                $('#info-box').css({ 'opacity' : '0.2' });
-            } else {
-                $('#info-box').css({ 'opacity' : '0.8' });
-            }
-
-            posList.push([move_x, move_y]);
-            if (onErase) {
-                cvs.clearRect(move_x, move_y, eraseWeight, eraseWeight);
-            } else {
-                cvs.lineTo(move_x, move_y);
-                cvs.stroke();
-            }
-            
+            drawOnCanvas(e);
         });
 
-
+        $('.SDinDesign-device').mouseup(function (e) {
+            finishDraw(e);
+        });
+        $('.SDinDesign-part').mouseup(function (e) {
+            finishDraw(e);
+        });
         $('#live-canvas').mouseup(function (e) {
-            $('#info-box').css({ 'opacity': '0.8' });
-            cvs.closePath();
-
-            console.log(posList);
-            if(onErase) {
-                curDrawType = 'erase';
-            } else {
-                curDrawType = 'draw';
-            }
-            
-            $.post({
-                url: `/api/liveCanvas/${design.design.id}/`,
-                data: {
-                    'path': JSON.stringify(posList),
-                    'type': curDrawType,
-                    csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
-                },
-            });
-            posList = [];
-
-            $('#live-canvas').unbind("mousemove mouseup");
+            finishDraw(e);
         });
     });
 }
