@@ -18,7 +18,15 @@ let save_mode = 0;
 let username = $('#username-hack').text();
 let authorname = $('#authorname-hack').text();
 
+let $design_msg_modal = $('#design-msg-modal');
+let $design_msg_body = $('#design-msg-body');
 
+$design_msg_modal.modal({
+    allowMultiple: true
+});
+$('.ui.modal').modal({
+    allowMultiple: true
+});
 $.ajax({
     type: 'GET',
     url: '/api/chassis',
@@ -670,6 +678,7 @@ function refresh() {
             let username = $(this).parent()[0].innerText;
             if (design._id == -1) {
                 alert("Please save your design first!");
+                return;
             }
             let id = design._id;
             $.ajax({
@@ -680,10 +689,14 @@ function refresh() {
                     'design': id,
                 },
                 success: (res) => {
+                    $design_msg_modal.modal('show');
+                    setTimeout(() => {
+                        $design_msg_modal.modal('hide');
+                    }, 1000);
                     // res.status == 0 -> error
                     // res.status == 1 -> success
                     refresh();
-                    alert(res.msg);
+                    // alert(res.msg);
                 }
             })
         });
@@ -719,16 +732,14 @@ $('#search-users-dropdown').dropdown({
 });
 $('#share-view-button, #share-edit-button').on('click', function (event) {
     if (design._id == -1) {
-        $('#share-modal').modal('hide');
-        $('.ui.dimmer:first .loader').text('ERROR. Please save your design first.');
-        $('.ui.dimmer:first').dimmer('show');
+        $design_msg_body.text('ERROR. Please save your design first.');
+        $design_msg_modal.modal('show');
         setTimeout(() => {
-            $('.ui.dimmer:first').dimmer('hide');
+            $design_msg_body.modal('hide');
         }, 3000);
     } else if ($('#search-users-dropdown').dropdown('get value').length > 0) {
-        $('#share-modal').modal('hide');
-        $('.ui.dimmer:first .loader').text('Connecting to the server...');
-        $('.ui.dimmer:first').dimmer('show');
+        $design_msg_body.text('Connecting to the server...');
+        $design_msg_modal.modal('show');
         let data = {
             users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
             circuit: JSON.stringify(design._id),
@@ -738,10 +749,10 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
         };
         $.post('/api/authority', data, function (v) {
             refresh();
-            $('.ui.dimmer:first .loader').text(v.msg)
+            $design_msg_body.text(v.msg)
             setTimeout(() => {
-               $('.ui.dimmer:first').dimmer('hide');
-            }, 3000);
+                $design_msg_modal.modal('hide');
+            }, 1000);
         });
     }
 });
