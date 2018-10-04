@@ -15,7 +15,7 @@
 #circuits-table tbody,
 #circuits-table th,
 #circuits-table tr {
-    color: #ffffff;
+    color: #ffffff!important;
     background-color: #3D3D3D;
 }
 

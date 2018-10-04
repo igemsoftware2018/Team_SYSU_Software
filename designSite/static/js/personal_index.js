@@ -3,7 +3,7 @@ function get_circuits(name, authority) {
         name: JSON.stringify(name)
     }, function (res) {
         if (res.circuits.length > 0) {
-            $('#circuits-modal div h5').html(`Ciruit Name: ${name}`);
+            $('#circuits-modal div h5').html(`Circuit Name: ${name}`);
             let html =
                 `<thead>
                 <tr>
