@@ -54,6 +54,16 @@ function initLiveCanvasDraw() {
 
             var move_x = e.clientX - $('#live-canvas')[0].offsetLeft + document.body.scrollLeft;
             var move_y = e.clientY - $('#live-canvas')[0].offsetTop + document.body.scrollTop;
+
+            var info_x = e.clientX - $('#info-box')[0].offsetLeft + document.body.scrollLeft;
+            var info_y = e.clientY - $('#info-box')[0].offsetTop + document.body.scrollTop;
+            
+            if (info_x >= 0 && info_x <= $('#info-box').outerWidth() && info_y > 0 && info_y <= $('#info-box').outerHeight()) {
+                $('#info-box').css({ 'opacity' : '0.2' });
+            } else {
+                $('#info-box').css({ 'opacity' : '0.8' });
+            }
+
             posList.push([move_x, move_y]);
             if (onErase) {
                 cvs.clearRect(move_x, move_y, eraseWeight, eraseWeight);
@@ -66,7 +76,7 @@ function initLiveCanvasDraw() {
 
 
         $('#live-canvas').mouseup(function (e) {
-
+            $('#info-box').css({ 'opacity': '0.8' });
             cvs.closePath();
 
             console.log(posList);
