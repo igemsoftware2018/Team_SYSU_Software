@@ -566,3 +566,7 @@ div h5,
     -ms-user-select: none;
     user-select: none;
 }
+
+.orad-error {
+  color: rgb(168, 49, 64);
+}

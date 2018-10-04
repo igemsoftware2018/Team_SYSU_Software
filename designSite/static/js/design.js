@@ -693,8 +693,16 @@ $('#search-users-dropdown').dropdown({
 });
 $('#share-view-button, #share-edit-button').on('click', function (event) {
     if (design._id == -1) {
-        alert('Please save your design first');
+        $('#share-modal').modal('hide');
+        $('.ui.dimmer:first .loader').text('ERROR. Please save your design first.');
+        $('.ui.dimmer:first').dimmer('show');
+        setTimeout(() => {
+            $('.ui.dimmer:first').dimmer('hide');
+        }, 3000);
     } else if ($('#search-users-dropdown').dropdown('get value').length > 0) {
+        $('#share-modal').modal('hide');
+        $('.ui.dimmer:first .loader').text('Connecting to the server...');
+        $('.ui.dimmer:first').dimmer('show');
         let data = {
             users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
             circuit: JSON.stringify(design._id),
@@ -704,7 +712,10 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
         };
         $.post('/api/authority', data, function (v) {
             refresh();
-            alert(v.msg);
+            $('.ui.dimmer:first .loader').text(v.msg)
+            setTimeout(() => {
+               $('.ui.dimmer:first').dimmer('hide');
+            }, 3000);
         });
     }
 });
@@ -1990,7 +2001,21 @@ $('#realtime-enter')
     .on('click', function() {
         console.log('click realtime enter button');
         if (design.design.id == -1) {
-            alert('please save your design before entering magic realtime space!');
+            if ($('#info-box-not-saved-msg').length > 0) {
+                return;
+            }
+            let error_msg = `
+            <b>
+                <li id="info-box-not-saved-msg" class="orad-error"> 
+                    Please save your design before entering magic realtime space!
+                </li>
+            </b>
+            `;
+            let $error_msg = $(error_msg)
+            $('#info-box ul').prepend($error_msg);
+            setTimeout(() => {
+                $('#info-box-not-saved-msg').remove();
+            }, 5000);
             return;
         }
 
