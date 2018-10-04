@@ -18,7 +18,7 @@
           <img class="logo" src="/static/img/logo.png">
         </a>
         <div class="right item">
-          <h5>Welcome, {{ user.username }}!</h5>
+          <h5>Welcome, <span> {{ user.username }} </span>!</h5>
         </div>
         <div class="item">
           <a id="logout" class="ui inverted button">Log Out</a>
@@ -31,10 +31,6 @@
         <a href="/" style="color:white">CO-RAD</a>
       </h1>
       <h3>Design and Collaborate, Analysis and Optimize.</h3>
-      <!-- <div id="design-button" class="ui huge primary button">
-        Make new Design
-        <i class="right arrow icon"></i>
-      </div> -->
     </div><br>
 
     <div class="ui container">
@@ -42,6 +38,7 @@
         <a class="center active item" data-tab="Parts">My Parts</a>
         <a class="item" data-tab="Circuits">My Circuits</a>
         <a class="item" data-tab="Shares">Shared Circuits</a>
+        <a class="item" data-tab="Authority">Authority Manage</a>
         <a class="item" href="/design">New Design</a>
       </div>
     </div>
@@ -142,11 +139,84 @@
     </div>
   </div>
 
+  <div class="ui bottom attached tab segment" data-tab="Authority">
+    <div class="ui content">
+      <h5>Authority Manage</h5>
+      {% if authority %}
+      <table class="ui sortable selectable striped padded table" id="authority-table">
+        <thead>
+          <tr>
+            <th class="sorted descending">ID</th>
+            <th class="sorted descending">Name</th>
+            <th class="sorted descending">Author</th>
+            <th class="sorted descending">Description</th>
+            <th class="sorted descending">Last Editor</th>
+            <th class="sorted descending">Last Update Time</th>
+          </tr>
+        </thead>
+        {% for circuit in authority %}
+        <tbody data-id="{{ circuit.ID }}">
+          <td>{{ circuit.ID }}</td>
+          <td>{{ circuit.Name }}</td>
+          <td>{{ circuit.Author }}</td>
+          <td>{{ circuit.Description }}</td>
+          <td>{{ circuit.LastEditor }}</td>
+          <td>{{ circuit.LastUpdateTime }}</td>
+        </tbody>
+        {% endfor %}
+      </table>
+      {% else %}
+      <div class="ui divider"></div>
+      <h5> You have no circuit added.</h5>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Circuits modal -->
   <div id="circuits-modal" class="ui modal">
     <div class="ui content">
       <h5></h5>
       <table class="ui sortable selectable striped padded table" id="circuits-table">
       </table>
+    </div>
+  </div>
+
+  <!-- Share modal -->
+  <div id="share-modal" class="ui tiny modal">
+    <div class="content">
+      <div class="ui vertical masthead center aligned segment">
+        <div class="ui container">
+          <div class="ui tabular menu" id="share-tab">
+            <a class="active item" data-tab="View">View</a>
+            <a class="item" data-tab="Edit">Edit</a>
+          </div>
+        </div><br>
+
+        <select id="search-users-dropdown" class="ui fluid search dropdown" multiple="">
+          <i class="dropdown icon"></i>
+          <div class="default text">Search User...</div>
+        </select>{% csrf_token %}
+
+        <div class="ui divider"></div>
+
+        <div class="ui bottom attached tab segment active" data-tab="View">
+          <div class="ui content">
+            <h5 class="ui center aligned">Viewers</h5>
+            <div class="ui divider"></div>
+            <div id="view-users"></div><br>
+            <div class="ui primary button" id="share-view-button">Share view</div>
+          </div>
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="Edit">
+          <div class="ui content">
+            <h5 class="ui center aligned">Editors</h5>
+            <div class="ui divider"></div>
+            <div id="edit-users"></div><br>
+            <div class="ui primary button" id="share-edit-button">Share edit</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

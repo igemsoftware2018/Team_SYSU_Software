@@ -570,3 +570,11 @@ div h5,
 .orad-error {
   color: rgb(168, 49, 64);
 }
+
+.authority-delete {
+  float: right;
+}
+
+.authority-delete:hover {
+  cursor: pointer;
+}

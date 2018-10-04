@@ -57,12 +57,6 @@ if (designId !== '' && parseInt(designId) !== -1) {
 $('.left.sidebar').first().sidebar('attach events', '#operation');
 
 
-
-// TODO: share button
-$('#share-button').popup({
-    content: 'Share your design'
-});
-
 function protocolShuffleStepID() {
     let $mp = $('#protocol-step-mountpoint');
     $mp.children().each((idx, ele) => {
@@ -636,6 +630,10 @@ $('#analysis-sequence-button').on('click', function () {
 
 
 // Share
+$('#share-button').popup({
+    content: 'Share your design'
+});
+
 function refresh() {
     $.get('/api/authority?circuit=' + design._id, function (res) {
         if (res.read.length > 0) {
@@ -643,7 +641,10 @@ function refresh() {
             res.read.forEach(function (ele) {
                 $('#view-users').append(
                     `<div class="item">
-                        <div class="content"><i class="users icon"></i>${ele}</div>
+                        <div class="content">
+                            <i class="users icon"></i>${ele}<i class="red delete icon authority-delete"></i>
+                        </div>
+                        <div class="ui divider"></div>
                     </div>`);
             });
             $('#view-users').append(`</div>`);
@@ -655,15 +656,40 @@ function refresh() {
             res.write.forEach(function (ele) {
                 $('#edit-users').append(
                     `<div class="item">
-                        <div class="content"><i class="users icon"></i>${ele}</div>
+                        <div class="content">
+                            <i class="users icon"></i>${ele}<i class="red delete icon authority-delete"></i>
+                        </div>
+                        <div class="ui divider"></div>
                     </div>`);
             });
             $('#edit-users').append(`</div>`);
         } else {
             $('#edit-users').html('<h5 class="ui center aligned">Share your design to others!</h5>');
         }
+        $('.authority-delete').on('click', function() {
+            let username = $(this).parent()[0].innerText;
+            if (design._id == -1) {
+                alert("Please save your design first!");
+            }
+            let id = design._id;
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/authority_delete',
+                data: {
+                    'username': username,
+                    'design': id,
+                },
+                success: (res) => {
+                    // res.status == 0 -> error
+                    // res.status == 1 -> success
+                    refresh();
+                    alert(res.msg);
+                }
+            })
+        });
     });
 }
+
 $('#share-button').on('click', function () {
     refresh();
     $('#share-tab .item').tab();
@@ -719,6 +745,7 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
         });
     }
 });
+
 
 $('#save-button').on('click', () => {
     save_mode = 0;

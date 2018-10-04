@@ -179,7 +179,7 @@
 
   <!-- Main canvas -->
   <div id="canvas-box" design-id="{{ designID }}">
-    
+
     <div id="canvas">
       <div class="ui message info-box unselectable" id="info-box">
         <div class="header">
@@ -199,10 +199,10 @@
           {% if sharing %}
           <!-- if u have write permission -->
           {% if write_authority %}
-            <li> you are viewing user <b id="bi-user">{}</b> 's design with permission to <b>WRITE</b></li>
+          <li> you are viewing user <b id="bi-user">{}</b> 's design with permission to <b>WRITE</b></li>
           <!-- u have read permission -->
           {% else %}
-            <li id="bi-user"> you are viewing user <b id="bi-user">{}</b> 's design with permission to <b>READ</b> </li>
+          <li id="bi-user"> you are viewing user <b id="bi-user">{}</b> 's design with permission to <b>READ</b> </li>
           {% endif %}
           {% else %}
           <!-- u are viewing ur own design -->
@@ -241,7 +241,8 @@
       <div class="tab-context">
         <div class="ui top attached tabular menu">
           <div class="active item" data-tab="info-tab">PART INFORMATION</div>
-        </div> <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
+        </div>
+        <div id="part-info-tab" class="ui bottom attached active tab segment" data-tab="info-tab">
           <img id="part-info-img" class="ui centered tiny image" src="/static/img/design/unknown.png" alt="">
           <h5 id="part-info-name" class="ui center aligned header"></h5>
           <div class="ui center aligned container">
@@ -632,11 +633,8 @@
         <div class="ui bottom attached tab segment active" data-tab="View">
           <div class="ui content">
             <h5 class="ui center aligned">Viewers</h5>
-
             <div class="ui divider"></div>
-
             <div id="view-users"></div><br>
-
             <div class="ui primary button" id="share-view-button">Share view</div>
           </div>
         </div>
@@ -644,134 +642,132 @@
         <div class="ui bottom attached tab segment" data-tab="Edit">
           <div class="ui content">
             <h5 class="ui center aligned">Editors</h5>
-
             <div class="ui divider"></div>
-
             <div id="edit-users"></div><br>
-
             <div class="ui primary button" id="share-edit-button">Share edit</div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- High risk modal -->
-    <div id="safety-modal" class="ui basic modal">
-      <div class="ui icon header">
-        <i class="checkmark icon"></i>
-        You have finished your circuit, congratulations!
+  <!-- High risk modal -->
+  <div id="safety-modal" class="ui basic modal">
+    <div class="ui icon header">
+      <i class="checkmark icon"></i>
+      You have finished your circuit, congratulations!
+    </div>
+    <div class="content">
+      <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in
+        real world
+        application.
+      </p>
+    </div>
+    <div class="actions">
+      <div class="ui red basic cancel inverted button">
+        <i class="left chevron icon"></i>
+        Back to design
       </div>
-      <div class="content">
-        <p>A control system, like a killer switch, may prevent biosafety problems and help your circuit work better in
-          real world
-          application.
-        </p>
-      </div>
-      <div class="actions">
-        <div class="ui red basic cancel inverted button">
-          <i class="left chevron icon"></i>
-          Back to design
-        </div>
-        <div class="ui green ok inverted button" id="continue-save">
-          Continue to save
-          <i class="right chevron icon"></i>
-        </div>
+      <div class="ui green ok inverted button" id="continue-save">
+        Continue to save
+        <i class="right chevron icon"></i>
       </div>
     </div>
+  </div>
 
-    <!-- Chassis modal -->
-    <div id="set-chassis-modal" class="ui tiny modal">
-      <div class="content">
-        <h5>Chassis</h5>
-        <div class="ui compact floating selection dropdown" id="chassis-dropdown">
-          <div class="text" id="chassis"></div>
-          <i class="dropdown icon"></i>
-        </div>
-      </div>
-      <div class="actions">
-        <div class="ui one bottom attached big buttons">
-          <div id="set-chassis-button" class="ui white button">Confirm</div>
-        </div>
+  <!-- Chassis modal -->
+  <div id="set-chassis-modal" class="ui tiny modal">
+    <div class="content">
+      <h5>Chassis</h5>
+      <div class="ui compact floating selection dropdown" id="chassis-dropdown">
+        <div class="text" id="chassis"></div>
+        <i class="dropdown icon"></i>
       </div>
     </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="set-chassis-button" class="ui white button">Confirm</div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Plasmid modal -->
-    <!--   from 2015 SYSU-Software C.O.R.E. -->
-    <div id="plasmid-modal" class="ui tiny modal">
-      <div ng-app="myApp" ng-controller="PlasmidCtrl">
-        <div class="content">
-          <div class="plasmid-container">
-            <plasmidapi name="api"></plasmidapi>
-            <plasmid id="pdemo" sequencelength="{[currentPlasmid.length]}" plasmidheight="420" plasmidwidth="500">
-              <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="120">
-                <tracklabel text="{[currentPlasmid.name]}" labelstyle='font-size:20px;font-weight:400'></tracklabel>
-                <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
+  <!-- Plasmid modal -->
+  <!--   from 2015 SYSU-Software C.O.R.E. -->
+  <div id="plasmid-modal" class="ui tiny modal">
+    <div ng-app="myApp" ng-controller="PlasmidCtrl">
+      <div class="content">
+        <div class="plasmid-container">
+          <plasmidapi name="api"></plasmidapi>
+          <plasmid id="pdemo" sequencelength="{[currentPlasmid.length]}" plasmidheight="420" plasmidwidth="500">
+            <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="120">
+              <tracklabel text="{[currentPlasmid.name]}" labelstyle='font-size:20px;font-weight:400'></tracklabel>
+              <tracklabel text="{[api.plasmid('pdemo').sequencelength]} bp" labelstyle='font-size:10px' vadjust="20"></tracklabel>
 
-                <!-- draw the plasmid bone markers and labels -->
-                <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4"
-                  arrowstartlength="-4" markerstyle="{[m.markerStyleIn]}">
-                  <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}"
-                    showline="1" linevadjust="-5" lineclass="labelline" style='font-size:17px'></markerlabel>
-                </trackmarker>
+              <!-- draw the plasmid bone markers and labels -->
+              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" arrowendlength="4"
+                arrowstartlength="-4" markerstyle="{[m.markerStyleIn]}">
+                <markerlabel type="path" class="mdlabel" text="{[m.name]}" vadjust='{[m.vadjust]}' valign="{[m.valign]}"
+                  showline="1" linevadjust="-5" lineclass="labelline" style='font-size:17px'></markerlabel>
+              </trackmarker>
 
-                <!-- draw the marker regions -->
-                <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.markerStyleOut]}"
-                  wadjust="-5" vadjust="25"></trackmarker>
-                <trackscale interval="100" style='stroke:#999' ticksize="3"></trackscale>
-              </plasmidtrack>
+              <!-- draw the marker regions -->
+              <trackmarker ng-repeat="m in currentPlasmid.marker" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.markerStyleOut]}"
+                wadjust="-5" vadjust="25"></trackmarker>
+              <trackscale interval="100" style='stroke:#999' ticksize="3"></trackscale>
+            </plasmidtrack>
 
-              <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="110" width="10">
-                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}"
-                  sequence="{[m.sequence]}" ng-mousedown="showSequence(m)">
-                  <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
-                  <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}"
-                    wadjust="-5" vadjust="-5"></trackmarker>
-                </trackmarker>
-                <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
-              </plasmidtrack>
-            </plasmid>
-            <div class="p" ng-hide="myHide" ng-model="myValue" style="padding: 10px; font-size: 1rem; line-height: 1.2rem; word-wrap: break-word">
-              {[myValue]}
+            <plasmidtrack trackstyle="fill:rgba(225,225,225,0.5)" radius="110" width="10">
+              <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getStyleIn()]}"
+                sequence="{[m.sequence]}" ng-mousedown="showSequence(m)">
+                <markerlabel class="mdlabel" text="{[m.name]}" type="path" style='font-size:13px'></markerlabel>
+                <trackmarker ng-repeat="m in partList" start="{[m.start]}" end="{[m.end]}" markerstyle="{[m.getMarkerStyleOut()]}"
+                  wadjust="-5" vadjust="-5"></trackmarker>
+              </trackmarker>
+              <trackscale interval="200" style="stroke:#f00" direction="in" showlabels="1" labelstyle="fill:#999;stroke:none;text-anchor:middle;alignment-baseline:middle;font-size:10px"></trackscale>
+            </plasmidtrack>
+          </plasmid>
+          <div class="p" ng-hide="myHide" ng-model="myValue" style="padding: 10px; font-size: 1rem; line-height: 1.2rem; word-wrap: break-word">
+            {[myValue]}
+          </div>
+        </div>
+
+        <div class="plasmid-edit">
+          <form class="ui form">
+            <div class="field">
+              <select class="ui dropdown" ng-model="curPlaIndex" ng-options="plasmids.indexOf(a) as a.name for a in plasmids">
+                <option value="">Choose a plasmid</option>
+              </select>
             </div>
-          </div>
-
-          <div class="plasmid-edit">
-            <form class="ui form">
-              <div class="field">
-                <select class="ui dropdown" ng-model="curPlaIndex" ng-options="plasmids.indexOf(a) as a.name for a in plasmids">
-                  <option value="">Choose a plasmid</option>
-                </select>
-              </div>
-              <div class="field">
-                <select class="ui dropdown" ng-model="curPartType" ng-options="x for x in partType">
-                  <option value="">Choose a part type </option>
-                </select>
-              </div>
-              <div class="field">
-                <input placeholder="Part name" id="plasmid-part-name" type="text" ng-model="curPartName">
-              </div>
-              <div class="field">
-                <input placeholder="Part begin" id="plasmid-part-begin" type="text" ng-model="currentPartBegin">
-              </div>
-              <div class="field">
-                <input placeholder="Part end" id="plasmid-part-end" type="text" ng-model="curPartEnd">
-              </div>
-            </form>
-          </div>
+            <div class="field">
+              <select class="ui dropdown" ng-model="curPartType" ng-options="x for x in partType">
+                <option value="">Choose a part type </option>
+              </select>
+            </div>
+            <div class="field">
+              <input placeholder="Part name" id="plasmid-part-name" type="text" ng-model="curPartName">
+            </div>
+            <div class="field">
+              <input placeholder="Part begin" id="plasmid-part-begin" type="text" ng-model="currentPartBegin">
+            </div>
+            <div class="field">
+              <input placeholder="Part end" id="plasmid-part-end" type="text" ng-model="curPartEnd">
+            </div>
+          </form>
         </div>
-        <div class="actions">
-          <div class="ui three bottom attached big buttons">
-            <div class="ui white button" ng-click="addNewPart()">ADD</div>
-            <div class="ui white button" ng-click="goBack()">BACK</div>
-            <div class="ui white button" ng-click="clearAllPart()">RESET</div>
-          </div>
+      </div>
+      <div class="actions">
+        <div class="ui three bottom attached big buttons">
+          <div class="ui white button" ng-click="addNewPart()">ADD</div>
+          <div class="ui white button" ng-click="goBack()">BACK</div>
+          <div class="ui white button" ng-click="clearAllPart()">RESET</div>
         </div>
       </div>
     </div>
-    <div id="username-hack">{{username}}</div>
-    <div id="authorname-hack">{{authorname}}</div>
-</body>
+  </div>
 
+</body>
+<div id="username-hack" style="display:none">{{username}}</div>
+<div id="authorname-hack" style="display:none">{{authorname}}</div>
 
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>

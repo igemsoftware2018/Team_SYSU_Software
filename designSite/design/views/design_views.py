@@ -7,7 +7,7 @@ from sbol import *
 
 import json
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound,\
-    HttpResponseForbidden
+    HttpResponseForbidden, QueryDict
 from django.contrib import messages
 
 # from design.models import *
@@ -186,10 +186,19 @@ def authority(request):
         write: [xxx, xxx(usernam)]
     }
 
+    DELETE method with parameter:
+    username=xxx
+    return json:
+    {
+        status: 0 or 1 {0 for error and 1 for success}
+        msg: xxx 
+    }
+
     '''
     if request.method == 'POST':
         users = json.loads(request.POST['users'])
-        circuit = Circuit.objects.get(id=request.POST['circuit'])
+        circuit_id = json.loads(request.POST['circuit'])
+        circuit = Circuit.objects.get(id=circuit_id)
         auth_str = json.loads(request.POST['authority'])
         for username in users:
             if username == request.user.username:
@@ -235,6 +244,19 @@ def authority(request):
     else:
         logger.error('unknow request method')
         return HttpResponseNotFound()
+
+@csrf_exempt
+def authority_delete(request):
+    delete = QueryDict(request.body)
+    username = delete.get('username', '')
+    design_id = delete.get('design', '')
+    circuit = Circuit.objects.get(id=design_id)
+    user = User.objects.get(username=username)
+    Authorities.objects.get(Circuit=circuit, User=user).delete()
+    return JsonResponse({
+        'status': 1,
+        'msg': 'Delete Successfully!'
+    })
 
 def takeUpdateTime(elem):
     return elem['UpdateTime']
