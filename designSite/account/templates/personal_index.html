@@ -57,14 +57,16 @@
             <th class="sorted descending">Description</th>
           </tr>
         </thead>
-        {% for part in parts %}
-        <tbody data-id="{{ part.ID }}">
-          <td>{{ part.ID }}</td>
-          <td>{{ part.Name }}</td>
-          <td>{{ part.Role }}</td>
-          <td>{{ part.Description }}</td>
+        <tbody>
+          {% for part in parts %}
+          <tr data-id="{{ part.ID }}">
+            <td>{{ part.ID }}</td>
+            <td>{{ part.Name }}</td>
+            <td>{{ part.Role }}</td>
+            <td>{{ part.Description }}</td>
+          </tr>
+          {% endfor %}
         </tbody>
-        {% endfor %}
       </table>
       {% else %}
       <div class="ui divider"></div>
@@ -87,16 +89,18 @@
             <th class="sorted descending">Last Update Time</th>
           </tr>
         </thead>
-        {% for circuit in circuits %}
-        <tbody data-name="{{ circuit.Name }}">
-          <td>{{ circuit.ID }}</td>
-          <td>{{ circuit.Name }}</td>
-          <td>{{ circuit.Author }}</td>
-          <td>{{ circuit.Description }}</td>
-          <td>{{ circuit.LastEditor }}</td>
-          <td>{{ circuit.LastUpdateTime }}</td>
+        <tbody>
+          {% for circuit in circuits %}
+          <tr data-name="{{ circuit.Name }}">
+            <td>{{ circuit.ID }}</td>
+            <td>{{ circuit.Name }}</td>
+            <td>{{ circuit.Author }}</td>
+            <td>{{ circuit.Description }}</td>
+            <td>{{ circuit.LastEditor }}</td>
+            <td>{{ circuit.LastUpdateTime }}</td>
+          </tr>
+          {% endfor %}
         </tbody>
-        {% endfor %}
       </table>
       {% else %}
       <div class="ui divider"></div>
@@ -120,17 +124,19 @@
             <th class="sorted descending">Last Update Time</th>
           </tr>
         </thead>
-        {% for circuit in share %}
-        <tbody data-name="{{ circuit.Name }}">
-          <td>{{ circuit.ID }}</td>
-          <td>{{ circuit.Name }}</td>
-          <td>{{ circuit.Author }}</td>
-          <td>{{ circuit.Description }}</td>
-          <td>{{ circuit.Authority }}</td>
-          <td>{{ circuit.LastEditor }}</td>
-          <td>{{ circuit.LastUpdateTime }}</td>
+        <tbody>
+          {% for circuit in share %}
+          <tr data-name="{{ circuit.Name }}">
+            <td>{{ circuit.ID }}</td>
+            <td>{{ circuit.Name }}</td>
+            <td>{{ circuit.Author }}</td>
+            <td>{{ circuit.Description }}</td>
+            <td>{{ circuit.Authority }}</td>
+            <td>{{ circuit.LastEditor }}</td>
+            <td>{{ circuit.LastUpdateTime }}</td>
+          </tr>
+          {% endfor %}
         </tbody>
-        {% endfor %}
       </table>
       {% else %}
       <div class="ui divider"></div>
@@ -154,16 +160,18 @@
             <th class="sorted descending">Last Update Time</th>
           </tr>
         </thead>
-        {% for circuit in authority %}
-        <tbody data-id="{{ circuit.ID }}">
-          <td>{{ circuit.ID }}</td>
-          <td>{{ circuit.Name }}</td>
-          <td>{{ circuit.Author }}</td>
-          <td>{{ circuit.Description }}</td>
-          <td>{{ circuit.LastEditor }}</td>
-          <td>{{ circuit.LastUpdateTime }}</td>
+        <tbody>
+          {% for circuit in authority %}
+          <tr data-id="{{ circuit.ID }}">
+            <td>{{ circuit.ID }}</td>
+            <td>{{ circuit.Name }}</td>
+            <td>{{ circuit.Author }}</td>
+            <td>{{ circuit.Description }}</td>
+            <td>{{ circuit.LastEditor }}</td>
+            <td>{{ circuit.LastUpdateTime }}</td>
+          </tr>
+          {% endfor %}
         </tbody>
-        {% endfor %}
       </table>
       {% else %}
       <div class="ui divider"></div>
@@ -242,6 +250,7 @@
 <script src="/static/semantic/dist/semantic.js"></script>
 <script src="/static/semantic/dist/components/popup.min.js"></script>
 <script src="/static/semantic/dist/components/tab.min.js"></script>
+<script src="/static/js/tableSort.js"></script>
 <script src="/static/js/personal_index.js"></script>
 
 </html>

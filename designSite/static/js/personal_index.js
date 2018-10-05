@@ -15,24 +15,18 @@ function get_circuits(name, authority) {
                     <th class="sorted descending">Update Time</th>\
                     <th class="sorted descending">Comment</th>\
                 `
-            // if (authority !== 'share-table') {
-            //     html += `<th class="sorted descending">Authority Manage</th>`;
-            // }
-            html += `</tr></thead>`
+            html += `</tr></thead><tbody>`
 
             $('#circuits-table').append(html);
             res.circuits.forEach(element => {
-                let temp = `<tbody data-id="${element.ID}">\
+                let temp = `<tr data-id="${element.ID}">\
                     <td class="id">${element.ID}</td>\
                     <td>${element.Editor}</td>\
                     <td>${element.UpdateTime}</td>\
                     <td>${element.Comment}</td>`;
-                // if (authority !== 'share-table') {
-                //     temp += `<td class="ui small button" style="z-index=100">Authority Manage</td>`;
-                // }
-                $('#circuits-table').append(temp + `</tbody>`);
+                $('#circuits-table').append(temp + `</tr></tbody>`);
             });
-            $('#circuits-table').children('tbody').on('click', function () {
+            $('#circuits-table').children('tbody').children('tr').on('click', function () {
                 let id = $(this).attr('data-id');
                 let url = `/design/${id}`;
                 if (authority === 'share-table') {
@@ -40,9 +34,7 @@ function get_circuits(name, authority) {
                 }
                 window.location = url;
             });
-            // $('#circuits-table').children('tbody').children('tr').children('.button').on('click', function () {
-            //     console.log("manage");
-            // });
+            $('table').tablesort();
         } else {
             $('#circuits-table').html('<h5 class="ui center aligned">Empty!</h5>');
         }
@@ -156,8 +148,8 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
 });
 
 $(function () {
-    $('#master-table, #share-table').children('tbody').on('click', function () {
-        let name = $(this).attr('data-name');
+    $('#master-table, #share-table').children('tbody').children('tr').on('click', function () {
+        let name = $(this).attr('data-name')
         get_circuits(name, $(this).parent()[0].id);
         $('#circuits-modal').modal({
             onHide: function () {
@@ -166,7 +158,7 @@ $(function () {
         }).modal('show');
     });
 
-    $('#authority-table').children('tbody').on('click', function () {
+    $('#authority-table').children('tbody').children('tr').on('click', function () {
         id = $(this).attr('data-id');
         refresh();
         $('#share-tab .item').tab();
@@ -183,3 +175,5 @@ $('#logout').on('click', function () {
 });
 
 $('.tabular.menu .item').tab();
+
+$('table').tablesort();

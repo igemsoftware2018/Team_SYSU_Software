@@ -12,20 +12,17 @@
     color: #a83140;
 }
 
-#circuits-table tbody,
 #circuits-table th,
-#circuits-table tr {
+#circuits-table tbody {
     color: #ffffff!important;
     background-color: #3D3D3D;
 }
 
-/* #circuits-table {
-    border: none;
-} */
-
-tbody:hover {
+#master-table tbody tr:hover,
+#share-table tbody tr:hover,
+#authority-table tbody tr:hover {
     border-color: rgba(255, 0, 0, 0.3);
-    background-color: rgba(255, 0, 0, 0.05);
+    background-color: rgba(255, 0, 0, 0.05) !important;
     cursor: pointer;
 }
 
