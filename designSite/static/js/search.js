@@ -11,6 +11,23 @@ function keyDownSearch(e) {
   return true;
 }
 
+$('#logo').on('click', function(){
+  $(location).attr('href', '/');
+})
+// Update some css parameters
+// function updateParameters() {
+//   let topBarHeight = $(".top-bar").height();
+//   console.log(topBarHeight);
+//   $(".top-bar p").css("font-size", String(topBarHeight * .7));
+// }
+
+// $(document).ready(function() {
+//   updateParameters();
+// })
+
+// $(window).resize(updateParameters);
+
+
 $('#search').on('click', function () {
   $('#content-segment').html('');
   $('#item-segment').removeClass('visible').addClass('invisible');

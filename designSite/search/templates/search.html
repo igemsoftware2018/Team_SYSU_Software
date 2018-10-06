@@ -10,33 +10,53 @@
 </head>
 
 <body>
-  <!-- Search top bar -->
-  <div class="ui center aligned container top-bar">
-    <img id="logo" class="button" src="/static/img/logo.png">
-    <div class="ui icon input">
-      <input name="keyword" placeholder="Search..." type="text">
-      <i class="search icon" id="search"></i>
-    </div>
-    <label id="design" class="button">DESIGN</label>
-    <label id="account" class="button">ACCOUNT</label>
+  <!-- top bar -->
+  <div class="ui large top fixed menu" id="top-bar">
+      <div class="left item">
+        <div class="top-bar-item">
+            <img id="logo" src="/static/img/logo_gray.png">
+        </div>
+      </div>
+      <div class="right item">
+          <!-- <label id="design" class="button">DESIGN</label>
+          <label id="account" class="button">ACCOUNT</label> -->
+          <div class="top-bar-item">
+            <a href="/design">
+              <h3>Design</h3>
+            </a>
+          </div>
+          <div class="top-bar-item">
+            <a href="/account">
+              <h3>Welcome, <span class="username">{{ user.username }}</span> !</h3>
+            </a>
+          </div>
+      </div>
   </div>
 
-  <!-- Guide bar -->
-  <div class="ui breadcrumb">
-    <a class="active section">Paper</a>
-    <div class="divider"> | </div>
-    <a class="section">Project</a>
-    <div class="divider"> | </div>
-    <a class="section">Upload</a>
+  <div class="ui middle aligned grid" id="center-wrapper">
+      <div class="column">
+          <div class="ui center aligned page grid">
+            <div id="search-title-1">
+              CO-RAD Search
+            </div>
+            <div class="sixteen wide column">
+                <div class="ui icon my-input-box">
+                  <input id="my-input-box" name="keyword" placeholder="Search..." type="text">
+                  <i class="search icon" id="search-button"></i>
+                </div>
+            </div>
+            <div class="ui breadcrumb">
+                <a class="active section"><span>Paper</span></a>
+                <div class="divider"> | </div>
+                <a class="section"><span>Project</span></a>
+                <div class="divider"> | </div>
+                <a class="section"><span>Upload</span></a>
+              </div>
+          </div>
+      </div>
   </div>
 
-  <!-- Search Content segment -->
-  <div id="content-segment" class="ui vertical stripe segment visible"></div>
 
-  <!-- Item Detail segment -->
-  <div id="item-segment" class="ui vertical stripe segment invisible">
-    <div class="ui container"></div>
-  </div>
 </body>
 
 <script src="/static/js/jquery.min.js"></script>
@@ -46,5 +66,8 @@
 <script src="/static/semantic/dist/components/popup.min.js"></script>
 <script src="/static/semantic/dist/components/tab.min.js"></script>
 <script src="/static/js/search.js"></script>
+<script>
+
+</script>
 
 </html>

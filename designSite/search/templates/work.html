@@ -1,0 +1,103 @@
+<html>
+
+<head>
+  <title>Search</title>
+
+  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/css/search.css">
+</head>
+
+<body>
+  <!-- top bar -->
+  <div class="ui large fixed menu" id="top-bar">
+        <div class="left item">
+            <div class="top-bar-item">
+                <img id="logo" src="/static/img/logo_gray.png">
+            </div>
+        </div>
+        <div class="right item">
+            <!-- <label id="design" class="button">DESIGN</label>
+            <label id="account" class="button">ACCOUNT</label> -->
+            <div class="top-bar-item">
+                <a href="/design">
+                <h3>Design</h3>
+                </a>
+            </div>
+            <div class="top-bar-item">
+                <a href="/account">
+                <h3>Welcome, <span class="username">{{ user.username }}</span> !</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui grid container" style="margin-top:150px">
+            <div class="three wide column" id="search-title-2">
+               Search
+            </div>
+            <div class="twelve wide column">
+                <div class="ui action input">
+                    <input id="my-input-box" type="text" palceholder="Search..">
+                    <button class="ui icon button" id="search-button">
+                        <i class="search icon"></i>
+                    </button>
+                </div>
+            </div>
+    </div>
+  <div class="ui vertical stripe segment" style="margin-top:120px">
+        
+        <div class="ui middle aligned stackable grid container">
+          <div class="row">
+            <div class="eight wide column">
+              <h3 class="ui header">We Help Companies and Companions</h3>
+              <p>We can give your company superpowers to do things that they never thought possible. Let us delight your customers and empower your needs...through pure data analytics.</p>
+              <h3 class="ui header">We Make Bananas That Can Dance</h3>
+              <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
+            </div>
+            <div class="six wide right floated column">
+              <img src="assets/images/wireframe/white-image.png" class="ui large bordered rounded image">
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <!-- <div class="ui middle aligned grid" id="center-wrapper">
+      <div class="column">
+          <div class="ui center aligned page grid">
+            <div id="search-title">
+              CO-RAD Search
+            </div>
+            <div class="sixteen wide column">
+                <div class="ui icon my-input-box">
+                  <input id="my-input-box" name="keyword" placeholder="Search..." type="text">
+                  <i class="search icon" id="search-button"></i>
+                </div>
+            </div>
+            <div class="ui breadcrumb">
+                <a class="active section"><span>Paper</span></a>
+                <div class="divider"> | </div>
+                <a class="section"><span>Project</span></a>
+                <div class="divider"> | </div>
+                <a class="section"><span>Upload</span></a>
+              </div>
+          </div>
+      </div>
+  </div> -->
+
+
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.mousewheel.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
+<script src="/static/js/search.js"></script>
+<script>
+
+</script>
+
+</html>

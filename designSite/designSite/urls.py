@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^design/realtime/\d+/?$', design_views.personal_design),
     url(r'^design/share/\d+/?$', design_views.share_design),
     url(r'^design/share/realtime/\d+/?$', design_views.share_design),
+    url(r'^work$', search_views.work),
     url(r'^interest/?$', account_views.interest),
     url(r'^logout/?$', account_views.logout_view),
 ] + [
@@ -50,7 +51,6 @@ urlpatterns = [
     url(r'api/circuits$', design_views.circuits),
     url(r'api/circuit$', design_views.circuit),
     url(r'api/get_saves$', design_views.get_saves),
-    url(r'api/interact$', design_views.interact),
     url(r'api/simulation$', design_views.simulation),
     url(r'api/plasmid_data$', design_views.plasmid_data),
     url(r'api/plasm_part$', design_views.plasm_part),
@@ -60,6 +60,7 @@ urlpatterns = [
     url(r'api/analysis$', design_views.analysis_sequence),
     url(r'api/realtime/\d+/?$', design_views.api_real_time),
     url(r'api/liveCanvas/\d+/.*?$', design_views.api_live_canvas),
+    # url(r'api/interact$', design_views.interact),
     # url(r'api/tag_favorite$', design_views.tag_favorite),
     # url(r'api/get_favorite$', design_views.get_favorite),
     # url(r'api/part_favorite$', design_views.part_favorite),
