@@ -51,7 +51,7 @@ def work(request):
                 part.append({
                     'id': request.GET.get('id'),
                     'BBa': item,
-                    'name': "None",
+                    'name': "unknown",
                 })
         if wk.Img.all().count() == 0:
             Img = [wk.DefaultImg]
