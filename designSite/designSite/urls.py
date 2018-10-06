@@ -44,6 +44,7 @@ urlpatterns = [
     # API urls
     url(r'api/users$', design_views.users),
     url(r'api/authority$', design_views.authority),
+    url(r'api/authority_delete$', design_views.authority_delete),
     url(r'api/authority_circuits$', design_views.authority_circuits),
     url(r'api/parts$', design_views.parts),
     url(r'api/part$', design_views.part),

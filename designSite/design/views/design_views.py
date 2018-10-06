@@ -7,7 +7,7 @@ from sbol import *
 
 import json
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound,\
-    HttpResponseForbidden
+    HttpResponseForbidden, QueryDict
 from django.contrib import messages
 
 # from design.models import *
@@ -79,7 +79,9 @@ def design(request):
     context = {
         'type_list': TYPE_LIST,
         'designID': -1,
-        'username': request.user.username
+        'username': request.user.username,
+        'sharing': False,
+        'authorname': request.user.username
     }
     return render(request, 'design.html', context)
 
@@ -99,14 +101,16 @@ def share_design(request):
         'designID': designID,
         'write_authority': False,
         'username': request.user.username,
-        'realtime': isRealtime
+        'realtime': isRealtime,
+        'sharing': True
     }
-
+    circuit_authorname = None
     # check whether this id exists
     try:
         circuit = Circuit.objects.get(pk=designID)
         if circuit.Author == request_user:
             return redirect(os.path.join('/design/', designID))
+        circuit_authorname = circuit.Author.username
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
     except:
@@ -114,6 +118,8 @@ def share_design(request):
         logger.error('unknown bugs')
         return HttpResponseNotFound()
 
+    assert circuit_authorname is not None
+    context['authorname'] = circuit_authorname
     # check authorities
     try:
         authority_query = Authorities.objects.get(User=request_user, Circuit=circuit)
@@ -180,10 +186,19 @@ def authority(request):
         write: [xxx, xxx(usernam)]
     }
 
+    DELETE method with parameter:
+    username=xxx
+    return json:
+    {
+        status: 0 or 1 {0 for error and 1 for success}
+        msg: xxx 
+    }
+
     '''
     if request.method == 'POST':
         users = json.loads(request.POST['users'])
-        circuit = Circuit.objects.get(id=request.POST['circuit'])
+        circuit_id = json.loads(request.POST['circuit'])
+        circuit = Circuit.objects.get(id=circuit_id)
         auth_str = json.loads(request.POST['authority'])
         for username in users:
             if username == request.user.username:
@@ -229,6 +244,19 @@ def authority(request):
     else:
         logger.error('unknow request method')
         return HttpResponseNotFound()
+
+@csrf_exempt
+def authority_delete(request):
+    delete = QueryDict(request.body)
+    username = delete.get('username', '')
+    design_id = delete.get('design', '')
+    circuit = Circuit.objects.get(id=design_id)
+    user = User.objects.get(username=username)
+    Authorities.objects.get(Circuit=circuit, User=user).delete()
+    return JsonResponse({
+        'status': 1,
+        'msg': 'Delete Successfully!'
+    })
 
 def takeUpdateTime(elem):
     return elem['UpdateTime']
@@ -309,8 +337,10 @@ def personal_design(request):
         'type_list': TYPE_LIST,
         'designID': designID,
         'username': request.user.username,
+        'authorname': request.user.username,
         'write_authority': True,
-        'realtime': isRealtime
+        'realtime': isRealtime,
+        'sharing': False
     }
     return render(request, 'design.html', context)
 
@@ -1517,20 +1547,21 @@ def api_live_canvas(request):
     may combine with realtime
     '''
     if request.method == 'GET':
-        designID = request.path.split('/')[-1]
+        designID = request.path.split('/')[-2]
         if 'Order' not in request.GET.keys():
             return JsonResponse({})
         orderID = request.GET['Order']
         try:
-            pathToDraw = LiveCanvas.objects.filter(Order__gt=orderID)
+            pathToDraw = LiveCanvas.objects.filter(Design__exact=designID, Order__gt=orderID)
             if len(pathToDraw) == 0:
                 return JsonResponse({'latestOrder': 'latest'})
             latestOrder = list(pathToDraw.values('Order'))[-1]['Order']
             drawList = []
-            for path in list(pathToDraw.values('Path', 'Type')):
+            for path in list(pathToDraw.values('Path', 'Type', 'Design')):
                 drawList.append({
                     'drawType' : path['Type'],
-                    'drawPath': json.loads(path['Path'])
+                    'drawPath': json.loads(path['Path']),
+                    'designID' : path['Design']
                 })
             return JsonResponse({
                 'drawList' : drawList,
@@ -1540,7 +1571,7 @@ def api_live_canvas(request):
             return JsonResponse({})
         return JsonResponse({})
     elif request.method == 'POST':
-        designID = request.path.split('/')[-1]
+        designID = request.path.split('/')[-2]
         drawPath = request.POST['path']
         drawType = request.POST['type']
         # testing write authority
@@ -1560,7 +1591,7 @@ def api_live_canvas(request):
         # alter design.design json in db
         LiveCanvas.objects.create(
             Path=drawPath,
-            Design=designID,
+            Design=str(designID),
             Type=drawType
         )
         return JsonResponse({

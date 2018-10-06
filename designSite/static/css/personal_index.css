@@ -3,18 +3,77 @@
     width: 5rem !important;
 }
 
-#master-table tbody:hover,
-#share-table tbody:hover, 
-#circuits-table tbody:hover {
-    border-color: rgba(255,0,0,0.3);
-    background-color: rgba(255,0,0,0.05);
+.right.item {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.right.item>h5>span {
+    text-decoration: underline;
+    color: #a83140;
+}
+
+#circuits-table th,
+#circuits-table tbody {
+    color: #ffffff!important;
+    background-color: #3D3D3D;
+}
+
+#master-table tbody tr:hover,
+#share-table tbody tr:hover,
+#authority-table tbody tr:hover {
+    border-color: rgba(255, 0, 0, 0.3);
+    background-color: rgba(255, 0, 0, 0.05) !important;
     cursor: pointer;
 }
 
-th, tr, h5{
+th,
+tr,
+h5 {
     text-align: center;
 }
 
 .tabular item {
     font-weight: bold;
+}
+
+
+.modal:not(.basic)>.actions {
+    padding: 0;
+}
+
+.modal:not(.basic) {
+    border-radius: 1em;
+}
+
+.modal:not(.basic) .header,
+.modal:not(.basic) .content,
+.modal:not(.basic) .actions {
+    color: #ffffff;
+    border: 0 !important;
+    background-color: #3D3D3D !important;
+}
+
+.modal:not(.basic) .content:nth-child(2) {
+    padding-top: 0;
+}
+
+#share-tab .item {
+    color: #ffffff;
+}
+
+#share-tab .active {
+    color: #3D3D3D;
+}
+
+.center.aligned.segment .tab.segment {
+    background-color: #3D3D3D;
+    border: none;
+}
+
+.authority-delete {
+    float: right;
+}
+
+.authority-delete:hover {
+    cursor: pointer;
 }

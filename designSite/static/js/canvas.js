@@ -576,7 +576,8 @@ class SDinDesign {
                 left: (this._canvasPositionX + device.X) * this._size.unit,
                 top: (this._canvasPositionY + device.Y) * this._size.unit,
                 height: `calc(${this._size.partSize + this._size.bonePadding * 3 + 3}px + ${1.5 * this._size.unit}em)`,
-                width: Object.keys(device.parts).length * (this._size.partSize + this._size.partPadding) + this._size.partPadding
+                width: Object.keys(device.parts).length * (this._size.partSize + this._size.partPadding) + this._size.partPadding,
+                backgroundColor: `rgba(0, 0, 0, 0) !important`
             }).children('.bone').css({
                 left: this._size.partPadding,
                 width: device.DOM.width() - 2 * this._size.partPadding,

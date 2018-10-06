@@ -15,7 +15,18 @@ let CHASSIS_FORMAT;
 
 let save_mode = 0;
 
+let username = $('#username-hack').text();
+let authorname = $('#authorname-hack').text();
 
+let $design_msg_modal = $('#design-msg-modal');
+let $design_msg_body = $('#design-msg-body');
+
+$design_msg_modal.modal({
+    allowMultiple: true
+});
+$('.ui.modal').modal({
+    allowMultiple: true
+});
 $.ajax({
     type: 'GET',
     url: '/api/chassis',
@@ -53,12 +64,6 @@ if (designId !== '' && parseInt(designId) !== -1) {
 
 $('.left.sidebar').first().sidebar('attach events', '#operation');
 
-
-
-// TODO: share button
-$('#share-button').popup({
-    content: 'Share your design'
-});
 
 function protocolShuffleStepID() {
     let $mp = $('#protocol-step-mountpoint');
@@ -633,6 +638,10 @@ $('#analysis-sequence-button').on('click', function () {
 
 
 // Share
+$('#share-button').popup({
+    content: 'Share your design'
+});
+
 function refresh() {
     $.get('/api/authority?circuit=' + design._id, function (res) {
         if (res.read.length > 0) {
@@ -640,7 +649,10 @@ function refresh() {
             res.read.forEach(function (ele) {
                 $('#view-users').append(
                     `<div class="item">
-                        <div class="content"><i class="users icon"></i>${ele}</div>
+                        <div class="content">
+                            <i class="users icon"></i>${ele}<i class="red delete icon authority-delete"></i>
+                        </div>
+                        <div class="ui divider"></div>
                     </div>`);
             });
             $('#view-users').append(`</div>`);
@@ -652,15 +664,45 @@ function refresh() {
             res.write.forEach(function (ele) {
                 $('#edit-users').append(
                     `<div class="item">
-                        <div class="content"><i class="users icon"></i>${ele}</div>
+                        <div class="content">
+                            <i class="users icon"></i>${ele}<i class="red delete icon authority-delete"></i>
+                        </div>
+                        <div class="ui divider"></div>
                     </div>`);
             });
             $('#edit-users').append(`</div>`);
         } else {
             $('#edit-users').html('<h5 class="ui center aligned">Share your design to others!</h5>');
         }
+        $('.authority-delete').on('click', function() {
+            let username = $(this).parent()[0].innerText;
+            if (design._id == -1) {
+                alert("Please save your design first!");
+                return;
+            }
+            let id = design._id;
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/authority_delete',
+                data: {
+                    'username': username,
+                    'design': id,
+                },
+                success: (res) => {
+                    $design_msg_modal.modal('show');
+                    setTimeout(() => {
+                        $design_msg_modal.modal('hide');
+                    }, 1000);
+                    // res.status == 0 -> error
+                    // res.status == 1 -> success
+                    refresh();
+                    // alert(res.msg);
+                }
+            })
+        });
     });
 }
+
 $('#share-button').on('click', function () {
     refresh();
     $('#share-tab .item').tab();
@@ -690,8 +732,14 @@ $('#search-users-dropdown').dropdown({
 });
 $('#share-view-button, #share-edit-button').on('click', function (event) {
     if (design._id == -1) {
-        alert('Please save your design first');
+        $design_msg_body.text('ERROR. Please save your design first.');
+        $design_msg_modal.modal('show');
+        setTimeout(() => {
+            $design_msg_body.modal('hide');
+        }, 3000);
     } else if ($('#search-users-dropdown').dropdown('get value').length > 0) {
+        $design_msg_body.text('Connecting to the server...');
+        $design_msg_modal.modal('show');
         let data = {
             users: JSON.stringify($('#search-users-dropdown').dropdown('get value')),
             circuit: JSON.stringify(design._id),
@@ -701,10 +749,14 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
         };
         $.post('/api/authority', data, function (v) {
             refresh();
-            alert(v.msg);
+            $design_msg_body.text(v.msg)
+            setTimeout(() => {
+                $design_msg_modal.modal('hide');
+            }, 1000);
         });
     }
 });
+
 
 $('#save-button').on('click', () => {
     save_mode = 0;
@@ -1049,6 +1101,9 @@ function stickPartPanel() {
         });
 }
 
+// set this to let the right Penel responsive
+$(window).resize(stickPartPanel);
+
 function unstickPartPanel() {
     partPanelStickedToRight = false;
     let win = $('#part-panel');
@@ -1126,6 +1181,9 @@ function uncollapsed() {
         });
 }
 
+$('#advanced-search-button').popup({
+    content: 'Search Options'
+});
 
 // Initialize the checkboxes
 $('#advanced-search-modal .checkbox').checkbox('set checked');
@@ -1137,11 +1195,17 @@ $('.list .master.checkbox')
         onChecked: function () {
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('check');
+            $childCheckbox.siblings('label').each(function () {
+                $(this).removeClass('unchecked').addClass('checked');
+            });
         },
         // uncheck all children
         onUnchecked: function () {
             var $childCheckbox = $(this).closest('.checkbox').siblings('.list').find('.checkbox');
             $childCheckbox.checkbox('uncheck');
+            $childCheckbox.siblings('label').each(function () {
+                $(this).removeClass('checked').addClass('unchecked');
+            });
         }
     });
 
@@ -1175,6 +1239,17 @@ $('.list .child.checkbox')
             } else {
                 $parentCheckbox.checkbox('set indeterminate');
             }
+        },
+        onChecked: function () {
+            $(this).siblings('label').each(function () {
+                $(this).removeClass('unchecked').addClass('checked');
+            });
+        },
+        // uncheck all children
+        onUnchecked: function () {
+            $(this).siblings('label').each(function () {
+                $(this).removeClass('unchecked').addClass('unchecked');
+            });
         }
     });
 
@@ -1433,6 +1508,16 @@ let newConnectionType, newConnectionStep;
 let newConnectionSource, newConnectionTarget;
 let previewConnection = {};
 
+const mode2str = {
+    modifyItem: 'Drag',
+    dragCanvas: 'Drag ALL',
+    deleteItem: 'Delete',
+    inspectItem: 'Inspect',
+    chassisItem: 'Setting Chassis',
+    addConnection: 'Add Connection',
+    chooseInteractive: 'Chose Interactive'
+};
+
 function selectMode(mode) {
     if (currentMode === mode)
         return;
@@ -1445,6 +1530,8 @@ function selectMode(mode) {
     button = modes[mode];
     button.addClass('active');
     button.trigger('select');
+
+    $('#bi-mode').text(mode2str[mode])
 }
 
 $('#chassis-item')
@@ -1509,7 +1596,7 @@ $('#drag-canvas')
         design.disableDrag();
     })
     .popup({
-        content: 'Drag and move canvas. (Ctrl)'
+        content: 'Drag and move canvas.'
     });
 $('#inspect-item')
     .on('click', () => {
@@ -1952,7 +2039,21 @@ $('#realtime-enter')
     .on('click', function() {
         console.log('click realtime enter button');
         if (design.design.id == -1) {
-            alert('please save your design before entering magic realtime space!');
+            if ($('#info-box-not-saved-msg').length > 0) {
+                return;
+            }
+            let error_msg = `
+            <b>
+                <li id="info-box-not-saved-msg" class="orad-error"> 
+                    Please save your design before entering magic realtime space!
+                </li>
+            </b>
+            `;
+            let $error_msg = $(error_msg)
+            $('#info-box ul').prepend($error_msg);
+            setTimeout(() => {
+                $('#info-box-not-saved-msg').remove();
+            }, 5000);
             return;
         }
 
@@ -1972,5 +2073,16 @@ $('#realtime-enter')
         window.location.pathname = pn.join('/');
     })
     .popup({
-        content: 'click to go into realtime mode'
+        content: 'Click to go into realtime mode'
     });
+
+
+let bi_user_text = $('#bi-user').text()
+$('#bi-user').text(bi_user_text.replace('{}', authorname));
+
+$('#info-box').on('mouseover', function() {
+    //$(this).css('background', 'rgba(255, 255, 255, 0.3');
+    $(this).css('opacity', '0.2');
+}).on('mouseleave', function() {
+    $(this).css('opacity', '0.8');
+});
