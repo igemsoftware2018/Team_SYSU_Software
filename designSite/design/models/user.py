@@ -66,7 +66,7 @@ class Works(models.Model):
     Description = models.TextField(default = "To be add")
     SimpleDescription = models.TextField(default = "To be add")
     Keywords = models.CharField(max_length = 200, default = "" )
-    Chassis = models.CharField(max_length = 100, default = "None")
+    Chassis = models.CharField(max_length = 100, default = "Pichia pastoris ")
     IEF = models.FloatField(default=0.0) # IEF is the score of the project
     Circuit = models.ForeignKey('Circuit', on_delete = models.CASCADE, null = True)
     ReadCount = models.IntegerField(default = 0)

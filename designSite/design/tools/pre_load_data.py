@@ -185,6 +185,28 @@ def load_part_info(parts_floder_path, all_parts):
     atomic_save(part_subparts)
     print('Error: {0:6d}'.format(err2))
 
+def load_partsParameter(folderpath):
+    all_parts = {p.Name: p for p in Parts.objects.all()}
+    errors = 0
+    parts = []
+    for root, dirs, files in os.walk(folderpath):
+        for name in files:
+            filepath = os.path.join(root, name)
+            print('  Loading %s...' % filepath)
+            csv_reader = csv.reader(open(filepath, "r", encoding='utf-8'))
+            next(csv_reader)
+            for row in csv_reader:
+                try:
+                    part = all_parts[row[0].strip()]
+                    part.Parameter = row[1].strip()
+                    parts.append(part)
+                except Exception as err:
+                    errors += 1
+                    print(err)
+    print('Saving parts Parameter...')
+    atomic_save(parts)
+    print('Error: {0:6d}'.format(errors))
+
 
 
 #load works data
@@ -537,7 +559,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
         print("Delete all circuits")
 
     new_part_count = 0
-
+    sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
     for root, dirs, files in os.walk(circuits_floder_path):
         for name in files:
             try:
@@ -559,6 +581,11 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                             circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
                         except:
                             circuit = Circuit.objects.get(Name = teamName + str(teamID))
+                        try:
+                            circuit.Chassis = Chassis.objects.get(name = team.Chassis)
+                        except:
+                            circuit.Chassis = sample_chassis
+                        circuit.save()
                     else:
                         DOI = sheet.cell_value(1, 0)
                         try:
@@ -569,9 +596,9 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                             circuit = Circuit.objects.create(Name = DOI, Description = "")
                         except:
                             circuit = Circuit.objects.get(Name = DOI)
+                        circuit.Chassis = sample_chassis
+                        circuit.save()
 
-
-                    
                     team.Circuit = circuit
                     team.save()
 
@@ -757,6 +784,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
 
 
             except:
+                print("Something wrong when loading circuits")
                 pass
 
     print('Total new part: ' + str(new_part_count))
@@ -935,8 +963,11 @@ def final():
         work.Circuit = circuit
         work.save()
 
+    
+
 def pre_load_data(currentpath, Imgpath):
     load_parts(os.path.join(currentpath, 'parts'))
+    load_chassis(os.path.join(currentpath, 'chassis'))
     # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     load_partsParameter(os.path.join(currentpath, 'partsParameter'))
     load_works(os.path.join(currentpath, 'works'))
@@ -947,5 +978,4 @@ def pre_load_data(currentpath, Imgpath):
     load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
     #load_circuits(os.path.join(currentpath, 'works/circuits2'))
     load_additional(os.path.join(currentpath, 'additional'))
-    load_chassis(os.path.join(currentpath, 'chassis'))
     final()
