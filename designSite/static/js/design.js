@@ -144,6 +144,36 @@ $('#protocol-button')
     .popup({
         content: 'Add your Protocol'
     });
+function __protocol_refresh_from_design() {
+    let $m = $('#protocol-modal');
+    $m.find('[name=title]').val(design._design.protocol.title);
+    $m.find('[name=description]').val(design._design.protocol.description);
+    let $mp = $('#protocol-step-mountpoint');
+    let step_titles = $mp.find('input');
+    let step_desc = $mp.find('textarea');
+
+    let pl = design.design.protocol.steps.length;
+    let ml = step_titles.length;
+    let diff = pl - ml;
+    const min = (a, b) => (a < b ? a : b);
+    let base = min(pl, ml);
+    if (diff > 0) {
+        for (let i = 0; i < diff; ++i) {
+            $mp.append(protocolStepHelper(base + i));
+            protocolAddLastStepHook();
+        }
+    } else if (diff < 0) {
+        for (let i = 0; i < -diff; ++i) {
+            $mp.children().eq(base).remove();
+        }
+    }
+    let new_step_titles = $mp.find('input');
+    let new_step_desc = $mp.find('textarea');
+    for (let i = 0; i < pl; ++i) {
+        new_step_titles.eq(i).val(design.design.protocol.steps[i].title);
+        new_step_desc.eq(i).val(design.design.protocol.steps[i].body);
+    }
+}
 //  __trigger: one click dimmer one, onHide trigger twice.
 // use this method to only run it once.
 let __trigger = false;
@@ -155,34 +185,7 @@ $('#protocol-modal').modal({
                 return;
             }
             __trigger = false;
-            let $m = $('#protocol-modal');
-            $m.find('[name=title]').val(design._design.protocol.title);
-            $m.find('[name=description]').val(design._design.protocol.description);
-            let $mp = $('#protocol-step-mountpoint');
-            let step_titles = $mp.find('input');
-            let step_desc = $mp.find('textarea');
-
-            let pl = design.design.protocol.steps.length;
-            let ml = step_titles.length;
-            let diff = pl - ml;
-            const min = (a, b) => (a < b ? a : b);
-            let base = min(pl, ml);
-            if (diff > 0) {
-                for (let i = 0; i < diff; ++i) {
-                    $mp.append(protocolStepHelper(base + i));
-                    protocolAddLastStepHook();
-                }
-            } else if (diff < 0) {
-                for (let i = 0; i < -diff; ++i) {
-                    $mp.children().eq(base).remove();
-                }
-            }
-            let new_step_titles = $mp.find('input');
-            let new_step_desc = $mp.find('textarea');
-            for (let i = 0; i < pl; ++i) {
-                new_step_titles.eq(i).val(design.design.protocol.steps[i].title);
-                new_step_desc.eq(i).val(design.design.protocol.steps[i].body);
-            }
+            __protocol_refresh_from_design();
         }
     }
 });

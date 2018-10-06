@@ -281,6 +281,7 @@ class SDinDesign {
         });
 
         this.redrawDesign();
+
     }
     combine(design) {
         this.recordHistory(`Combined design ID=${design.id}.`);

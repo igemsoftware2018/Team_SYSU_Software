@@ -61,6 +61,8 @@ setInterval(() => {
             success: (data) => {
                 let design_data = JSON.parse(data['design_data']);
                 design.design = design_data;
+
+                __protocol_refresh_from_design();
             }
         });
     } else {
