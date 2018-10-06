@@ -565,6 +565,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
             try:
                 f = xlrd.open_workbook(os.path.join(root, name))
                 for sheet in f.sheets():
+                    print("Here")
                     if is_work:
                         try:
                             teamID = int(sheet.cell_value(1, 0))
@@ -622,7 +623,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                                                 # Done
                                                 # Change Type to Role
                                                 Role = role_dict[sheet.cell_value(row, 2)],
-                                                Type = sheet.ccell_value(row, 2),
+                                                Type = sheet.cell_value(row, 2),
                                                 Description = sheet.cell_value(row, 1))
                                         new_part_count += 1
                                     try:
@@ -784,7 +785,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
 
 
             except:
-                print("Something wrong when loading circuits")
+                print("Something wrong when loading circuit of works/papers")
                 pass
 
     print('Total new part: ' + str(new_part_count))
@@ -966,16 +967,16 @@ def final():
     
 
 def pre_load_data(currentpath, Imgpath):
-    load_parts(os.path.join(currentpath, 'parts'))
-    load_chassis(os.path.join(currentpath, 'chassis'))
-    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
-    load_partsParameter(os.path.join(currentpath, 'partsParameter'))
-    load_works(os.path.join(currentpath, 'works'))
-    load_Trelation(os.path.join(currentpath, 'TeamRelation'))
-    load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
-    load_papers(os.path.join(currentpath, 'papers'))
-    load_circuits(os.path.join(currentpath, 'works/circuits'), delete = True)
+    # load_parts(os.path.join(currentpath, 'parts'))
+    # load_chassis(os.path.join(currentpath, 'chassis'))
+    # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
+    # load_works(os.path.join(currentpath, 'works'))
+    # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
+    # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
+    # load_papers(os.path.join(currentpath, 'papers'))
+    # load_circuits(os.path.join(currentpath, 'works/circuits'), delete = True)
     load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    #load_circuits(os.path.join(currentpath, 'works/circuits2'))
-    load_additional(os.path.join(currentpath, 'additional'))
-    final()
+    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    # load_additional(os.path.join(currentpath, 'additional'))
+    # final()
