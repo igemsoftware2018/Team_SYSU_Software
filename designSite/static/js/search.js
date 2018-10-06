@@ -1,3 +1,7 @@
+window.onload = function(){
+  $('.ui.dropdown').dropdown();
+};
+
 document.onkeydown = keyDownSearch;
 
 function keyDownSearch(e) {
@@ -11,9 +15,10 @@ function keyDownSearch(e) {
   return true;
 }
 
+
 $('#logo').on('click', function(){
   $(location).attr('href', '/');
-})
+});
 // Update some css parameters
 // function updateParameters() {
 //   let topBarHeight = $(".top-bar").height();

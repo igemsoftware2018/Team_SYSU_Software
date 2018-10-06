@@ -28,12 +28,14 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
+
 def search(request):
-  return render(request, 'search.html')
+    return render(request, 'search.html')
+
 
 @login_required
 def work(request):
-  return render(request, 'work.html')
+    return render(request, 'work.html', context)
     # if request.method == 'POST':
     #     return
     # try:
@@ -58,7 +60,6 @@ def work(request):
     #                 'name': pt.secondName,
     #                 'isFavourite': favor})
 
-
     #         except Parts.DoesNotExist:
     #             part.append({
     #                 'id': request.GET.get('id'),
@@ -82,7 +83,7 @@ def work(request):
     #     Awards = wk.Award.split(';')
     #     while len(Awards) > 0 and Awards[-1] == '':
     #         Awards = Awards[: -1]
-        
+
     #     relatedTeams = Trelation.objects.filter(first = wk)
     #     relatedTeams = list(map(lambda rt: {
     #         'teamName': rt.second.Teamname,
@@ -119,3 +120,8 @@ def work(request):
 
     # except Works.DoesNotExist:
     #     return HttpResponse("Work Does Not Exist!")
+
+
+@login_required
+def paper(request):
+    return render(request, 'paper.html', context)

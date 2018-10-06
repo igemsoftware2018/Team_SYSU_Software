@@ -1,0 +1,86 @@
+<html>
+
+<head>
+  <!-- <title>Search</title> -->
+  <title>{{ projectName }} | {{ year }}-{{ teamName }} - Project detail - S-Din</title>
+  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/css/search_paper.css">
+</head>
+
+<body>
+  <!-- top bar -->
+  <div class="ui fixed menu" id="top-bar">
+    <div class="left item">
+      <div class="top-bar-item">
+        <h1>CO-RAD <span>Search</span></h1>
+      </div>
+    </div>
+    <div class="right item">
+      <div class="top-bar-item">
+        <h2><a href="/design">Design</a></h2>
+      </div>
+      <div class="top-bar-item">
+        <h2>Welcome, <a href="/account" class="username">{{ user.username }}</a> !</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="Content">
+    <div class="content_title">
+      <img id="logo" src="/static/img/logo_gray.png">
+      <div class="ui icon input">
+        <input id="search-input" type="text" placeholder="Search...">
+        <i class="search icon"></i>
+      </div>
+      <div class="option"></div>
+      <div class="tools"></div>
+    </div>
+
+    <div class="content_detail">
+      <p class="title"><a href="{{ articleURL }}">{{ title }}</a></p>
+      <div class="detail">
+        <div class="top">
+          <h3>DOI: {{ DOI }} <span>JIF: {{ JIF }}</span></h3>
+          <h3>Author: {% for author in authors %} {{ author }} {% endfor %}</h3>
+          <h3 class="copyright">Copyright info: {{ copyright }}</h3>
+        </div>
+        <p class="abstract">
+          Abstract:<br>
+          <span>
+            {{ abstract }}
+          </span>
+        </p>
+        <div class="bottom">
+          <p class="keywords">Keywords: <span>{{ keywords }}</span></p>
+          <div class="ui selection dropdown parts">
+            Parts:
+            <input type="hidden" name="part">
+            <div class="default text">Parts</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              {% for p in part %}
+              <div class="item" data-value="0">{{p.BBa}}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.mousewheel.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
+<script src="/static/js/search.js"></script>
+<script>
+
+</script>
+
+</html>

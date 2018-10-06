@@ -1,92 +1,82 @@
 <html>
 
 <head>
-  <title>Search</title>
-
-  <link rel="shortcut icon" href="/static/img/favicon.png">
-  <link rel="stylesheet" href="/static/css/fontsize.css">
-  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
-  <link rel="stylesheet" href="/static/css/search.css">
+    <!-- <title>Search</title> -->
+    <title>{{ projectName }} | {{ year }}-{{ teamName }} - Project detail - S-Din</title>
+    <link rel="shortcut icon" href="/static/img/favicon.png">
+    <link rel="stylesheet" href="/static/css/fontsize.css">
+    <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/search_work.css">
 </head>
 
 <body>
-  <!-- top bar -->
-  <div class="ui large fixed menu" id="top-bar">
+    <!-- top bar -->
+    <div class="ui fixed menu" id="top-bar">
         <div class="left item">
             <div class="top-bar-item">
-                <img id="logo" src="/static/img/logo_gray.png">
+                <h1>CO-RAD <span>Search</span></h1>
             </div>
         </div>
         <div class="right item">
-            <!-- <label id="design" class="button">DESIGN</label>
-            <label id="account" class="button">ACCOUNT</label> -->
             <div class="top-bar-item">
-                <a href="/design">
-                <h3>Design</h3>
-                </a>
+                <h2><a href="/design">Design</a></h2>
             </div>
             <div class="top-bar-item">
-                <a href="/account">
-                <h3>Welcome, <span class="username">{{ user.username }}</span> !</h3>
-                </a>
+                <h2>Welcome, <a href="/account" class="username">{{ user.username }}</a> !</h2>
             </div>
         </div>
     </div>
 
-    <div class="ui grid container" style="margin-top:150px">
-            <div class="three wide column" id="search-title-2">
-               Search
+    <!-- Content -->
+    <div class="Content">
+        <div class="content_title">
+            <img id="logo" src="/static/img/logo_gray.png">
+            <div class="ui icon input">
+                <input id="search-input" type="text" placeholder="Search...">
+                <i class="search icon"></i>
             </div>
-            <div class="twelve wide column">
-                <div class="ui action input">
-                    <input id="my-input-box" type="text" palceholder="Search..">
-                    <button class="ui icon button" id="search-button">
-                        <i class="search icon"></i>
-                    </button>
-                </div>
-            </div>
-    </div>
-  <div class="ui vertical stripe segment" style="margin-top:120px">
-        
-        <div class="ui middle aligned stackable grid container">
-          <div class="row">
-            <div class="eight wide column">
-              <h3 class="ui header">We Help Companies and Companions</h3>
-              <p>We can give your company superpowers to do things that they never thought possible. Let us delight your customers and empower your needs...through pure data analytics.</p>
-              <h3 class="ui header">We Make Bananas That Can Dance</h3>
-              <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
-            </div>
-            <div class="six wide right floated column">
-              <img src="assets/images/wireframe/white-image.png" class="ui large bordered rounded image">
-            </div>
-          </div>
+            <div class="option"></div>
+            <div class="tools"></div>
         </div>
-      </div>
 
-  <!-- <div class="ui middle aligned grid" id="center-wrapper">
-      <div class="column">
-          <div class="ui center aligned page grid">
-            <div id="search-title">
-              CO-RAD Search
-            </div>
-            <div class="sixteen wide column">
-                <div class="ui icon my-input-box">
-                  <input id="my-input-box" name="keyword" placeholder="Search..." type="text">
-                  <i class="search icon" id="search-button"></i>
+        <div class="content_detail">
+            <p class="title">{{ projectName }}</p>
+            <div class="detail">
+                <div class="left">
+                    <div class="top">
+                        <h3>{{ year }} <span class="direction">{{ teamName }}</span> {% if not not medal %} <span class="award">{{ medal }} Award</span> {% endif %}</h3>
+                    </div>
+                    <p class="abstract">
+                        Abstract:<br>
+                        <span>
+                            {{ description }}
+                        </span>
+                    </p>
+                    <div class="bottom">
+                        <p class="keywords">Keywords: <span>{% for keyword in keywords %} {{keyword }} {% endfor %}</span></p>
+                        <div class="ui selection dropdown parts">
+                            Parts: 
+                            <input type="hidden" name="part">
+                            <div class="default text">Parts</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                {% for p in part %}
+                                <div class="item" data-value="0">{{p.BBa}}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="wiki_image">
+                        {% for img in images %}
+                        <img class="circuit" src="{{ img }}">
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-            <div class="ui breadcrumb">
-                <a class="active section"><span>Paper</span></a>
-                <div class="divider"> | </div>
-                <a class="section"><span>Project</span></a>
-                <div class="divider"> | </div>
-                <a class="section"><span>Upload</span></a>
-              </div>
-          </div>
-      </div>
-  </div> -->
-
-
+        </div>
+    </div>
 </body>
 
 <script src="/static/js/jquery.min.js"></script>

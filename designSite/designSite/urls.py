@@ -26,6 +26,7 @@ import account.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('search/', search_views.search),
+    path('paper/', search_views.paper),
     path('', account_views.index),
     path('login/', account_views.signin_view),
     path('signin/', account_views.signin_view),
