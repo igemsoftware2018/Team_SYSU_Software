@@ -1917,13 +1917,13 @@ $('#clear-all-button')
     });
 
 
-// $('#real-clear-all-button')
-//     .on('click', () => {
-//         design.clearAll();
-//         $('#chassis-dropdown').dropdown(
-//             'set selected', 'Escherichia Coli'
-//         );
-//     });
+$('#real-clear-all-button')
+    .on('click', () => {
+        design.clearAll();
+        $('#chassis-dropdown').dropdown(
+            'set selected', 'Escherichia Coli'
+        );
+    });
 
 //TODO: only this place use Chart.js
 // Consider to remove Chart.js
