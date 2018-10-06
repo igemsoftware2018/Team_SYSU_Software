@@ -110,7 +110,18 @@ def share_design(request):
         circuit = Circuit.objects.get(pk=designID)
         if circuit.Author == request_user:
             return redirect(os.path.join('/design/', designID))
+
+        # not own by oneself, is it a work by other teams?
+        work_query = Works.objects.filter(Circuit=circuit)
+        if work_query:
+            logger.debug('is work, designID %s', designID)
+            year = work_query.get().Year
+            teamname = work_query.get().Teamname
+            context['authorname'] = 'TEAM: <{}, {}>'.format(teamname, str(year))
+            return render(request, 'design.html', context)
+
         circuit_authorname = circuit.Author.username
+
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
     except:
@@ -324,6 +335,12 @@ def personal_design(request):
         user = request.user
         # this design is not construct by this user. forbidden.
         if circuit.Author != user:
+            # if not own by user, is it a work by other teams?
+            logger.debug('designID %s not by user. is it a work?', designID)
+            work_query = Works.objects.filter(Circuit=circuit)
+            logger.debug('work query %s', work_query)
+            if work_query:
+                return redirect(os.path.join('/design/share/', str(designID)))
             return HttpResponseForbidden()
     except ObjectDoesNotExist:
         # do not exist this id
@@ -685,17 +702,25 @@ def circuit(request):
             combines = {x.Father.id: [i.id for i in x.Sons.all()]
                         for x in combines_query}
             chassis = circuit.Chassis.name
-            protocol_query = Protocol.objects.get(Circuit=circuit)
-            step_query = Step.objects.filter(Father=protocol_query)
-            protocol = {
-                'title': protocol_query.Title,
-                'description': protocol_query.Description,
-                'steps': [{
-                    'title': x.Title,
-                    'body': x.Body,
-                } for x in step_query
-                ]
-            }
+            protocol = None
+            try:
+                protocol_query = Protocol.objects.get(Circuit=circuit)
+                step_query = Step.objects.filter(Father=protocol_query)
+                protocol = {
+                    'title': protocol_query.Title,
+                    'description': protocol_query.Description,
+                    'steps': [{
+                        'title': x.Title,
+                        'body': x.Body,
+                    } for x in step_query
+                    ]
+                }
+            except ObjectDoesNotExist:
+                protocol = {
+                    'title': '',
+                    'description': '',
+                    'steps': []
+                } 
             return JsonResponse({
                 'status': 1,
                 'id': query_id,
