@@ -157,7 +157,44 @@ $(function () {
             }
         }).modal('show');
     });
-
+    $('#part-table').children('tbody').children('tr')
+        .on('click', function () {
+            let data = {
+                "part" : {
+                    "type" : "unknown",
+                    "name" : "unknown",
+                    "id" : $(this).attr('data-id'),
+                    "description" : "unknown"
+                }
+            };
+            //console.log(data);
+            let itemModal = $('#inspect-item-modal');
+            itemModal.modal('show');
+            // TODO: type and role is (incorrectly) the same here.
+            // change it when "type and role" is fixed.
+            $.ajax('/api/part', {
+                data: {
+                    id: data['part']['id']
+                },
+                success: (data) => {
+                    itemModal
+                        .find('input[name=component-role]')
+                        .val(data['type']);
+                    itemModal
+                        .find('input[name=component-id]')
+                        .val(data['name']);
+                    itemModal
+                        .find('input[name=component-name]')
+                        .val(data['name']);
+                    itemModal
+                        .find('textarea[name=component-description]')
+                        .val(data['description']);
+                    itemModal
+                        .find('textarea[name=component-sequence]')
+                        .val(data['sequence']);
+                }
+            });
+        });
     $('#authority-table').children('tbody').children('tr').on('click', function () {
         id = $(this).attr('data-id');
         refresh();

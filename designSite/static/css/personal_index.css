@@ -18,6 +18,7 @@
     background-color: #3D3D3D;
 }
 
+#part-table tbody tr:hover,
 #master-table tbody tr:hover,
 #share-table tbody tr:hover,
 #authority-table tbody tr:hover {
