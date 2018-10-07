@@ -1,7 +1,6 @@
-<html>
+<!-- <html>
 
 <head>
-  <!-- <title>Search</title> -->
   <title>{{ projectName }} | {{ year }}-{{ teamName }} - Project detail - S-Din</title>
   <link rel="shortcut icon" href="/static/img/favicon.png">
   <link rel="stylesheet" href="/static/css/fontsize.css">
@@ -9,9 +8,9 @@
   <link rel="stylesheet" href="/static/css/search_paper.css">
 </head>
 
-<body>
-  <!-- top bar -->
-  <div class="ui fixed menu" id="top-bar">
+<body> -->
+<!-- top bar -->
+<!-- <div class="ui fixed menu" id="top-bar">
     <div class="left item">
       <div class="top-bar-item">
         <h1>CO-RAD <span>Search</span></h1>
@@ -25,10 +24,10 @@
         <h2>Welcome, <a href="/account" class="username">{{ user.username }}</a> !</h2>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <!-- Content -->
-  <div class="Content">
+<!-- Content -->
+<!-- <div class="Content">
     <div class="content_title">
       <img id="logo" src="/static/img/logo_gray.png">
       <div class="ui icon input">
@@ -82,5 +81,120 @@
 <script>
 
 </script>
+
+</html> -->
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>{{ title }} - Paper detail - S-Din</title>
+  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/semantic/dist/components/icon.min.css">
+  <link rel="stylesheet" href="/static/css/search_paper.css">
+</head>
+
+<body>
+  <div class="ui inverted fixed menu" id="nav">
+    <div class="ui container">
+      <div class="item">CO-RAD <span class="page-name">Search</span></div>
+      <div class="right menu">
+        <a class="item" href="/design">
+          Design
+        </a>
+        <span class="item">Welcome, <span class="username"> {{ user.username }} </span> !</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="search-box-container">
+    <div id="logo">
+      <a href="/">
+        <img class="ui fluid image" src="/static/img/logo.png" alt="CO-RAD">
+      </a>
+    </div>
+    <div id="search-box">
+      <div class="ui form">
+        <div class="field">
+          <div class="ui fluid icon input">
+            <input id="search-edit" type="text" placeholder="Search...">
+            <i id="search-icon" class="search icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="search-page-dimmer"></div>
+
+  <div id="detail-container">
+    <div class="back-icon">
+      <i class="chevron left link icon"></i>
+    </div>
+    <div class="back">
+      back
+    </div>
+    <div class="title"><a target="paper" href="{{ articleURL }}">{{ title }}</a></div>
+    <div class="paper-identity">
+      <div class="doi">DOI: {{ DOI }}</div>
+      <div class="jif">JIF: {{ JIF }}</div>
+    </div>
+    <div class="abstract">
+      <p>{{ abstract }}</p>
+    </div>
+    <div class="keywords">
+      <span>Keywords:</span> {{ keywords }}
+    </div>
+    <div class="copyright">
+      <span>Copyright info:</span> {{ copyright }}
+    </div>
+    <div class="parts">Parts:</div>
+    <div id="part-container">
+      <div class="part-table">
+        <table class="ui fixed striped table">
+          <thead>
+            <tr>
+              <th>BBa</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in part %}
+            <tr>
+              <td>{{ p.BBa }}</td>
+              <td>{{ p.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div id="right-panel">
+    <h4 class="ui header">Authors</h4>
+    <div class="ui list">
+      {% for a in authors %}
+      <div class="item">
+        <i class="users icon"></i>
+        <div class="content">{{ a }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="ui page dimmer">
+    <div class="content">
+      <div class="center">test</div>
+    </div>
+  </div>
+
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+  <script src="/static/js/jquery.mousewheel.min.js"></script>
+  <script src="/static/semantic/dist/semantic.js"></script>
+  <script src="/static/js/jsplumb.js"></script>
+  <script src="/static/js/search.js"></script>
 
 </html>
