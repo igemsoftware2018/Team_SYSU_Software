@@ -74,3 +74,32 @@ h1, h2, h3, h4, h5, h6{
 .my_main_wrapper {
   
 }
+
+/* search page */
+
+button.invert {
+  color: #FFF !important;
+  background-color: #000 !important;
+}
+
+button.invert>i {
+  opacity: 1 !important;
+}
+
+.shadowed {
+  box-shadow: 2px 2px 6px 0px;
+}
+
+.font-constantia {
+  font-family: Constantia !important;
+}
+
+.selected {
+  text-decoration: underline;
+  color: #FFF !important;
+}
+
+.section:hover {
+  text-decoration: underline;
+  color: #FFF !important;
+}

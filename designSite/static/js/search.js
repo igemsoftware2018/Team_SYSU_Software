@@ -2,6 +2,8 @@
 //   $('.ui.dropdown').dropdown();
 // };
 
+var currentSearchType = "paper";
+
 document.onkeydown = keyDownSearch;
 
 function keyDownSearch(e) {
@@ -29,6 +31,20 @@ $('#design').on('click', function () {
 $('#logo').on('click', function () {
   window.location.href = '/';
 });
+
+$(".CORADSearchSelector").on('click', function () {
+  currentSearchType = $(this).attr("data-type");
+  $(".CORADSearchSelector").removeClass("selected");
+  $(this).addClass("selected");
+})
+
+$("#search").on("click", function () {
+  if (currentSearchType === 'upload') {
+    console.warn("TODO: add upload module");
+  } else {
+    window.location.href = '/search/?type=' + currentSearchType + "&query=" + $('#search-content').val();
+  }
+})
 
 // Update some css parameters
 // function updateParameters() {
