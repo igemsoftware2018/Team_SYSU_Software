@@ -1,7 +1,16 @@
 # Designer
 
-## 关于分享功能的问题
-### 关于url
+## 术语约定
+
+Circuit - 指通路信息。（一个SBOL文档可以描述一个Circuit）
+Protocol - 描述某一个Circuit的实验过程。
+Design - 记录一个Circuit和其对应的Protocol的信息。
+Document - 一系列具有父子关系（历史继承关系）的Design。
+
+## 关于分享功能
+
+### url
+
 url有以下两种形式  
 第一种形如  
 ```url
@@ -14,53 +23,22 @@ url有以下两种形式
 ```
 它是在用户创建了一个分享后，分享对应的链接。  
 
-### 关于存档的逻辑
-**本条目需要继续讨论和修改**  
-save的时候直接新建一个新的同`name`的通路到数据库里，id不同，存储日期也不同。
-save as new的时候创建一个不同`name`的通路到数据库里。
-
-
-### 术语约定
-
-Circuit - 指通路信息。（一个SBOL文档可以描述一个Circuit）
-Protocol - 描述某一个Circuit的实验过程。
-Design - 记录一个Circuit和其对应的Protocol的信息。
-Document - 一系列具有父子关系（历史继承关系）的Design。
-
-
 ### 关于part
-part之前设计分成公有和私有了。在后端可能需要修改一下逻辑。
+
+part 分成公有和私有
 
 ### 关于Document
+
 事实上这是一个不需要被实现的概念。把Design的`name`字段作为Document的id，在处理时我们认为拥有同一个`Name`的Design是归属于同一个`Document`的。同时，一个`Document`只有一个`Master`，即建立这个Document（或者说建立这个Document的第一个Design）的用户名。此外，一个Document共享一个`EditableGroup`，其中记录着可以编辑该Document下所有Design的用户。
 
 ### 关于Design
+
 Design由唯一id号确认。访问Design的url约定为:`homepage/circuit/{id}`
 
-Design需要新加入以下字段：
-1. `Master`，指建立**该Design所归属于某个Document**的用户。
-2. `UpdateTime`，记录该Design的更新时间。
-3. `Version`，版本号。`Name`与`Version`唯一映射到一个`Id`。
-4. `Previous`，父亲/前驱版本号。
-5. `Master`，含义参考上文。
-6. `Editor`，编辑该Design的用户。
-7. `EditableGroup`，含义参考上文。
-
-### 前端更新
-#### 保存Design
-保存分两种：
-1. 保存(save)。默认是在同一个Document下派生出一个新的Design版本，不需要记录Design名字信息，只需要记录更新了的信息和父亲版本即可。
-2. 保存为新的Document(save as new document)。要求用户填写`Name`字段，父亲版本记为-1（表示没有前驱）。
-
-#### 加载Design
-加载Design首先要选定`Name`，然后再选定对应的`Version`。这部分还可以做各种排序、过滤，此是后话。
-
-#### Something Else
-有一个叫`simple_history`的py库，我要先看一下能不能用进来。
-
-
 ## 值得大家知道的新特性
+
 ### Logger
+
 **tips** 遇到`xxx file not found`的报错时，只需要把该文件创建好即可。所有的log文件都在`gitignore`里，目的是防止大家的log之间出现conflict.
 现在所有的Python后端都可以很方便地输出Logger调试信息。
 具体用法如下。
