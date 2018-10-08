@@ -22,6 +22,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.views.decorators.csrf import csrf_exempt
 
+import re
+
 import traceback
 import logging
 logger = logging.getLogger(__name__)
@@ -35,14 +37,25 @@ def search(request):
         if key not in w_dict:
             w_dict[key] = 0
         w_dict[key] += 1
+    
+    search_type = request.GET.get('type')
+    if search_type == None:
+        return render(reqeust, 'search.html')
+    
+    try:
+        page = request.GET.get('page')
+        if page == None:
+            page = 1
+        page = int(page)
+    except:
+        return HttpResponseNotFound("Invalid Search!")
         
-
-    search_type = reqeust.GET.get('type')
     if search_type != 'paper' and search_type != 'project':
-        return HttpResponseNotFound("Invalid Search Type!")
-    keys = request.GET.get('keyword').lower().split
+        return HttpResponseNotFound("Invalid Search!")
+    keys = request.GET.get('keyword').lower().split()
+    logging.info(keys)
+    w_dict = {}
     if search_type == 'project':
-        w_dict = {}
         for key in keys:
             if key.isdigit():    # May be year
                 q_on_Year = Works.objects.filter(Year__exact=int(key))
@@ -69,8 +82,75 @@ def search(request):
             q = Works.objects.filter(Description__icontains=key)
             for obj in q:
                 update(w_dict, obj.TeamID, 1)
-        result = sorted(w_dict, key=lambda x:(w_dict[x], x))
-    logging.info(result[:10])
+
+            for work in Works.objects.all():
+                work_keys = re.split(',|;', work.Keywords)
+                for work_key in work_keys:
+                    if key in work_key:
+                        update(w_dict, work.TeamID, 3)
+                        break
+
+    if search_type == 'paper':
+        for key in keys:
+            try:
+                q = Papers.objects.get(DOI__iexact=key)
+                update(w_dict, Papers.DOI, 100)
+            except:
+                pass
+            
+            q = Papers.objects.filter(Title__icontains=key)
+            for obj in q:
+                update(w_dict, obj.DOI, 4)
+            
+            q = Papers.objects.filter(Journal__icontains=key)
+            for obj in q:
+                update(w_dict, obj.DOI, 1)
+            
+            for paper in Papers.objects.all():
+                if paper.Keywords != 'To be add':
+                    paper_keys = re.split(',|;', paper.Keywords)
+                    for paper_key in paper_keys:
+                        if key in paper_keys:
+                            update(w_dict, paper.DOI, 3)
+                            break
+            
+            q = Papers.objects.filter(Authors__icontains=key)
+            for obj in q:
+                update(w_dict, obj.DOI, 3)
+    result = sorted(w_dict, key=lambda x:(-w_dict[x], x))
+    context = {
+        "NumOfResult": len(result),
+        "Type": search_type,
+        "Result":[]
+    }
+    result = result[(page-1) * 10:page * 10]
+    
+    if search_type == "project":
+        for item in result:
+            work = Works.objects.get(TeamID=item)
+            context['Result'].append({
+                "TeamID": work.TeamID,
+                "Teamname": work.Teamname,
+                "Year": work.Year,
+                "Title": work.Title,
+                "Description": work.Description,
+                "Logo": work.logo,
+                "ReadCount": work.ReadCount
+            })
+    else:
+        for item in result:
+            paper = Papers.objects.get(DOI=item)
+            context['Result'].append({
+                "DOI": paper.DOI,
+                "Title": paper.Title,
+                "Journal": paper.Journal,
+                "Author": paper.Authors,
+                "Article": paper.ArticleURL,
+                "Logo": paper.LogoURL,
+            })
+    
+    return render(request, 'search_result.html', context)
+    
         
         
             

@@ -57,7 +57,7 @@ class Works(models.Model):
     Size = models.IntegerField()
     Status = models.CharField(max_length = 32)
     Year = models.IntegerField()
-    Wiki = models.URLField(max_length = 128)
+    Wiki = models.URLField(max_length = 128)    
     Section = models.CharField(max_length = 32)
     Medal = models.CharField(max_length = 128)
     Award = models.CharField(max_length = 512)
