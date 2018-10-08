@@ -245,7 +245,6 @@ body {
 } */
 
 div.ui.fixed.menu>div.ui.container {
-  margin-left: 3rem !important;
   margin-right: 3rem !important;
   width: 100%;
   height: 3rem;
