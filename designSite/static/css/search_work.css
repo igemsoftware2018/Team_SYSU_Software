@@ -194,8 +194,8 @@ body {
 
 .ui.inverted.menu {
   transition: all 0.25s ease-out;
+  height: 70px;
 }
-
 
 #nav {
   z-index: 10;
