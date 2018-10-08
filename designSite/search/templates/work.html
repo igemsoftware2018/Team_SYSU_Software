@@ -1,95 +1,3 @@
-<!-- <html>
-
-<head>
-    <title>{{ projectName }} | {{ year }}-{{ teamName }} - Project detail - S-Din</title>
-    <link rel="shortcut icon" href="/static/img/favicon.png">
-    <link rel="stylesheet" href="/static/css/fontsize.css">
-    <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
-    <link rel="stylesheet" href="/static/css/search_work.css">
-</head>
-
-<body> -->
-<!-- top bar -->
-<!-- <div class="ui fixed menu" id="top-bar">
-        <div class="left item">
-            <div class="top-bar-item">
-                <h1>CO-RAD <span>Search</span></h1>
-            </div>
-        </div>
-        <div class="right item">
-            <div class="top-bar-item">
-                <h2><a href="/design">Design</a></h2>
-            </div>
-            <div class="top-bar-item">
-                <h2>Welcome, <a href="/account" class="username">{{ user.username }}</a> !</h2>
-            </div>
-        </div>
-    </div> -->
-
-<!-- Content -->
-<!-- <div class="Content">
-        <div class="content_title">
-            <img id="logo" src="/static/img/logo_gray.png">
-            <div class="ui icon input">
-                <input id="search-input" type="text" placeholder="Search...">
-                <i class="search icon"></i>
-            </div>
-            <div class="option"></div>
-            <div class="tools"></div>
-        </div>
-
-        <div class="content_detail">
-            <p class="title">{{ projectName }}</p>
-            <div class="detail">
-                <div class="left">
-                    <div class="top">
-                        <h3>{{ year }} <span class="direction">{{ teamName }}</span> {% if not not medal %} <span class="award">{{ medal }} Award</span> {% endif %}</h3>
-                    </div>
-                    <p class="abstract">
-                        Abstract:<br>
-                        <span>
-                            {{ description }}
-                        </span>
-                    </p>
-                    <div class="bottom">
-                        <p class="keywords">Keywords: <span>{% for keyword in keywords %} {{keyword }} {% endfor %}</span></p>
-                        <div class="ui selection dropdown parts">
-                            Parts: 
-                            <input type="hidden" name="part">
-                            <div class="default text">Parts</div>
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                {% for p in part %}
-                                <div class="item" data-value="0">{{p.BBa}}</div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="right">
-                    <div class="wiki_image">
-                        {% for img in images %}
-                        <img class="circuit" src="{{ img }}">
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-
-<script src="/static/js/jquery.min.js"></script>
-<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
-<script src="/static/js/jquery.mousewheel.min.js"></script>
-<script src="/static/semantic/dist/semantic.js"></script>
-<script src="/static/semantic/dist/components/popup.min.js"></script>
-<script src="/static/semantic/dist/components/tab.min.js"></script>
-<script src="/static/js/search.js"></script>
-<script>
-
-</script>
-
-</html> -->
 
 <html>
 
@@ -102,49 +10,55 @@
     <link rel="stylesheet" href="/static/css/fontsize.css">
     <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
     <link rel="stylesheet" href="/static/semantic/dist/components/icon.min.css">
+    <link rel="stylesheet" href="/static/css/search.css">
     <link rel="stylesheet" href="/static/css/search_work.css">
 </head>
 
 <body>
-    <div class="ui inverted fixed menu" id="nav">
-        <div class="ui container">
-            <div class="item">CO-RAD <span class="page-name">Search</span></div>
-            <div class="right menu">
-                <a class="item" href="/design">
-                    Design
-                </a>
-                <span class="item">Welcome, <span class="username"> {{ user.username }} </span> !</span>
+    <!-- top bar -->
+    <div class="ui large top fixed menu" id="top-bar">
+        <div class="left item">
+        <div class="top-bar-item">
+            <img id="top-bar-logo" src="/static/img/logo_gray.png">
+        </div>
+        </div>
+        <div class="right item">
+            <!-- <label id="design" class="button">DESIGN</label>
+            <label id="account" class="button">ACCOUNT</label> -->
+            <div class="top-bar-item">
+            <a href="/design">
+                <h3>Design</h3>
+            </a>
+            </div>
+            <div class="top-bar-item">
+            <a href="/account">
+                <h3>Welcome, <span class="username">{{ user.username }}</span> !</h3>
+            </a>
             </div>
         </div>
     </div>
-
-    <div id="search-box-container">
-        <div id="logo">
-            <a href="/">
-                <img class="ui fluid image" src="/static/img/logo.png" alt="CO-RAD">
-            </a>
-        </div>
-        <div id="search-box">
-            <div class="ui form">
-                <div class="field">
-                    <div class="ui fluid icon input">
-                        <input id="search-edit" type="text" placeholder="Search...">
-                        <i id="search-icon" class="search icon"></i>
+    <div class="content">
+        <div id="search-container">
+                <div class="four wide column">
+                    <div class="ui action input search-bar">
+                        <input style="border-radius: 0px !important;background-color: rgba(255,255,255,0.8);" type="text" id="search-content" placeholder="Search...">
+                        <button style="border-radius: 0px !important;" id="search" class="ui icon button squard invert">
+                        <i class="search icon"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
     <div id="search-page-dimmer"></div>
 
     {% csrf_token %}
     <div class="content">
-        <div id="detail-container">
+        <div class="shadow-box" id="detail-container">
             <div class="back-icon">
                 <i class="chevron left icon"></i>
             </div>
             <div class="back">
-                back
+                Back
             </div>
             <div class="title">
                 <a target="igem" href="http://{{ year }}.igem.org/Team:{{ teamName }}">{{ projectName }}<span class="year">{{ year }}-{{ teamName }}</span></a>
@@ -183,7 +97,7 @@
             </div>
         </div>
         <div class="right-panel-container">
-            <div class="right-panel">
+            <div class="right-panel shadow-box">
                 <div class="header">
                     <img src="/static/img/search/medal.png" alt="">
                     <h4 class="ui header">Rewards</h4>
@@ -198,7 +112,7 @@
                 </ul>
                 {% endif %}
             </div>
-            <div class="right-panel">
+            <div class="right-panel shadow-box">
                 <div class="header">
                     <i class="icon users"></i>
                     <div class="ui header">Related teams</div>
@@ -209,7 +123,7 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="right-panel">
+            <div class="right-panel shadow-box">
                 <div class="header">
                     <i class="icon wikipedia w"></i>
                     <div class="ui header">Keywords</div>

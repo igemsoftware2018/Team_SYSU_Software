@@ -40,7 +40,7 @@ def search(request):
     
     search_type = request.GET.get('type')
     if search_type == None:
-        return render(reqeust, 'search.html')
+        return render(request, 'search.html')
     
     try:
         page = request.GET.get('page')

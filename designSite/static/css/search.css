@@ -1,7 +1,7 @@
 body {
   background-image: url('/static/img/search/background_blue.jpg');
   background-attachment: fixed;
-  background-size:100% 100%;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 
@@ -27,9 +27,8 @@ h1, h2, h3, h4, h5, h6{
   text-decoration: underline;
 }
 
-#logo {
+#top-bar-logo {
   height: 75px;
-  width: 150px;
 }
 
 #center-wrapper {
@@ -71,9 +70,6 @@ h1, h2, h3, h4, h5, h6{
   font-size: 28px;  
 }
 
-.my_main_wrapper {
-  
-}
 
 /* search page */
 
@@ -86,8 +82,15 @@ button.invert>i {
   opacity: 1 !important;
 }
 
-.shadowed {
+.search-bar {
   box-shadow: 2px 2px 6px 0px;
+}
+
+
+
+#index-search-bar {
+  box-shadow: 2px 2px 6px 0px;
+  margin: 2%;
 }
 
 .font-constantia {
@@ -103,3 +106,23 @@ button.invert>i {
   text-decoration: underline;
   color: #FFF !important;
 }
+
+.username {
+  text-decoration: underline;
+}
+
+.username:hover {
+  cursor: pointer;
+  color: #7fa7d3;
+}
+
+.shadow-font {
+  text-shadow: black 0.1em 0.1em 0.2em;
+}
+
+.shadow-box {
+  box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px 0px;  
+}
+
