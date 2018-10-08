@@ -94,7 +94,7 @@ button.invert>i {
 }
 
 .font-constantia {
-  font-family: Constantia !important;
+  font-family: Consolos !important;
 }
 
 .selected {
@@ -126,3 +126,24 @@ button.invert>i {
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px 0px;  
 }
 
+#search-container {
+  margin-top: 8rem;
+  width: 50rem;
+  position: relative;
+}
+
+.content {
+  margin-left: 10.5rem;
+  display: flex;
+  flex-direction: row;
+}
+
+/* hide scroller bar */
+::-webkit-scrollbar {
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
