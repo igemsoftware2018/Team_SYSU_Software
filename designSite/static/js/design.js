@@ -62,7 +62,7 @@ if (designId !== '' && parseInt(designId) !== -1) {
 } else
     design = new SDinDesign('#canvas');
 
-$('.left.sidebar').first().sidebar('attach events', '#operation');
+$('.left.sidebar').first().sidebar('attach events', '#operation').sidebar('setting', 'transition', 'overlay');
 
 
 function protocolShuffleStepID() {

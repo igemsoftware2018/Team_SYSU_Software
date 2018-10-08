@@ -20,6 +20,16 @@
   transition: all 0.2s ease;
 }
 
+.ui.fixed.menu {
+  z-index: 100;
+}
+
+.ui.labeled.left.inline.vertical.sidebar.menu {
+  padding-top: 50px;
+  width: 68px;
+  z-index: 10;
+}
+
 #operation>img {
   margin-right: 0;
 }
@@ -218,7 +228,6 @@
 
 #toolbox {
   background-color: white;
-  /* padding: 0.5rem 1rem 0.5rem 1rem; */
   border: none;
   opacity: 1;
 }
@@ -245,7 +254,6 @@ body {
 } */
 
 div.ui.fixed.menu>div.ui.container {
-  margin-left: 3rem !important;
   margin-right: 3rem !important;
   width: 100%;
   height: 3rem;
