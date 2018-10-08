@@ -12,7 +12,7 @@ from django.contrib import messages
 # from design.models import *
 from design.models.bio import *
 from design.models.user import *
-
+from django.db.models import Q
 
 from design.tools.biode import CIR2ODE as cir2
 
@@ -30,7 +30,54 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def search(request):
-    return render(request, 'search.html')
+
+    def update(w_dict, key, w):
+        if key not in w_dict:
+            w_dict[key] = 0
+        w_dict[key] += 1
+        
+
+    search_type = reqeust.GET.get('type')
+    if search_type != 'paper' and search_type != 'project':
+        return HttpResponseNotFound("Invalid Search Type!")
+    keys = request.GET.get('keyword').lower().split
+    if search_type == 'project':
+        w_dict = {}
+        for key in keys:
+            if key.isdigit():    # May be year
+                q_on_Year = Works.objects.filter(Year__exact=int(key))
+            else:
+                q_on_Year = Works.objects.none()
+            if key == 'gold' or key == 'silver' or key == 'bronze':
+                q_on_Medal = Works.objects.filter(Medal__icontains=key)
+            else:
+                q_on_Medal = Works.objects.none()
+
+            q = Works.objects.filter(Q(Region__icontains=key) | Q(Country__icontains=key))
+            q = q | q_on_Medal | q_on_Year
+            for obj in q:
+                update(w_dict, obj.TeamID, 1)
+
+            q = Works.objects.filter(Award__icontains=key)
+            for obj in q:
+                update(w_dict, obj.TeamID, 2)
+        
+            q = Works.objects.filter(Title__icontains=key)
+            for obj in q:
+                update(w_dict, obj.TeamID, 4)
+            
+            q = Works.objects.filter(Description__icontains=key)
+            for obj in q:
+                update(w_dict, obj.TeamID, 1)
+        result = sorted(w_dict, key=lambda x:(w_dict[x], x))
+    logging.info(result[:10])
+        
+        
+            
+        
+
+
+    # return render(request, 'search.html')
 
 
 @login_required

@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^design/share/\d+/?$', design_views.share_design),
     url(r'^design/share/realtime/\d+/?$', design_views.share_design),
     url(r'^work$', search_views.work),
+    url(r'^search$', search_views.search)
     url(r'^interest/?$', account_views.interest),
     url(r'^logout/?$', account_views.logout_view),
 ] + [
