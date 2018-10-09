@@ -138,7 +138,7 @@ def search(request):
                     des = des[:-1]
                 des += '...'
             logo = work.logo
-            if logo in ["http://2013.igem.org\\wiki/skins/common/images/wiki.jpg", "http://2014.igem.org/images/wiki.png"]:
+            if logo in ["http://2013.igem.org\\wiki/skins/common/images/wiki.jpg", "http://2014.igem.org/images/wiki.png", "http://2012.igem.org\\wiki/skins/common/images/wiki.png"]:
                 logo = "/static/img/Team_Img/none.jpg"
             context['Result'].append({
                 "TeamID": work.TeamID,

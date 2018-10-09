@@ -7,7 +7,7 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
-.right.item>h5>span {
+.right.item>h5 span {
     text-decoration: underline;
     color: #a83140;
 }

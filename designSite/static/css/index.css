@@ -117,3 +117,9 @@
 #index-button:hover {
   box-shadow: 2px 2px 2px #000000;
 }
+
+/* hide scroller bar */
+::-webkit-scrollbar {
+  width: 0px;  /* remove scrollbar space */
+  /* background: transparent;  optional: just make scrollbar invisible */
+}

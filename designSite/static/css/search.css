@@ -11,12 +11,9 @@ h1, h2, h3, h4, h5, h6{
 /* Top Bar */
 #top-bar {  
   background: rgba(0, 0, 0, 0.4);
+  color: white;
 }
 
-#top-bar {
-  color: white;
-  font-size: 32px;
-}
 
 .top-bar-item {
   margin-left: 20px;
@@ -141,9 +138,5 @@ button.invert>i {
 /* hide scroller bar */
 ::-webkit-scrollbar {
   width: 0px;  /* remove scrollbar space */
-  background: transparent;  /* optional: just make scrollbar invisible */
-}
-/* optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
-  background: #FF0000;
+  /* background: transparent;  optional: just make scrollbar invisible */
 }

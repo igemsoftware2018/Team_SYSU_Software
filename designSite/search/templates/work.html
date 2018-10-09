@@ -141,7 +141,7 @@
                 </div>
                 <ul class="ui list">
                     {% for keyword in keywords %}
-                    <li><a href="/search/work?q={{ keyword }}">{{ keyword }}</a></li>
+                    <li><a href="/search?type=project&keyword={{ keyword }}">{{ keyword }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

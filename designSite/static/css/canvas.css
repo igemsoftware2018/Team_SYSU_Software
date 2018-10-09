@@ -7,7 +7,7 @@
 .SDinDesign-device>.bone {
   position: absolute;
   height: 3px;
-  background-color: #efefef;
+  background-color: rgb(171, 163, 163);
   bottom: 1em;
 }
 .SDinDesign-part {

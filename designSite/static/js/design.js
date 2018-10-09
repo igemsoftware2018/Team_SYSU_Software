@@ -142,7 +142,7 @@ $('#protocol-button')
         $('#protocol-modal').modal('show');
     })
     .popup({
-        content: 'Add your Protocol'
+        content: 'Add your protocol.'
     });
 function __protocol_refresh_from_design() {
     let $m = $('#protocol-modal');
@@ -1005,6 +1005,8 @@ $('#undo-button').on('click', function () {
     let t = design.canUndo;
     if (t === false)
         t = 'Unable to undo.';
+    else
+        t = "Undo: " + t;
     $(this).popup('get popup').html(t);
 }).popup({
     variation: 'small popup',
@@ -1013,6 +1015,8 @@ $('#undo-button').on('click', function () {
         let t = design.canUndo;
         if (t === false)
             t = 'Unable to undo.';
+        else
+            t = "Undo: " + t;
         this.html(t);
     }
 });
@@ -1021,6 +1025,8 @@ $('#redo-button').on('click', function () {
     let t = design.canRedo;
     if (t === false)
         t = 'Unable to redo.';
+    else
+        t = "Redo: " + t;
     $(this).popup('get popup').html(t);
 }).popup({
     variation: 'small popup',
@@ -1029,6 +1035,8 @@ $('#redo-button').on('click', function () {
         let t = design.canRedo;
         if (t === false)
             t = 'Unable to redo.';
+        else 
+            t = "Redo: " + t;
         this.html(t);
     }
 });
@@ -1663,7 +1671,7 @@ $('#inspect-item')
         design.unHighlightDevice($('.SDinDesign-part, .SDinDesign-device'));
     })
     .popup({
-        content: 'Inspect Item'
+        content: 'Inspect item.'
     });
 $('#connection-dropdown')
     .dropdown({
@@ -1916,7 +1924,7 @@ $('#clear-all-button')
         $('#clear-all-modal').modal('show');
     })
     .popup({
-        content: 'CLEAR THE CANVAS!'
+        content: 'Clear the canvas!'
     });
 
 
@@ -2076,7 +2084,7 @@ $('#realtime-enter')
         window.location.pathname = pn.join('/');
     })
     .popup({
-        content: 'Click to go into realtime mode'
+        content: 'Click to go into realtime mode.'
     });
 
 
