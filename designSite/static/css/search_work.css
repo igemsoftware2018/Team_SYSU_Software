@@ -1,10 +1,5 @@
 
 
-body {
-  background-image: url("/static/img/search/background_blue.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-}
 
 .ui.inverted.menu {
   transition: all 0.25s ease-out;
@@ -34,31 +29,6 @@ body {
   color: #7fa7d3;
 }
 
-#search-box-container {
-  margin-left: 2rem;
-  margin-top: 5rem;
-  position: relative;
-  z-index: 1;
-}
-
-
-
-#search-box {
-  width: 44rem;
-  margin-left: 2rem;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 100%;
-}
-#search-edit  {
-  font-family: 'Times New Roman', Times, serif;
-  border-radius: 0;
-  border: 0;
-}
-#search-icon {
-  pointer-events: auto;
-  cursor: pointer;
-}
 #search-page-dimmer {
   background: rgba(0, 0, 0, 0);
   width: 100%;

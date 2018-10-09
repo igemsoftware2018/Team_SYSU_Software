@@ -39,9 +39,11 @@ $(".CORADSearchSelector").on('click', function () {
 })
 
 $("#search").on("click", function () {
-  if (currentSearchType === 'upload') {
-    console.warn("TODO: add upload module");
-  } else {
-    window.location.href = '/search/?type=' + currentSearchType + "&keyword=" + $('#search-content').val();
-  }
+  window.location.href = '/search/?type=' + currentSearchType + "&keyword=" + $('#search-content').val();
+})
+
+
+
+$("img").each(function() {
+  console.log($(this).attr('src'));
 })

@@ -1,0 +1,136 @@
+<html>
+
+<head>
+  <title>Search</title>
+
+  <link rel="shortcut icon" href="/static/img/favicon.png">
+  <link rel="stylesheet" href="/static/css/fontsize.css">
+  <link rel="stylesheet" href="/static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/static/css/search.css">
+  <link rel="stylesheet" href="/static/css/search_content.css">
+</head>
+
+<script src="/static/js/jquery.min.js"></script>
+
+<body class="font-constantia">
+  <!-- top bar -->
+  <div class="ui large top fixed menu" id="top-bar">
+      <div class="left item">
+        <div class="top-bar-item">
+            <img id="top-bar-logo" src="/static/img/logo_gray.png">
+        </div>
+      </div>
+      <div class="right item">
+          <!-- <label id="design" class="button">DESIGN</label>
+          <label id="account" class="button">ACCOUNT</label> -->
+          <div class="top-bar-item">
+            <a href="/design">
+              <h3>Design</h3>
+            </a>
+          </div>
+          <div class="top-bar-item">
+            <a href="/account">
+              <h3>Welcome, <span class="username">{{ user.username }}</span> !</h3>
+            </a>
+          </div>
+      </div>
+  </div>
+    <!-- Search bar-->
+    <div class="content">
+        <div id="search-container">
+            <div class="ui two column grid">
+                <div class="column">
+                    <div class="ui fluid action input search-bar">
+                        <input style="border-radius: 0px !important;background-color: rgba(255,255,255,0.8);" type="text"
+                            id="search-content" placeholder="Search...">
+                        <button style="border-radius: 0px !important;" id="search" class="ui icon button squard invert">
+                            <i class="search icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="column middle aligned">
+                    <div class="ui breadcrumb search-choice-bar shadow-font">
+                        <a data-type="paper" class="selected section CORADSearchSelector"><span class="shadow-font">Paper</span></a>
+                        <div class="divider"></div>
+                        <a data-type="project" class="section CORADSearchSelector"><span class="shadow-font">Project</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column search-choice-bar">
+             
+            </div>
+        </div>
+    </div>
+    <div id="search-page-dimmer"></div>
+
+    {% csrf_token %}
+   
+    <div id="content-container">
+        {% if NumOfResult == 0 %}
+            <div class="no-result-box shadow-box">
+                No Search Result!
+            </div>
+        {% else %}
+        {% if IsProject %}
+            {% for i in Result %}
+            <a href="/work?id={{i.TeamID}}">
+                <div class="content-box shadow-box">
+                    <div class="image-box">
+                        <img src="{{ i.Logo }}" onerror="javascript:this.src='/static/img/Team_img/none.jpg'">
+                    </div>
+                    <div class="introduction-box">
+                        <div class="title">
+                            {{ i.Title }}
+                        </div>
+                        <div>
+                            <span class="year">
+                                Team: {{ i.Teamname }}&nbsp;&nbsp;&nbsp;&nbsp;Year: {{ i.Year }} 
+                            </span>
+                        </div>
+                        <div class="description">
+                            {{ i.Description }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        {% else %}
+            {% for i in Result %}
+            <a href="/paper?id={{i.ID}}">
+                <div class="content-box shadow-box">
+                    <div class="image-box">
+                        <img src="{{ i.Logo }}" onerror="javascript:this.src='/static/img/Team_img/none.jpg'">
+                    </div>
+                    <div class="introduction-box">
+                        <div class="title">
+                            {{ i.Title }}
+                        </div>
+                        <div class="year">
+                            Journal: {{ i.Journal }}
+                        </div>
+                        <div class="year">
+                            Authors: {{ i.Author }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            {% endfor %}
+        {% endif %}
+        {% endif %}
+    </div>
+
+</body>
+
+
+<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.mousewheel.min.js"></script>
+<script src="/static/semantic/dist/semantic.js"></script>
+<script src="/static/semantic/dist/components/popup.min.js"></script>
+<script src="/static/semantic/dist/components/tab.min.js"></script>
+<script src="/static/js/search.js"></script>
+<script>
+
+</script>
+
+</html>
