@@ -150,7 +150,7 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
 $(function () {
     $('#master-table, #share-table').children('tbody').children('tr').on('click', function () {
         let name = $(this).attr('data-name')
-        get_circuits(name, $(this).parent()[0].id);
+        get_circuits(name, $(this).parent().first().parent().first().attr('id'));
         $('#circuits-modal').modal({
             onHide: function () {
                 $('#circuits-table').html('');
