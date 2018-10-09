@@ -1,0 +1,86 @@
+#content-container {
+    position: relative;
+    left: 10.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.content-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    width:57rem;
+    height: 10rem;
+    padding-left: 1.8rem;
+    padding-right: 1.8rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display:flex;
+    flex-direction: row;
+}
+
+.introduction-box {
+    margin-left: 2rem;
+}
+
+.introduction-box .title {
+    width: 40rem;
+    word-wrap:break-word;
+    word-break:break-all;
+  font-size: 1.2rem;
+  font-family: PmingLiu;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+  color: #000000;
+}
+
+
+
+
+.image-box {
+    height: 8rem;
+    width: 300px;
+    box-shadow: rgba(0, 0, 0, 0.4) 2px 2px 2px 0px;
+    background-color: rgb(247, 232, 232); 
+}
+
+.image-box > img {
+    height:100%;
+    width:100%;
+    vertical-align: middle;
+}
+
+.introduction-box .year {
+    font-family:Arial;
+    font-size: 1rem;
+    color: rgb(93, 86, 86);
+    width: 40rem;
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
+.description {
+    width: 40rem;
+    word-wrap:break-word;
+    word-break:break-all;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    color: black;
+}
+
+.no-result-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    width:57rem;
+    height: 3.2rem;
+    padding-left: 1.8rem;
+    padding-right: 1.8rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display:flex;
+    flex-direction: row;
+    font-size: 2rem;
+    vertical-align:middle;
+}

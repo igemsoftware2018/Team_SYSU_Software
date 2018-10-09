@@ -42,13 +42,13 @@ def search(request):
     if search_type == None:
         return render(request, 'search.html')
     
-    try:
-        page = request.GET.get('page')
-        if page == None:
-            page = 1
-        page = int(page)
-    except:
-        return HttpResponseNotFound("Invalid Search!")
+    # try:
+    #     page = request.GET.get('page')
+    #     if page == None:
+    #         page = 1
+    #     page = int(page)
+    # except:
+    #     return HttpResponseNotFound("Invalid Search!")
         
     if search_type != 'paper' and search_type != 'project':
         return HttpResponseNotFound("Invalid Search!")
@@ -90,7 +90,7 @@ def search(request):
                         update(w_dict, work.TeamID, 3)
                         break
 
-    if search_type == 'paper':
+    elif search_type == 'paper':
         for key in keys:
             try:
                 q = Papers.objects.get(DOI__iexact=key)
@@ -118,29 +118,44 @@ def search(request):
             for obj in q:
                 update(w_dict, obj.DOI, 3)
     result = sorted(w_dict, key=lambda x:(-w_dict[x], x))
+    result = result[0:min(len(result), 50)]
     context = {
         "NumOfResult": len(result),
-        "Type": search_type,
+        "IsProject": search_type == "project",
+        "IsPaper": search_type == "paper",
         "Result":[]
     }
-    result = result[(page-1) * 10:page * 10]
+
+    # result = result[(page-1) * 10:page * 10]
     
+
     if search_type == "project":
         for item in result:
             work = Works.objects.get(TeamID=item)
+            des =  work.Description[0:min(250, len(work.Description))]
+            if len(work.Description) > 300:
+                while des[-1] != ' ':
+                    des = des[:-1]
+                des += '...'
+            logo = work.logo
+            if logo in ["http://2013.igem.org\\wiki/skins/common/images/wiki.jpg", "http://2014.igem.org/images/wiki.png"]:
+                logo = "/static/img/Team_Img/none.jpg"
             context['Result'].append({
                 "TeamID": work.TeamID,
                 "Teamname": work.Teamname,
                 "Year": work.Year,
                 "Title": work.Title,
-                "Description": work.Description,
-                "Logo": work.logo,
+                "Description": des,
+                "Logo": logo,
                 "ReadCount": work.ReadCount
             })
     else:
         for item in result:
-            paper = Papers.objects.get(DOI=item)
+            paper = Papers.objects.filter(DOI=item)
+            id = paper.values("pk")[0]['pk']
+            paper = paper[0]
             context['Result'].append({
+                "ID": id,
                 "DOI": paper.DOI,
                 "Title": paper.Title,
                 "Journal": paper.Journal,
@@ -148,7 +163,7 @@ def search(request):
                 "Article": paper.ArticleURL,
                 "Logo": paper.LogoURL,
             })
-    
+    # logging.info(context)
     return render(request, 'search_result.html', context)
     
         
