@@ -514,6 +514,9 @@ $('#analysis-sequence-button').on('click', function () {
                     $('#analysis-sequence').popup('destroy');
                 }
             }).popup('show');
+            setTimeout(() => {
+                $('#analysis-sequence').popup('hide');
+            }, 3000);
         } else {
             let myChart = echarts.init(document.getElementById('myChart'));
             let option = {
