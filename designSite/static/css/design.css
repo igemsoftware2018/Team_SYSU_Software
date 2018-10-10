@@ -595,3 +595,7 @@ div h5,
 #design-msg-modal {
   padding: 250px;
 }
+
+#selected-part-sequence {
+  width: 100%;
+}
