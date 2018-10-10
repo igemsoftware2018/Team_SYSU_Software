@@ -1289,7 +1289,7 @@ $('#search-parts-dropdown').dropdown({
         onResponse: (response) => ({
             success: response.success === true,
             results: response.parts.map((x) => ({
-                name: x.name,
+                name: '<i class="' + x.safety +' circle right floated icon"></i>' + x.name,
                 value: x.id
             }))
         })
