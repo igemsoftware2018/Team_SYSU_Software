@@ -71,15 +71,16 @@ def atomic_add(items):
 # load parts info in folder 'parts'
 # type is included at the end of the filename with '()'
 # e.g: new_finalOther_Regulator(promoter) indicates type is promoter
-def load_parts(parts_floder_path):
+def load_parts(parts_folder_path, delete=False):
     errors = 0
-    print('Deleting all previous parts...')
-    Parts.objects.all().delete()
+    if delete:
+        print('Deleting all previous parts...')
+        Parts.objects.all().delete()
 
     print('Adding parts...')
     parts = []
     Nameset = set()
-    for root, dirs, files in os.walk(parts_floder_path):
+    for root, dirs, files in os.walk(parts_folder_path):
         for name in files:
             if "info" in name or "safety" in name or "score" in name or "partsDescName" in name:
                 continue
@@ -91,6 +92,12 @@ def load_parts(parts_floder_path):
             for row in csv_reader:
                 try:
                     row[0] = row[0].strip()
+                    try:
+                        obj =  Parts.objects.get(Name=row[0])
+                        if obj is not None:
+                            continue
+                    except:
+                        pass
                     if row[0] in Nameset:
                         continue
                     Nameset.add(row[0])
@@ -118,11 +125,12 @@ def load_parts(parts_floder_path):
     atomic_save(parts)
     print('Error: {0:6d}'.format(errors))
     all_parts = {p.Name: p for p in Parts.objects.all()}
-    load_part_secondName(parts_floder_path, all_parts)
-    load_part_info(parts_floder_path, all_parts)
+    load_part_secondName(parts_folder_path, all_parts)
+    load_part_Safety(parts_folder_path, all_parts)
+    load_part_info(parts_folder_path, all_parts)
 
-def load_part_secondName(parts_floder_path, all_parts):
-    filepath = join(parts_floder_path, 'partsDescName.csv')
+def load_part_secondName(parts_folder_path, all_parts):
+    filepath = join(parts_folder_path, 'partsDescName.csv')
     reader = csv.reader(open(filepath, encoding='utf-8'))
     print('  Loading %s...' % filepath)
     errors = 0
@@ -141,14 +149,31 @@ def load_part_secondName(parts_floder_path, all_parts):
     atomic_save(parts)
     print('Error: {0:6d}'.format(errors))
 
+def load_part_Safety(parts_folder_path, all_parts):
+    filepath = join(parts_folder_path, "part_safety.csv")
+    reader = csv.reader(open(filepath, encoding='utf-8'))
+    parts = []
+    errors = 0
+    for row in reader:
+        try:
+            part = all_parts[row[0]]
+            part.Safety = row[1]
+            parts.append(part)
+        except:
+            errors += 1
+            pass
+    print('Saving...')
+    atomic_save(parts)
+    print('Error: {0:6d}'.format(errors))
 
-def load_part_info(parts_floder_path, all_parts):
+
+def load_part_info(parts_folder_path, all_parts):
     files = ["partsinfo.csv", "other_DNA_info.csv"]
     part_subparts = []
     parts = []
     err1, err2 = 0, 0
     for name in files:
-        filepath = join(parts_floder_path, name)
+        filepath = join(parts_folder_path, name)
         reader = csv.reader(open(filepath, encoding='utf-8'))
         print('  Loading %s...' % filepath)
         next(reader)
@@ -968,15 +993,15 @@ def final():
 
 def pre_load_data(currentpath, Imgpath):
     load_parts(os.path.join(currentpath, 'parts'))
-    load_chassis(os.path.join(currentpath, 'chassis'))
-    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
-    load_partsParameter(os.path.join(currentpath, 'partsParameter'))
-    load_works(os.path.join(currentpath, 'works'))
-    load_Trelation(os.path.join(currentpath, 'TeamRelation'))
-    load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
-    load_papers(os.path.join(currentpath, 'papers'))
-    load_circuits(os.path.join(currentpath, 'works/circuits'), delete = True)
-    load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    #load_circuits(os.path.join(currentpath, 'works/circuits2'))
-    load_additional(os.path.join(currentpath, 'additional'))
-    final()
+    # load_chassis(os.path.join(currentpath, 'chassis'))
+    # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
+    # load_works(os.path.join(currentpath, 'works'))
+    # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
+    # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
+    # load_papers(os.path.join(currentpath, 'papers'))
+    # load_circuits(os.path.join(currentpath, 'works/circuits'), delete = True)
+    # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
+    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    # load_additional(os.path.join(currentpath, 'additional'))
+    # final()

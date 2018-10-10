@@ -18,7 +18,7 @@ class Parts(models.Model):
     Length = models.IntegerField(default = 0) # 0输出Unknow
     Part_rating = models.IntegerField(default = 0)#0输出Unknow
     Type = models.CharField(max_length = 20)
-    # Safety = models.IntegerField(default = -1) #负数的时候需要输出Unknow
+    Safety = models.IntegerField(default = -1) #负数的时候需要输出Unknow
     # Scores = models.FloatField(default=-1.0) # 负数的时候需要输出Unknow
     Release_status = models.CharField(max_length = 100, default = "To be add")
     Twins = models.CharField(max_length = 500, default = "To be add")
@@ -31,7 +31,7 @@ class Parts(models.Model):
     Distribution = models.TextField(default = "To be add")
     Sequence = models.TextField()
     # No idea what it is. It seems usesless
-    Parameter = models.TextField(default = "")  
+    Parameter = models.TextField(default = "")
 
     def __str__(self):
         return "%s : %s" % (self.Name, self.Description)

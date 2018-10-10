@@ -382,16 +382,24 @@ def parts(request):
         return JsonResponse({'success': False})
 
     query_set = Parts.objects.filter(Name__contains=query_name)
-
+    safety = ['', 'green', 'yellow', 'red', 'green']
     parts = []
     for x in query_set:
         if search_target[TYPE_LIST.index(str(x.Type))] == '0':
             continue
         if x.IsPublic == 1:
-            parts.append({'id': x.id, 'name': "%s" % (x.Name)})
+            parts.append({
+                'id': x.id, 
+                'name': "%s" % (x.Name),
+                'safety':safety[x.Safety],
+            })
         elif x.Username == request.user.username:
             parts.append(
-                {'id': x.id, 'name': "%s (%s)" % (x.Name, x.Username)})
+                {
+                    'id': x.id, 
+                    'name': "%s (%s)" % (x.Name, x.Username),
+                    'safety':safety[x.Safety],
+                })
         if len(parts) > 50:
             break
 
