@@ -437,14 +437,14 @@ $('#analysis-button').on('click', function () {
                 values: data,
                 onChange: function (value) {
                     $.get('/api/part?id=' + value, function (res) {
-                        $('#selected-part-sequence').text(res.sequence);
+                        $('#selected-part-sequence').val(res.sequence);
                     });
                 }
             });
         },
         onHide: function () {
             $('#analysis-sequence').val('');
-            $('#selected-part-sequence').text('Selected Part Sequence here');
+            $('#selected-part-sequence').val('Selected Part Sequence here');
             echarts.dispose(document.getElementById('myChart'));
         }
     }).modal('show');
@@ -452,7 +452,7 @@ $('#analysis-button').on('click', function () {
     content: 'Analysis your design.'
 });
 $('#add-to-sequence-button').on('click', function () {
-    let seq = $('#selected-part-sequence').html();
+    let seq = $('#selected-part-sequence').val();
     console.log(seq);
     $('#analysis-sequence').val(function (i, text) {
         return text + seq;
