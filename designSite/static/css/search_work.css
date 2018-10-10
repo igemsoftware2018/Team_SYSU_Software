@@ -235,6 +235,16 @@ div.ui.page.dimmer .content {
   cursor: pointer;
 }
 
+
+#design-wiki-box {
+  position: relative;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding: 1rem;
+  text-align: right;
+}
+
+
 html {
   overflow: scroll;
   overflow-x: hidden;

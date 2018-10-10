@@ -2,7 +2,7 @@
 //   $('.ui.dropdown').dropdown();
 // };
 
-var currentSearchType = "paper";
+var currentSearchType = "project";
 
 document.onkeydown = keyDownSearch;
 

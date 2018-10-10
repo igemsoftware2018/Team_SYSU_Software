@@ -596,7 +596,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                             teamID = int(sheet.cell_value(1, 0))
                         except:
                             print(sheet.name)
-                        teamName = sheet.cell_value(1, 1)
+                        teiamName = sheet.cell_value(1, 1)
 
                         try:
                             team = Works.objects.get(TeamID = teamID)
@@ -989,14 +989,61 @@ def final():
         work.Circuit = circuit
         work.save()
 
-    
+#load works data
+def load_2017_works(works_floder_path):
+    errors = 0
+    works = []
+    filepath = os.path.join(works_floder_path, "team_list_2017.csv")
+    csv_reader = csv.reader(open(filepath, encoding='utf-8'))
+    print('  Loading %s...' % filepath)          
+    try:
+        next(csv_reader)
+        for row in csv_reader:
+            try:
+                row[1] = row[1].strip()
+                    
+                print(row[1])
+                works.append(Works(
+                    TeamID = int(row[0]),
+                    Teamname = row[1],
+                    Region = row[2],
+                    Country = row[3],
+                    Track = row[4],
+                    Size = 0,
+                    Status = row[6],
+                    Year = int(row[7]),
+                    Wiki = row[8],
+                    Section = row[9],
+                    Medal = row[10].replace(' medal', ''),
+                    Award = row[11],
+                    Use_parts = "None",
+                    Title = row[13],
+                    Description = row[14],
+                    SimpleDescription = row[14]
+                ))
+            except Exception as err1:
+                    errors += 1
+                    print(err1)
+                    pass
+    except Exception as err2:
+        errors += 1
+        print(err2)
+        pass
+    print('Saving...')
+    atomic_save(works)
+    print('Error: {0:6d}'.format(errors))
+    # load_Team_description(works_floder_path)
+    # load_Team_IEF(works_floder_path)
+    # load_TeamImg(works_floder_path)
+    # load_Team_logo(works_floder_path)
 
 def pre_load_data(currentpath, Imgpath):
-    load_parts(os.path.join(currentpath, 'parts'))
+    # load_parts(os.path.join(currentpath, 'parts'))
     # load_chassis(os.path.join(currentpath, 'chassis'))
     # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
     # load_works(os.path.join(currentpath, 'works'))
+    load_2017_works(os.path.join(currentpath, 'works'))
     # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
     # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
     # load_papers(os.path.join(currentpath, 'papers'))

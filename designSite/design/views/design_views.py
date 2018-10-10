@@ -117,6 +117,7 @@ def share_design(request):
             logger.debug('is work, designID %s', designID)
             year = work_query.get().Year
             teamname = work_query.get().Teamname
+            
             context['authorname'] = 'TEAM: <{}, {}>'.format(teamname, str(year))
             return render(request, 'design.html', context)
 

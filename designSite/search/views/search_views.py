@@ -49,7 +49,10 @@ def search(request):
     #     page = int(page)
     # except:
     #     return HttpResponseNotFound("Invalid Search!")
-        
+
+
+    ugly_photo_list = ["static\img\Team_img\\none.jpg", "http://2013.igem.org\\wiki/skins/common/images/wiki.jpg", "http://2014.igem.org/images/wiki.png", "http://2012.igem.org\\wiki/skins/common/images/wiki.png", "http://2010.igem.org/images/wiki.png", "http://2009.igem.org\wiki/skins/common/images/wiki.png", "http://2011.igem.org\wiki/skins/common/images/wiki.png"]
+
     if search_type != 'paper' and search_type != 'project':
         return HttpResponseNotFound("Invalid Search!")
     keys = request.GET.get('keyword').lower().split()
@@ -74,6 +77,10 @@ def search(request):
             q = Works.objects.filter(Award__icontains=key)
             for obj in q:
                 update(w_dict, obj.TeamID, 2)
+
+            q = Works.objects.filter(Teamname__icontains=key)
+            for obj in q:
+                update(w_dict, obj.TeamID, 3)
         
             q = Works.objects.filter(Title__icontains=key)
             for obj in q:
@@ -89,6 +96,14 @@ def search(request):
                     if key in work_key:
                         update(w_dict, work.TeamID, 3)
                         break
+
+            for i in w_dict:
+                work = Works.objects.get(TeamID=i)
+                if "none" in work.logo:
+                    print(work.logo)
+                if work.logo not in ugly_photo_list:
+                    update(w_dict, work.TeamID, 3)
+                    
 
     elif search_type == 'paper':
         for key in keys:
@@ -117,6 +132,14 @@ def search(request):
             q = Papers.objects.filter(Authors__icontains=key)
             for obj in q:
                 update(w_dict, obj.DOI, 3)
+
+            for i in w_dict:
+                paper = Papers.objects.get(DOI=i)
+                if paper.LogoURL not in ugly_photo_list:
+                    update(w_dict, paper.DOI, 3)
+
+        
+
     result = sorted(w_dict, key=lambda x:(-w_dict[x], x))
     result = result[0:min(len(result), 50)]
     context = {
@@ -138,7 +161,7 @@ def search(request):
                     des = des[:-1]
                 des += '...'
             logo = work.logo
-            if logo in ["http://2013.igem.org\\wiki/skins/common/images/wiki.jpg", "http://2014.igem.org/images/wiki.png", "http://2012.igem.org\\wiki/skins/common/images/wiki.png", "http://2010.igem.org/images/wiki.png", "http://2009.igem.org\wiki/skins/common/images/wiki.png"]:
+            if logo in ugly_photo_list:
                 logo = "/static/img/Team_Img/none.jpg"
             context['Result'].append({
                 "TeamID": work.TeamID,
@@ -219,6 +242,10 @@ def work(request):
 
         wk.ReadCount += 1
         wk.save()
+        if wk.Circuit:
+            circuitID = Circuit.objects.filter(Name = wk.Circuit.Name).values('pk')[0]['pk']
+        else:
+            circuitID = 0
         context = {
             'projectName': wk.Title,
             'teamName': wk.Teamname,
@@ -232,7 +259,8 @@ def work(request):
             'part': part,
             'logo': wk.logo,
             'keywords': keywords,
-            'relatedTeams': relatedTeams
+            'relatedTeams': relatedTeams,
+            'circuitID': circuitID,
         }
         return render(request, 'work.html', context)
 
