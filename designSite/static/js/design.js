@@ -741,7 +741,7 @@ $('#share-view-button, #share-edit-button').on('click', function (event) {
         $design_msg_body.text('ERROR. Please save your design first.');
         $design_msg_modal.modal('show');
         setTimeout(() => {
-            $design_msg_body.modal('hide');
+            $design_msg_modal.modal('hide');
         }, 3000);
     } else if ($('#search-users-dropdown').dropdown('get value').length > 0) {
         $design_msg_body.text('Connecting to the server...');
