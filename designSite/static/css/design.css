@@ -591,3 +591,7 @@ div h5,
 #show-part-src-seg-button {
   margin: 0 auto;
 }
+
+#design-msg-modal {
+  padding: 250px;
+}
