@@ -484,7 +484,7 @@ div h5,
   min-width: 180px;
   margin-left: 10px;
   margin-top: 5px;
-  font-family: 'Source Sans Pro','Helvetica Neue',Arial,Helvetica,sans-serif
+  font-family: 'Source Sans Pro','Helvetica Neue',Arial,Helvetica,sans-serif;
   font-size: 15px;
   font-weight: bold;
 }
@@ -508,6 +508,7 @@ div h5,
 
 .SDinDesign-part p {
   color: #000000;
+  font-size: 0.5em !important;
 }
 
 .ui.divider {
