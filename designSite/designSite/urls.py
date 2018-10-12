@@ -62,6 +62,8 @@ urlpatterns = [
     url(r'api/analysis$', design_views.analysis_sequence),
     url(r'api/realtime/\d+/?$', design_views.api_real_time),
     url(r'api/liveCanvas/\d+/.*?$', design_views.api_live_canvas),
+    url(r'api/simulation$', design_views.simulation),
+    url(r'api/optimization$', design_views.optimization),
     # url(r'api/interact$', design_views.interact),
     # url(r'api/tag_favorite$', design_views.tag_favorite),
     # url(r'api/get_favorite$', design_views.get_favorite),

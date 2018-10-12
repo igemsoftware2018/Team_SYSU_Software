@@ -1,10 +1,15 @@
+@font-face{
+  font-family: 'Avenir';
+  src : url('https://fonts.google.com/?query=Avenir');
+}
+
 .body {
   size: 100%;
 }
 
 .logo {
-  height: 75px;
-  width: 150px !important;
+  height: 150px;
+  width: 300px !important;
   margin-top: 10px;
   margin-left: 100px;
 }
@@ -24,7 +29,7 @@
   display: inline;
   margin-right: 50px;
   padding-top: 15px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Avenir;
   font-size: 25px;
 }
 
@@ -33,8 +38,7 @@
   text-decoration: underline;
 }
 
-#signup,
-#logout {
+#signup {
   background: white;
   color: #3050a8;
   border: 4px solid #3050a8;
@@ -45,19 +49,28 @@
 }
 
 #signup:hover,
-#logout:hover,
 #signin:hover {
   background: grey;
 }
 
+#logout {
+  background: #ffffff;
+}
+
+#logout>img {
+  height: 50px;
+}
+
+#logout>img:hover {
+  box-shadow: 2px 2px 2px #000000;
+}
+
 .page,
 .page-two {
-  width: auto;
-  height: -webkit-fill-available;
+  height: 100%;
   background-image: url(../img/index/background_not_center.jpg);
   background-repeat: no-repeat;
-  background-size: 100%;
-
+  background-size: cover;
 }
 
 .page>.app-name {
@@ -69,53 +82,66 @@
 }
 
 .page-two {
-  background-image: url(../img/index/background2.jpg);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
 }
 
-.page-two>.app-name {
-  color: #ffffff;
-  padding-top: 150px;
-  padding-left: 100px;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 100px;
+.top-blank {
+  width: 100%;
+  height: 170px;
+}
+
+.container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.button-container {
+  height: 776px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 #design-button,
 #search-button,
-#index-button,
-.design-descrip {
-  float: right;
-  background: transparent;
-  margin: 50 20 0 0;
-  color: #ffffff;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 50px;
-  font-weight: normal;
-}
-
-.design-descrip {
-  font-size: 25px;
-  margin: 155 -380 0 0;
-}
-
-#search-button {
-  margin: 120 480 0 0;
-  color: #000000;
-  font-size: 45px;
-}
-
 #index-button {
-  font-size: 100px;
-  margin: 250 -550 0 0;
+  height: 35%;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  padding-top: 4rem;
+  margin-top: 0;
+  background: transparent;
+  color: #000000;
+  border: 3px solid #000000;
 }
 
-#design-button:hover {
-  box-shadow: 2px 2px 2px #ffffff;
+#design-button>img,
+#search-button>img,
+#index-button>img {
+  height: 120px;
+  width: 100px;
 }
 
+#design-button>p,
+#search-button>p,
+#index-button>p {
+  margin-top: 45px;
+  margin-left: 15px;
+  font-family: Avenir;
+  font-size: 30px;
+}
+
+#design-button:hover,
 #search-button:hover,
 #index-button:hover {
   box-shadow: 2px 2px 2px #000000;
+  background-color: #A7DABC;
 }
 
 /* hide scroller bar */

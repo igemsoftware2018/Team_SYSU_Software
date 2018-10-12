@@ -512,6 +512,7 @@ div h5,
 
 .SDinDesign-part p {
   color: #000000;
+  font-size: 0.5em !important;
 }
 
 .ui.divider {

@@ -17,16 +17,29 @@
     </a>
     <div class="right item">
       <h5>Welcome, <a href="/account"><span class="username">{{ user.username }}</span></a> !</h5>
-      <a id="logout" class="ui button">Log Out</a>
+      <a id="logout" class="ui button"><img src="/static/img/index/log_out.png"></a>
     </div>
   </div>
 
   <div class="page-two">
-    <div id="design-button" class="ui button">New Design</div>
-    <p class="design-descrip">You can create a new circuit design.</p>
-    <h1 class="app-name">CO-RAD</h1>
-    <div id="search-button" class="ui button">Search</div>
-    <div id="index-button" class="ui button">Index Page</div>
+    <div class="top-blank"></div>
+    <div class="container">
+      <div class="button-container">
+        <div id="index-button" class="ui button">
+          <img src="static/img/index/index_page.png">
+          <p>Index Page</p>
+        </div>
+        <div id="design-button" class="ui button">
+          <img src="static/img/index/new_design.png">
+          <p>New Design</p>
+        </div>
+        <div id="search-button" class="ui button">
+          <img src="static/img/index/search.png">
+          <p>Search</p>
+        </div>
+      </div>
+      <div class="right-blank"></div>
+    </div>
   </div>
   {% else %}
   <div class="ui large top fixed menu">
@@ -43,42 +56,6 @@
     <h1 class="app-name">CO-RAD</h1>
   </div>
   {% endif %}
-  <!-- <div class="ui inverted vertical masthead center aligned segment">
-    <div class="ui container">
-      <div class="ui large secondary inverted pointing menu">
-        <a class="item" href="/">
-          <img class="logo" src="/static/img/logo.png">
-        </a>
-        {% if user.is_authenticated %}
-        <div class="right item">
-          <h5>Welcome, {{ user.username }}!</h5>
-        </div>
-        <div class="item">
-          <a id="logout" class="ui inverted button">Log Out</a>
-        </div>
-        {% else %}
-        <div class="right item">
-          <a id="signin" class="ui inverted button">Sign In</a>
-        </div>
-        <div class="item">
-          <a id="signup" class="ui inverted button">Sign Up</a>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        CO-RAD
-      </h1>
-      <h3>Design and Collaborate, Analysis and Optimize.</h3>
-      {% if user.is_authenticated %}
-      <div id="index-button" class="ui primary button">Index Page</div>
-      <div id="design-button" class="ui primary button">New Design</div>
-      <div id="search-button" class="ui primary button">Search</div>
-      {% endif %}
-    </div>
-  </div> -->
 </body>
 
 <script src="/static/js/jquery.min.js"></script>

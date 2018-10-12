@@ -1,30 +1,29 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import os
-from django.shortcuts import render, redirect
-from django.http import HttpRequest
-from sbol import *
 
 import json
-from django.http import HttpResponse, JsonResponse, HttpResponseNotFound,\
-    HttpResponseForbidden, QueryDict
-from django.contrib import messages
+import logging
+import os
+import re
+import traceback
 
-# from design.models import *
+import numpy as np
+from sbol import *
+
 from design.models.bio import *
 from design.models.user import *
-
-
 from design.tools.biode import CIR2ODE as cir2
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.http import (HttpRequest, HttpResponse, HttpResponseForbidden,
+                         HttpResponseNotFound, JsonResponse, QueryDict)
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-import traceback
-import logging
+from opt_sim_module.solve import solve_ode
+from opt_sim_module.optimize import optimization 
+
 logger = logging.getLogger(__name__)
 
 '''
@@ -861,28 +860,51 @@ def get_saves(request):
         'circuits': saves})
 
 
-import numpy as np
+
+
+# def simulation(request):
+#     '''
+#     POST /api/simulation
+#     param:
+#         n * n list
+#     return:
+#         time: [] a list of time stamp of length m
+#         result: m * n list, result[m][n] means at time m, the concentration of
+#             n th material
+#     '''
+#     if request.method == 'POST':
+#         data = json.loads(request.POST['data'])
+#         time, result = cir2(data, np.zeros(len(data)))
+#         return JsonResponse({
+#             'status': 1,
+#             'time': time.tolist(),
+#             'result': result.tolist()
+#         })
+#     return 0
 
 
 def simulation(request):
-    '''
-    POST /api/simulation
-    param:
-        n * n list
-    return:
-        time: [] a list of time stamp of length m
-        result: m * n list, result[m][n] means at time m, the concentration of
-            n th material
-    '''
-    if request.method == 'POST':
-        data = json.loads(request.POST['data'])
-        time, result = cir2(data, np.zeros(len(data)))
-        return JsonResponse({
-            'status': 1,
-            'time': time.tolist(),
-            'result': result.tolist()
-        })
-    return 0
+    
+    data = {
+        'matrix': [[0,1],[1,0]],
+        'initial_value': [1,0],
+        'd': [1,1],
+        'n': [1,1]
+    }
+
+    k = [0.13266746665830317,8.949699559416413] # k值
+    eval_t = 10 # 演化时间
+    t, y = solve_ode(data, k, eval_t)
+
+def optimization(request):
+    ith_protein = -1
+    target = 10
+    k_op = optimization(data, eval_t, target, k, ith_protein)
+    print(k_op)
+
+    #可以在优化的参数下观察现在物质的量的演化
+    t, y = solve_ode(data, k_op, eval_t)
+    
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -1396,7 +1418,6 @@ def get_chassis_info(name, read_format):
     return json.loads(Chassis.objects.filter(name=name)[0].data)[read_format]
 
 
-import re
 
 
 @csrf_exempt
@@ -1571,7 +1592,7 @@ def api_live_canvas(request):
     '''
     /api/liveCanvas/{designId}[/Order]
     GET
-    {
+    {k
         'path' : [[['x', 'y'],],], // path list to show
     }
     POST
@@ -1631,4 +1652,3 @@ def api_live_canvas(request):
         return JsonResponse({
             'msg': 'success'
         })
-
