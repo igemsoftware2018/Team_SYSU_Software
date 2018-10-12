@@ -393,8 +393,12 @@ div.part-helper>div.ui.image>img {
   color: white !important;
 }
 
-#simulation-modal .content {
+/* #simulation-modal .content {
   background-color: white !important;
+} */
+.subcontent {
+  padding: 5px;
+  width: 100%;
 }
 
 .simulation-result-container {
@@ -484,7 +488,7 @@ div h5,
   min-width: 180px;
   margin-left: 10px;
   margin-top: 5px;
-  font-family: 'Source Sans Pro','Helvetica Neue',Arial,Helvetica,sans-serif
+  font-family: 'Source Sans Pro','Helvetica Neue',Arial,Helvetica,sans-serif;
   font-size: 15px;
   font-weight: bold;
 }

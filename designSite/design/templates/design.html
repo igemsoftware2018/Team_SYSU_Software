@@ -250,8 +250,9 @@
           </div>
           <h5 class="ui header description">DESCRIPTION</h5>
           <div id="part-info-des">
-              <p></p>
-            <div class="mini ui middle button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source Circuit</div>            
+            <p></p>
+            <div class="mini ui middle button" data-position="bottom right" id="show-part-src-seg-button" style="display:none">Source
+              Circuit</div>
           </div>
         </div>
       </div>
@@ -416,7 +417,7 @@
         <br>
         <div class="content">
           <label class="ui header" id="selected-part-text"> Sequence Selecting Area </label><br />
-        <textarea id="selected-part-sequence" readonly="readonly" rows=3>Selected Part Sequence here</textarea>
+          <textarea id="selected-part-sequence" readonly="readonly" rows=3>Selected Part Sequence here</textarea>
         </div>
         <br>
         <div class="ui button" id="add-to-sequence-button"> add to sequence</div>
@@ -548,16 +549,55 @@
   </div>
 
   <!-- Simulation result modal -->
-  <div id="simulation-modal" class="ui modal">
-    <div class="content">
-      <div class="simulation-result-container">
-        <canvas id="simulation-result"></canvas>
+  <div id="simulation-modal" class="ui tiny modal">
+    <div class="header">Simulation</div>
+    <div class="scrolling content">
+      <div class="ui divider"></div>
+      <div class="ui tabular menu" id="simulation-tab">
+        <a class="active item" id="optimization-btn" data-tab="Optimization">Optimization</a>
+        <a class="item" id="simulation-btn" data-tab="Simulation">Simulation</a>
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="Simulation"></div>
+      <div class="ui bottom attached tab segment active" data-tab="Optimization">
+        <div class="ui content">
+          <label class="ui header">Optimization Setting</label>
+          <br />
+          <div class="ui relaxed divided items" id="optimization-settings">
+            <div class="item">
+              <div class="subcontent">
+                <div class="ui header">K value</div>
+                <div class="field">
+                  <div class="ui fluid right labeled input">
+                    <label for="amount" class="ui basic label">k</label>
+                    <input id="optimization-k" type="text" placeholder="k..." value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="subcontent">
+                <div class="ui header">Target:[<span id="optimization-target">None</span>]</div>
+                <div class="field">
+                  <div class="ui fluidui labeled labeled input">
+                    <input id="target-amount" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..."
+                      value="0">
+                    <div class="ui basic label">mol</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <label class="ui header">Amount of substances</label>
+      <div class="ui divider"></div>
+      <div class="ui relaxed divided items" id="simulation-amount-inputs">
       </div>
     </div>
     <div class="actions">
       <div class="ui two bottom attached big buttons">
-        <div id="show-plasmid" class="ui white button">Generate plasmid</div>
-        <div id="add-new-part" class="ui blue cancel button">Confirm simulation result</div>
+        <div id="show-plasmid" class="ui white button">Run Simulation</div>
+        <div id="add-new-part" class="ui blue cancel button">Cancel</div>
       </div>
     </div>
   </div>

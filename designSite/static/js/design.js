@@ -1952,56 +1952,15 @@ $('#simulation-button')
         $('.ui.dimmer:first .loader')
             .text('Running on server, please wait...');
         $('.ui.dimmer:first').dimmer('show');
-        $.post('/api/simulation', postData, (v) => {
-            $('.ui.dimmer:first').dimmer('hide');
-            $('#simulation-modal').modal('show');
-            let labels = v.time;
-            let datasets = [];
-            for (let i = 0; i < v.result[0].length; ++i)
-                datasets.push({
-                    label: data.partName[i],
-                    data: [],
-                    fill: false,
-                    pointRadius: 0,
-                    borderColor: `hsl(${i * 360 / v.result[0].length}, 100%, 80%)`,
-                    backgroundColor: 'rgba(0, 0, 0, 0)'
-                });
-            v.result.forEach((d) => {
-                d.forEach((x, i) => {
-                    datasets[i].data.push(x * 38);
-                });
-            });
-            new Chart($('#simulation-result'), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
-                options: {
-                    scales: {
-                        xAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                callback: (v) => v.toFixed(1)
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'time (h)'
-                            }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'concentration (μM)'
-                            }
-                        }]
-                    }
-                }
-            });
-        });
+        runSimulation();
+        $('#simulation-tab .item').tab();
+        $('.ui.dimmer:first').dimmer('hide');
+        $('#simulation-modal')
+        .modal({
+                centered: false
+            })
+        .modal('show');
+        
     })
     .popup({
         content: 'Run simulation on the design.'
@@ -2036,7 +1995,7 @@ $('#set-chassis-button').on('click', () => {
 
 
 $('#show-plasmid').on('click', function () {
-    $('#plasmid-modal').modal('show');
+    submitSimulation();
 });
 
 $(window)
@@ -2099,4 +2058,187 @@ $('#info-box').on('mouseover', function() {
     $(this).css('opacity', '0.2');
 }).on('mouseleave', function() {
     $(this).css('opacity', '0.8');
+});
+
+var geneTypeList = [
+    'CDS',
+    'RBS',
+    'promoter',
+    'terminator',
+    'other_DNA',
+    'composite',
+    'generator',
+    'reporter',
+    'inverter',
+    'signalling',
+    'measurement'
+];
+
+var simulationTemplate = `
+    <div class="item">
+        <div class="ui tiny image"><img src="/static/img/design/{{type}}.png" /></div>
+        <div class="subcontent">
+            <div class="ui header">
+              {{name}}
+              <div class="ui right floated basic button target-selector" data-id="{{cid}}">Select as Target</div>
+            </div>
+            <div class="field">
+                <div class="ui fluid right labeled input">
+                    <input class="simulation-amount" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
+                    <div class="ui basic label">mol</div>
+              </div>
+                </div>
+            </div>
+        </div>
+`;
+
+var partMapping = {};
+var simulationSubmitLines = [];
+
+function checkRate(input) {
+    var re = /^[0-9]+.?[0-9]*/;
+    if (!re.test(input)) {
+        return false;
+    }
+    return true;
+}
+
+function generateSimulationForm(partList) {
+    $('#simulation-amount-inputs').html("");
+    for(let part of partList) {
+        let tmpTemplate = simulationTemplate;
+        tmpTemplate = tmpTemplate.replace("{{type}}", part.part.type);
+        tmpTemplate = tmpTemplate.replace("{{name}}", part.part.name);
+        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
+        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
+        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
+        $('#simulation-amount-inputs').append(tmpTemplate);
+    }
+}
+
+function getUsedInDevice(part, devices, partMapping) {
+    let resultList = [];
+    for(let device of devices) {
+        if (device.subparts.indexOf(part.cid) != -1) {
+            for(let subpart of device.subparts) {
+                if (resultList.indexOf(subpart) === -1 
+                    && subpart != part.cid
+                    && geneTypeList.indexOf(partMapping[subpart].part.type) === -1) 
+                        resultList.push(subpart);
+            }
+        }
+    }
+    return resultList;
+}
+
+function getSimulationLines() {
+    
+    partMapping = {};
+    let simulationLines = design.design.lines;
+    let simulationDevices = design.design.devices;
+    let simulationParts = design.design.parts;
+    let resultLines = []
+    for(let part of simulationParts) {
+        partMapping[part.cid] = {
+            "part" : part
+        };
+    }
+    for (let part of simulationParts) {
+        partMapping[part.cid]["related"] = getUsedInDevice(part, simulationDevices, partMapping);
+    }
+    for(let line of simulationLines) {
+        let newLine = {}
+        if (geneTypeList.indexOf(partMapping[line.start].part.type) != -1) {
+            if (partMapping[line.start].related.length > 0) {
+                newLine.start = partMapping[line.start].related;
+            } else {
+                continue;
+            }
+        } else {
+            newLine.start = partMapping[line.start].related;
+            newLine.start.push(line.start);
+        }
+        if (geneTypeList.indexOf(partMapping[line.end].part.type) != -1) {
+            if (partMapping[line.end].related.length > 0) {
+                newLine.end = partMapping[line.end].related;
+            } else {
+                continue;
+            }
+        } else {
+            newLine.end = partMapping[line.end].related;
+            newLine.end.push(line.end);
+        }
+        newLine.type = line.type;
+        resultLines.push(newLine);
+    }
+    return resultLines;
+}
+
+function runSimulation() {
+    let resultLines = getSimulationLines();
+    let partList = [];
+    let usedPart = [];
+    for (let line of resultLines) {
+        for (let start of line.start) {
+            if(usedPart.indexOf(start) == -1) {
+                usedPart.push(start);
+                partList.push(partMapping[start]);
+            }
+        }
+        for (let end of line.end) {
+            if (usedPart.indexOf(end) == -1) {
+                usedPart.push(end);
+                partList.push(partMapping[end]);
+            }
+        }
+    }
+    generateSimulationForm(partList);
+    $('.target-selector').on('click', function () {
+        currentTarget = $(this).attr('data-id');
+        $('#optimization-target').html(partMapping[currentTarget].part.name);
+    });
+    simulationSubmitLines = resultLines;
+}
+
+function submitSimulation() {
+    let submitData = {
+        "parts": {},
+        "lines": simulationSubmitLines,
+        "kvalue": $('#optimization-k').val(),
+        "target": currentTarget,
+        "targetAmount": $('#target-amount').val(),
+        "type": simulationType
+    }
+    let checkFlag = true;
+    $('.simulation-amount').each(function () {
+        if (!checkRate($(this).val())) {
+            checkFlag = false;
+            $(this).parent().addClass('error');
+        } else {
+            submitData['parts'][$(this).attr('data-id')] = $(this).val();
+            $(this).parent().removeClass('error');
+        }
+    });
+    if (checkFlag) {
+        $.post({
+            url: `/api/simulation/`,
+            data: {
+                'data': JSON.stringify(submitData),
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            }
+        });
+    }
+}
+
+var simulationType = "optimization";
+var currentTarget = "None";
+
+$("#simulation-btn").on('click', function () {
+    simulationType = "simulation";
+    $('.target-selector').hide();
+});
+
+$("#optimization-btn").on('click', function () {
+    simulationType = "optimization";
+    $('.target-selector').show();
 });
