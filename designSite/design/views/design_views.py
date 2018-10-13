@@ -855,7 +855,7 @@ def get_saves(request):
 
 
 
-def simulation(request):
+def sim_and_opt(request):
     """
     {
         "parts":{"19516":"3","19518":"2"},
@@ -878,11 +878,14 @@ def simulation(request):
         init_amount = []
         ks = data['ks']
         k_value = []
+        targetAmount = float(data['targetAmount'])
+        flag = data['type']
 
         for (k, v) in material_amount.items():
             material_id.append(int(k))
             init_amount.append(int(v))
 
+        target = material_id.index(int(data['target']))
 
         for i in material_id:
             k_value.append(float(ks[str(i)]))
@@ -913,14 +916,21 @@ def simulation(request):
             'd': d,
             'n': n,
         }
+        k_op = None
+        if flag == 'simulation':
+            t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
+        else:
+            print(data, eval_t, targetAmount, k_value, target)
+            k_op = optimization(data, eval_t, targetAmount, k_value, target)
+            t, y = solve_ode(data, k_op, eval_t)
 
-        t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
         t = []
         y_np = np.array(y)
         for i in range(num_of_material):
             t.append(y_np[:,i])
             t[-1] = t[-1][::10] # only return 100 values
         result = {
+            "new_ks": k_op,
             "data":[],
             "parts": material_id,
             "xAxis": list(np.linspace(0, eval_t, 100)),
@@ -936,47 +946,6 @@ def simulation(request):
         return JsonResponse(result)
             
     
-
-def optimization(request):
-    if request.method == 'POST':
-        # data = {"parts":{"19516":"23","19518":"34"},"lines":[{"start":[19518],"end":[19516],"type":"stimulation"}]}
-
-        data = json.loads(request.POST['data'])
-        material_amount = data['parts']
-        num_of_material = len(material_amount)
-        lines = data['lines']
-        material_id = []
-        init_amount = []
-
-        for (k, v) in material_amount.items():
-            material_id.append(int(k))
-            init_amount.append(int(v))
-
-
-        matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
-        
-        for line in lines:
-            starts = line['start']
-            ends = line['end']
-            for i in starts:
-                for j in ends:
-                    if line['type'] == 'stimulation':
-                        matrix[material_id.index(j)][material_id.index(i)] = 1 
-                    elif line['type'] == 'inhibition':
-                        matrix[material_id.index(j)][material_id.index(i)] = -1
-                    else:
-                        raise("Type error")
-
-        d = [1 for _ in range(num_of_material)] # stimulation efficiency
-        n = [1 for _ in range(num_of_material)] # Reaction efficiency
-
-        ith_protein = -1
-        target = 10
-    k_op = optimization(data, eval_t, target, k, ith_protein)
-    print(k_op)
-
-    #可以在优化的参数下观察现在物质的量的演化
-    t, y = solve_ode(data, k_op, eval_t)
     
 
 
