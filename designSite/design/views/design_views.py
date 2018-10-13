@@ -942,7 +942,9 @@ def simulation(request):
             result['data'].append({
                 'name': material_id[i],
                 'type': 'line', # requirement of echarts
-                'data': t[i],
+                'data': list(t[i]),
+                'showSymbol': False,
+                'smooth': True,
             })
         return JsonResponse(result)
             
