@@ -393,8 +393,12 @@ div.part-helper>div.ui.image>img {
   color: white !important;
 }
 
-#simulation-modal .content {
+/* #simulation-modal .content {
   background-color: white !important;
+} */
+.subcontent {
+  padding: 5px;
+  width: 100%;
 }
 
 .simulation-result-container {
