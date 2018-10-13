@@ -855,6 +855,7 @@ def get_saves(request):
         'description': x.Description,
         'author': x.Author.id if x.Author != None else None
     } for x in query_set]
+    saves.reverse()
     return JsonResponse({
         'status': 1,
         'circuits': saves})
@@ -885,25 +886,62 @@ def get_saves(request):
 
 def simulation(request):
     
-    data = {
-        'matrix': [[0,1],[1,0]],
-        'initial_value': [1,0],
-        'd': [1,1],
-        'n': [1,1]
-    }
+    if request.method == 'GET':
+        print('here')
+        data = {"parts":{"19516":"23","19518":"34"},"lines":[{"start":[19518],"end":[19516],"type":"stimulation"}]}
+        # data = request.POST.get('data')
 
-    k = [0.13266746665830317,8.949699559416413] # k值
-    eval_t = 10 # 演化时间
-    t, y = solve_ode(data, k, eval_t)
+        material_amount = data['parts']
+        num_of_material = len(material_amount)
+        lines = data['lines']
+        material_id = []
+        init_amount = []
+
+        for (k, v) in material_amount.items():
+            material_id.append(int(k))
+            init_amount.append(int(v))
+
+        matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
+        
+        for line in lines:
+            starts = line['start']
+            ends = line['end']
+            for i in starts:
+                for j in ends:
+                    if line['type'] == 'stimulation':
+                        matrix[material_id.index(i)][material_id.index(j)] = 1 
+                    elif line['type'] == 'inhibition':
+                        matrix[material_id.index(i)][material_id.index(j)] = -1
+                    else:
+                        raise("Type error")
+        print(matrix)
+
+        d = [1 for _ in range(num_of_material)] # stimulation efficiency
+        n = [1 for _ in range(num_of_material)] # Reaction efficiency
+
+        data = {
+            'matrix': matrix,
+            'initial_value': init_amount,
+            'd': d,
+            'n': n,
+        }
+        k = [0.13266746665830317,8.949699559416413] # k value for default
+        eval_t = 10 # areaction duration
+
+        t, y = solve_ode(data, k, eval_t)
+        print(y)
+            
+    
 
 def optimization(request):
-    ith_protein = -1
-    target = 10
-    k_op = optimization(data, eval_t, target, k, ith_protein)
-    print(k_op)
+    pass
+    # ith_protein = -1
+    # target = 10
+    # k_op = optimization(data, eval_t, target, k, ith_protein)
+    # print(k_op)
 
-    #可以在优化的参数下观察现在物质的量的演化
-    t, y = solve_ode(data, k_op, eval_t)
+    # #可以在优化的参数下观察现在物质的量的演化
+    # t, y = solve_ode(data, k_op, eval_t)
     
 
 
