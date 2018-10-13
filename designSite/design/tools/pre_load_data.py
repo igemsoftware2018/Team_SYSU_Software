@@ -269,13 +269,13 @@ def load_works(works_floder_path):
                 ))
             except Exception as err1:
                     errors += 1
-                    print(err1)
+                    print("Error1:", err1)
                     pass
     except Exception as err2:
         errors += 1
-        print(err2)
+        print("Error2:", err2)
         pass
-    print('Saving...')
+    print('Saving...Num of works', len(works))
     atomic_save(works)
     print('Error: {0:6d}'.format(errors))
     load_Team_description(works_floder_path)
@@ -584,9 +584,13 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
         print("Delete all circuits")
 
     new_part_count = 0
+    new_circuit_count = 0
     sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
     for root, dirs, files in os.walk(circuits_floder_path):
         for name in files:
+            print(name)
+            if "2017" in name:
+                continue 
             try:
                 f = xlrd.open_workbook(os.path.join(root, name))
                 for sheet in f.sheets():
@@ -595,7 +599,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                             teamID = int(sheet.cell_value(1, 0))
                         except:
                             print(sheet.name)
-                        teiamName = sheet.cell_value(1, 1)
+                        teamName = sheet.cell_value(1, 1)
 
                         try:
                             team = Works.objects.get(TeamID = teamID)
@@ -607,10 +611,11 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                         except:
                             circuit = Circuit.objects.get(Name = teamName + str(teamID))
                         try:
-                            circuit.Chassis = Chassis.objects.get(name = team.Chassis)
+                            circuit.Chassis = Chassis.objects.get(name__icontains = team.Chassis)
                         except:
                             circuit.Chassis = sample_chassis
                         circuit.save()
+                        new_circuit_count += 1
                     else:
                         DOI = sheet.cell_value(1, 0)
                         try:
@@ -623,6 +628,7 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                             circuit = Circuit.objects.get(Name = DOI)
                         circuit.Chassis = sample_chassis
                         circuit.save()
+                        new_circuit_count += 1
 
                     team.Circuit = circuit
                     team.save()
@@ -813,27 +819,27 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                 pass
 
     print('Total new part: ' + str(new_part_count))
+    print('Total new circuit' + str(new_circuit_count))
 
 def load_2017_circuits(file):
     new_part_count = 0
+    new_circuit_count = 0
     sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
+    
     try:
         f = xlrd.open_workbook(file)
         for sheet in f.sheets():
             try:
                 teamID = int(sheet.cell_value(1, 0))
             except:
-                print(sheet.name)
-            teamName = str(sheet.cell_value(1, 1))
-            if not teamName[0].isalpha():
-                teamName = teamName[1:]
-            teamName = teamName.strip()
+                print('Sheet:', sheet.name, "faults.")
+                continue
             try:
                 team = Works.objects.get(TeamID = teamID)
             except Works.DoesNotExist:
-                print(teamName + ' ID:' + str(teamID) + ' Not found!')
+                print('ID:' + str(teamID) + ' Not found!')
                 continue
-            
+            teamName = team.Teamname
             try:
                 circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
             except:
@@ -843,8 +849,10 @@ def load_2017_circuits(file):
             except:
                 circuit.Chassis = sample_chassis
             circuit.save()
-        team.Circuit = circuit
-        team.save()
+            new_circuit_count += 1
+            team.Circuit = circuit
+            team.save()
+        print("New circuit {}".format(new_circuit_count))
 
         cid = {}
         for i in range(0, sheet.nrows):
@@ -1148,6 +1156,9 @@ def final():
 #load works data
 def load_2017_works(works_floder_path):
     errors = 0
+    works_2017 = Works.objects.filter(Year = 2017)
+    print("Delete 2017 works, count = ", works_2017.count())
+    works_2017.delete()
     works = []
     filepath = os.path.join(works_floder_path, "team_list_2017.csv")
     csv_reader = csv.reader(open(filepath, encoding='utf-8'))
@@ -1196,7 +1207,7 @@ def load_2017_works(works_floder_path):
 def pre_load_data(currentpath, Imgpath):
     # load_parts(os.path.join(currentpath, 'parts'))
     # load_chassis(os.path.join(currentpath, 'chassis'))
-    # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
     # load_works(os.path.join(currentpath, 'works'))
     load_2017_works(os.path.join(currentpath, 'works'))
@@ -1206,6 +1217,6 @@ def pre_load_data(currentpath, Imgpath):
     # load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
     load_2017_circuits(os.path.join(currentpath, 'works/circuits/2017.xlsx'))
     # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    #load_circuits(os.path.join(currentpath, 'works/circuits2'))
     # load_additional(os.path.join(currentpath, 'additional'))
     # final()

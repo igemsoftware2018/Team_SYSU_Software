@@ -855,6 +855,7 @@ def get_saves(request):
         'description': x.Description,
         'author': x.Author.id if x.Author != None else None
     } for x in query_set]
+    saves.reverse()
     return JsonResponse({
         'status': 1,
         'circuits': saves})
@@ -884,21 +885,104 @@ def get_saves(request):
 
 
 def simulation(request):
-    
-    data = {
-        'matrix': [[0,1],[1,0]],
-        'initial_value': [1,0],
-        'd': [1,1],
-        'n': [1,1]
-    }
+    if request.method == 'POST':
+        # data = {"parts":{"19516":"23","19518":"34"},"lines":[{"start":[19518],"end":[19516],"type":"stimulation"}]}
 
-    k = [0.13266746665830317,8.949699559416413] # k值
-    eval_t = 10 # 演化时间
-    t, y = solve_ode(data, k, eval_t)
+        data = json.loads(request.POST['data'])
+
+        material_amount = data['parts']
+        num_of_material = len(material_amount)
+        lines = data['lines']
+        material_id = []
+        init_amount = []
+
+        for (k, v) in material_amount.items():
+            material_id.append(int(k))
+            init_amount.append(int(v))
+
+        matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
+        
+        for line in lines:
+            starts = line['start']
+            ends = line['end']
+            for i in starts:
+                for j in ends:
+                    if line['type'] == 'stimulation':
+                        matrix[material_id.index(j)][material_id.index(i)] = 1 
+                    elif line['type'] == 'inhibition':
+                        matrix[material_id.index(j)][material_id.index(i)] = -1
+                    else:
+                        raise("Type error")
+        
+
+        d = [1 for _ in range(num_of_material)] # stimulation efficiency
+        n = [1 for _ in range(num_of_material)] # Reaction efficiency
+
+        data = {
+            'matrix': matrix,
+            'initial_value': init_amount,
+            'd': d,
+            'n': n,
+        }
+        k = [0.13266746665830317,8.949699559416413] # k value for default
+        eval_t = 10 # reaction duration
+
+        t, y = solve_ode(data, k, eval_t)   # y will be num_material * 1000 matrix
+        t = []
+        y_np = np.array(y)
+        for i in range(num_of_material):
+            t.append(y_np[:,i])
+            t[-1] = t[-1][::10] # only return 100 values
+        result = {
+            "data":[],
+            "parts": material_id,
+            "xAxis": list(np.linspace(0, eval_t, 100)),
+        }
+        for i in range(num_of_material):
+            result['data'].append({
+                'name': material_id[i],
+                'type': 'line', # requirement of echarts
+                'data': t[i],
+            })
+        return JsonResponse(result)
+            
+    
 
 def optimization(request):
-    ith_protein = -1
-    target = 10
+    if request.method == 'POST':
+        # data = {"parts":{"19516":"23","19518":"34"},"lines":[{"start":[19518],"end":[19516],"type":"stimulation"}]}
+
+        data = json.loads(request.POST['data'])
+        material_amount = data['parts']
+        num_of_material = len(material_amount)
+        lines = data['lines']
+        material_id = []
+        init_amount = []
+
+        for (k, v) in material_amount.items():
+            material_id.append(int(k))
+            init_amount.append(int(v))
+
+
+        matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
+        
+        for line in lines:
+            starts = line['start']
+            ends = line['end']
+            for i in starts:
+                for j in ends:
+                    if line['type'] == 'stimulation':
+                        matrix[material_id.index(j)][material_id.index(i)] = 1 
+                    elif line['type'] == 'inhibition':
+                        matrix[material_id.index(j)][material_id.index(i)] = -1
+                    else:
+                        raise("Type error")
+
+        d = [1 for _ in range(num_of_material)] # stimulation efficiency
+        n = [1 for _ in range(num_of_material)] # Reaction efficiency
+
+        ith_protein = -1
+        target = 10
     k_op = optimization(data, eval_t, target, k, ith_protein)
     print(k_op)
 
@@ -975,8 +1059,12 @@ def get_sbol_doc(request):
 
         # load components
         components = {}
+        com_set = set()
         for component in data['components']:
             temp = ComponentDefinition(component['name'])
+            if component['name'] in com_set:
+                continue
+            com_set.add(component['name'])
             temp.roles = roles[component['role']]
             temp.description = component['description']
             temp.sequence = Sequence(component['name'], component['sequence'])
@@ -1030,8 +1118,11 @@ def get_sbol_doc(request):
                 stimulator_participation.roles = SBO_STIMULATOR
                 stimulator_participation.participant = pro_fcs[stimulatorName].identity
 
-                other_participation = proInteraction.participations.create(
-                    otherName)
+                if otherName == stimulatorName:
+                    other_participation = stimulator_participation
+                else:
+                    other_participation = proInteraction.participations.create(
+                        otherName)
                 other_participation.roles = components[otherName].roles
                 other_participation.participant = pro_fcs[otherName].identity
 
@@ -1068,8 +1159,11 @@ def get_sbol_doc(request):
                 inhibitor_participation.roles = SBO_INHIBITOR
                 inhibitor_participation.participant = inh_fcs[inhibitorName].identity
 
-                other_participation = inhInteraction.participations.create(
-                    otherName)
+                if otherName == inhibitorName:
+                    other_participation = inhibitor_participation
+                else:
+                    other_participation = inhInteraction.participations.create(
+                        otherName)
                 other_participation.roles = components[otherName].roles
                 other_participation.participant = inh_fcs[otherName].identity
 
