@@ -862,31 +862,19 @@ def get_saves(request):
 
 
 
-
-# def simulation(request):
-#     '''
-#     POST /api/simulation
-#     param:
-#         n * n list
-#     return:
-#         time: [] a list of time stamp of length m
-#         result: m * n list, result[m][n] means at time m, the concentration of
-#             n th material
-#     '''
-#     if request.method == 'POST':
-#         data = json.loads(request.POST['data'])
-#         time, result = cir2(data, np.zeros(len(data)))
-#         return JsonResponse({
-#             'status': 1,
-#             'time': time.tolist(),
-#             'result': result.tolist()
-#         })
-#     return 0
-
-
 def simulation(request):
+    """
+    {
+        "parts":{"19516":"3","19518":"2"},
+        "ks":{"19516":"0","19518":"0"},
+        "lines":[{"start":[19518],"end":[19516],"type":"stimulation"}],
+        "time":"1",
+        "target":"None",
+        "targetAmount":"0",
+        "type":"simulation"
+    }
+    """
     if request.method == 'POST':
-        # data = {"parts":{"19516":"23","19518":"34"},"lines":[{"start":[19518],"end":[19516],"type":"stimulation"}]}
 
         data = json.loads(request.POST['data'])
 
@@ -895,10 +883,17 @@ def simulation(request):
         lines = data['lines']
         material_id = []
         init_amount = []
+        ks = data['ks']
+        k_value = []
 
         for (k, v) in material_amount.items():
             material_id.append(int(k))
             init_amount.append(int(v))
+
+
+        for i in material_id:
+            k_value.append(float(ks[str(i)]))
+            
 
         matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
         
@@ -924,10 +919,9 @@ def simulation(request):
             'd': d,
             'n': n,
         }
-        k = [0.13266746665830317,8.949699559416413] # k value for default
         eval_t = 10 # reaction duration
 
-        t, y = solve_ode(data, k, eval_t)   # y will be num_material * 1000 matrix
+        t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
         t = []
         y_np = np.array(y)
         for i in range(num_of_material):
