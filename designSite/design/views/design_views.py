@@ -912,6 +912,7 @@ def simulation(request):
 
         d = [1 for _ in range(num_of_material)] # stimulation efficiency
         n = [1 for _ in range(num_of_material)] # Reaction efficiency
+        eval_t = float(data['time']) # reaction duration
 
         data = {
             'matrix': matrix,
@@ -919,7 +920,6 @@ def simulation(request):
             'd': d,
             'n': n,
         }
-        eval_t = 10 # reaction duration
 
         t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
         t = []

@@ -2291,13 +2291,13 @@ var currentTarget = "None";
 $("#simulation-btn").on('click', function () {
     simulationType = "simulation";
     $('.target-selector').hide();
-    $('.kinput').hide();
+    // $('.kinput').hide();
 });
 
 $("#optimization-btn").on('click', function () {
     simulationType = "optimization";
     $('.target-selector').show();
-    $('.kinput').show();
+    // $('.kinput').show();
 });
 $("#close-chart").on('click', function () {
     $("#simulation-chart").modal("hide")

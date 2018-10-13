@@ -1153,6 +1153,31 @@ def final():
         work.Circuit = circuit
         work.save()
 
+
+def load_2017_TeamImg():
+    try:
+        for work in Works.objects.filter(Year=2017):
+            teamname = work.Teamname
+            path = os.path.join("static", "img", "Team_img", "2017", teamname)
+            print(path)
+            work = Works.objects.get(Teamname = teamname, Year = 2017)
+            work.Img.all().delete()
+            for dirpath, dirnames, filenames in os.walk(path):
+                for filename in filenames:
+                    if 'logo' != filename.split('.')[0]:
+                        print("\\" + path + "\\" + filename)
+                        img = TeamImg(
+                            Name =  teamname + '_' + filename,
+                            URL = "\\" + path + "\\" + filename,
+                        )
+                        img.save()
+                        work.Img.add(img)
+            work.save()
+    except:
+        print("Error occurs when load 2017 images.")
+                
+
+
 #load works data
 def load_2017_works(works_floder_path):
     errors = 0
@@ -1168,8 +1193,15 @@ def load_2017_works(works_floder_path):
         for row in csv_reader:
             try:
                 row[1] = row[1].strip()
-                    
-                print(row[1])
+                logoURL = os.path.join("static", "img", "Team_img", "none.jpg")
+                urlPath = os.path.join("static", "img", "Team_img", "2017", row[1])
+                for dirpath,dirnames,filenames in os.walk(urlPath):
+                    for filename in filenames:
+                        if 'logo' == filename.split('.')[0]:
+                            logoURL = os.path.join(urlPath, filename)
+                if "none" not in logoURL:
+                    logoURL = '\\' + logoURL
+                
                 works.append(Works(
                     TeamID = int(row[0]),
                     Teamname = row[1],
@@ -1186,8 +1218,10 @@ def load_2017_works(works_floder_path):
                     Use_parts = "None",
                     Title = row[13],
                     Description = row[14],
-                    SimpleDescription = row[14]
+                    SimpleDescription = row[14],
+                    logo = logoURL,
                 ))
+                
             except Exception as err1:
                     errors += 1
                     print(err1)
@@ -1201,8 +1235,10 @@ def load_2017_works(works_floder_path):
     print('Error: {0:6d}'.format(errors))
     # load_Team_description(works_floder_path)
     # load_Team_IEF(works_floder_path)
-    # load_TeamImg(works_floder_path)
-    # load_Team_logo(works_floder_path)
+    load_2017_TeamImg()
+
+
+
 
 def pre_load_data(currentpath, Imgpath):
     # load_parts(os.path.join(currentpath, 'parts'))
@@ -1210,7 +1246,7 @@ def pre_load_data(currentpath, Imgpath):
     # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
     # load_works(os.path.join(currentpath, 'works'))
-    load_2017_works(os.path.join(currentpath, 'works'))
+    # load_2017_works(os.path.join(currentpath, 'works'))
     # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
     # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
     # load_papers(os.path.join(currentpath, 'papers'))
