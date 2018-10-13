@@ -99,8 +99,6 @@ def search(request):
 
             for i in w_dict:
                 work = Works.objects.get(TeamID=i)
-                if "none" in work.logo:
-                    print(work.logo)
                 if work.logo not in ugly_photo_list:
                     update(w_dict, work.TeamID, 3)
                     

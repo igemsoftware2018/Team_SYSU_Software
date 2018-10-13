@@ -557,7 +557,25 @@
         <a class="active item" id="optimization-btn" data-tab="Optimization">Optimization</a>
         <a class="item" id="simulation-btn" data-tab="Simulation">Simulation</a>
       </div>
-      <div class="ui bottom attached tab segment" data-tab="Simulation"></div>
+      <div class="ui bottom attached tab segment" data-tab="Simulation">
+        <div class="ui content">
+          <label class="ui header">Simulation Setting</label>
+          <br />
+          <div class="ui relaxed divided items" id="optimization-settings">
+            <div class="item">
+              <div class="subcontent">
+                <div class="ui header">Reaction Time</div>
+                <div class="field">
+                  <div class="ui fluid right labeled input">
+                    <input id="simulation-time" type="text" placeholder="k..." value="0">
+                    <label for="amount" class="ui basic label">s</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="ui bottom attached tab segment active" data-tab="Optimization">
         <div class="ui content">
           <label class="ui header">Optimization Setting</label>
@@ -565,11 +583,11 @@
           <div class="ui relaxed divided items" id="optimization-settings">
             <div class="item">
               <div class="subcontent">
-                <div class="ui header">K value</div>
+                <div class="ui header">Reaction Time</div>
                 <div class="field">
                   <div class="ui fluid right labeled input">
-                    <label for="amount" class="ui basic label">k</label>
-                    <input id="optimization-k" type="text" placeholder="k..." value="0">
+                    <input id="optimization-time" type="text" placeholder="k..." value="0">
+                    <label for="amount" class="ui basic label">s</label>
                   </div>
                 </div>
               </div>
@@ -589,19 +607,31 @@
           </div>
         </div>
       </div>
-      <label class="ui header">Amount of substances</label>
+      <label class="ui header">Substances Setting</label>
       <div class="ui divider"></div>
       <div class="ui relaxed divided items" id="simulation-amount-inputs">
       </div>
     </div>
     <div class="actions">
       <div class="ui two bottom attached big buttons">
-        <div id="show-plasmid" class="ui white button">Run Simulation</div>
-        <div id="add-new-part" class="ui blue cancel button">Cancel</div>
+        <div id="cancel-simulation" class="ui white cancel button">Cancel</div>
+        <div id="show-simulation" class="ui blue button">Run Simulation</div>
       </div>
     </div>
   </div>
-
+  
+  <!-- simulation chart -->
+  <div id="simulation-chart" class="ui small modal">
+    <div class="header">Simulation Result</div>
+    <div class="content">
+      <div class="chart-container" id="chart-container"></div>
+    </div>
+    <div class="actions">
+      <div class="ui one bottom attached big buttons">
+        <div id="close-chart" class="ui white button">Close</div>
+      </div>
+    </div>
+  </div>
   <!-- Save modal -->
   <div id="save-modal" class="ui tiny modal">
     <div class="content">

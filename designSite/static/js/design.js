@@ -2006,7 +2006,7 @@ $('#set-chassis-button').on('click', () => {
 })
 
 
-$('#show-plasmid').on('click', function () {
+$('#show-simulation').on('click', function () {
     submitSimulation();
 });
 
@@ -2096,9 +2096,14 @@ var simulationTemplate = `
             </div>
             <div class="field">
                 <div class="ui fluid right labeled input">
+                    <label for="amount" class="ui basic label">Amount</label>
                     <input class="simulation-amount" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
                     <div class="ui basic label">mol</div>
-              </div>
+                </div>
+                <br />
+                <div class="ui fluid right labeled input kinput">
+                    <label for="amount" class="ui basic label">K</label>
+                    <input class="simulation-k" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
                 </div>
             </div>
         </div>
@@ -2121,6 +2126,8 @@ function generateSimulationForm(partList) {
         let tmpTemplate = simulationTemplate;
         tmpTemplate = tmpTemplate.replace("{{type}}", part.part.type);
         tmpTemplate = tmpTemplate.replace("{{name}}", part.part.name);
+        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
+        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
         tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
         tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
         tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
@@ -2215,8 +2222,9 @@ function runSimulation() {
 function submitSimulation() {
     let submitData = {
         "parts": {},
+        "ks": {},
         "lines": simulationSubmitLines,
-        "kvalue": $('#optimization-k').val(),
+        "time": $('#' + simulationType + '-time').val(),
         "target": currentTarget,
         "targetAmount": $('#target-amount').val(),
         "type": simulationType
@@ -2231,15 +2239,62 @@ function submitSimulation() {
             $(this).parent().removeClass('error');
         }
     });
+    $('.simulation-k').each(function () {
+        if (!checkRate($(this).val())) {
+            checkFlag = false;
+            $(this).parent().addClass('error');
+        } else {
+            submitData['ks'][$(this).attr('data-id')] = $(this).val();
+            $(this).parent().removeClass('error');
+        }
+    });
     if (checkFlag) {
         $.post({
-            url: `/api/simulation/`,
+            url: `/api/simulation`,
             data: {
                 'data': JSON.stringify(submitData),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
             }
+        }, (data) => {
+            showSimulationChart(data);
         });
     }
+}
+
+function showSimulationChart(data) {
+    $("#simulation-chart").modal("show")
+    var simulationChart = echarts.init($('#chart-container')[0]);
+    let option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: data.parts
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {title: "Save As Image"}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: data.xAxis
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: data.data
+    };
+
+    simulationChart.setOption(option);
+
 }
 
 var simulationType = "optimization";
@@ -2248,9 +2303,14 @@ var currentTarget = "None";
 $("#simulation-btn").on('click', function () {
     simulationType = "simulation";
     $('.target-selector').hide();
+    // $('.kinput').hide();
 });
 
 $("#optimization-btn").on('click', function () {
     simulationType = "optimization";
     $('.target-selector').show();
+    // $('.kinput').show();
+});
+$("#close-chart").on('click', function () {
+    $("#simulation-chart").modal("hide")
 });
