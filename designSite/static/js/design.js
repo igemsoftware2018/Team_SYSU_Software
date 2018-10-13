@@ -1451,7 +1451,14 @@ $('#add-new-gene, #add-new-material')
     .on('click', function () {
         let data;
         let gname = $('#gene-name').val();
-        if (gname.match('^[a-zA-Z0-9_]{2,}$') === null) {
+        let mname = $('#material-name').val();
+        let name;
+        if (addedPartType == 0) {
+            name = gname;
+        } else {
+            name = mname;
+        }
+        if (name.match('^[a-zA-Z0-9_]{2,}$') === null) {
             $('#new-gene-modal, #new-material-modal').modal('hide');
             $('.ui.dimmer:first .loader')
                 .text('ERROR! Part name should be alphanumeric and have at least 2 letter.');
