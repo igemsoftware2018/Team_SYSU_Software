@@ -606,14 +606,11 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                         except Works.DoesNotExist:
                             print(teamName + ' ID:' + str(teamID) + ' Not found!')
                             continue
-                        try:
-                            circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
-                        except:
-                            circuit = Circuit.objects.get(Name = teamName + str(teamID))
-                        try:
-                            circuit.Chassis = Chassis.objects.get(name__icontains = team.Chassis)
-                        except:
-                            circuit.Chassis = sample_chassis
+                        # try:
+                        #     circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
+                        # except:
+                        #     circuit = Circuit.objects.get(Name = teamName + str(teamID))
+                        circuit.Chassis = sample_chassis
                         circuit.save()
                         new_circuit_count += 1
                     else:
@@ -844,10 +841,7 @@ def load_2017_circuits(file):
                 circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
             except:
                 circuit = Circuit.objects.get(Name = teamName + str(teamID), Description = "")
-            try:
-                circuit.Chassis = Chassis.objects.get(name = team.Chassis)
-            except:
-                circuit.Chassis = sample_chassis
+            circuit.Chassis = sample_chassis
             circuit.save()
             new_circuit_count += 1
             team.Circuit = circuit
@@ -1135,8 +1129,10 @@ def final():
     for i in Works.objects.filter(Year__lte = 2008):
         i.delete()
 
-    for work in Works.objects.filter(Circuit = None):
+    for work in Works.objects.filter(Circuit = None, Year__lte = 2016):
         parts = work.Use_parts.split(';')
+        if len(parts) == 0:
+            continue
         circuit = Circuit.objects.create(
                 Name = work.Teamname + str(work.TeamID),
                 Description = '')
@@ -1241,18 +1237,18 @@ def load_2017_works(works_floder_path):
 
 
 def pre_load_data(currentpath, Imgpath):
-    # load_parts(os.path.join(currentpath, 'parts'))
-    # load_chassis(os.path.join(currentpath, 'chassis'))
+    load_parts(os.path.join(currentpath, 'parts'))
+    load_chassis(os.path.join(currentpath, 'chassis'))
     # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
-    # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
-    # load_works(os.path.join(currentpath, 'works'))
-    # load_2017_works(os.path.join(currentpath, 'works'))
-    # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
-    # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
-    # load_papers(os.path.join(currentpath, 'papers'))
-    # load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
+    load_partsParameter(os.path.join(currentpath, 'partsParameter'))
+    load_works(os.path.join(currentpath, 'works'))
+    load_2017_works(os.path.join(currentpath, 'works'))
+    load_Trelation(os.path.join(currentpath, 'TeamRelation'))
+    load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
+    load_papers(os.path.join(currentpath, 'papers'))
+    load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
     load_2017_circuits(os.path.join(currentpath, 'works/circuits/2017.xlsx'))
-    # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
+    load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
     #load_circuits(os.path.join(currentpath, 'works/circuits2'))
-    # load_additional(os.path.join(currentpath, 'additional'))
-    # final()
+    load_additional(os.path.join(currentpath, 'additional'))
+    final()
