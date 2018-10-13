@@ -1284,7 +1284,7 @@ $('#search-parts-dropdown').dropdown({
                 })
                 return searchTarget;
             })();
-            return settings.urlData.query.length < 3 ? false : settings;
+            return settings.urlData.query.length < 2 ? false : settings;
         },
         onResponse: (response) => ({
             success: response.success === true,
