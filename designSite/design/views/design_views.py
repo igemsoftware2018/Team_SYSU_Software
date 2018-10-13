@@ -387,19 +387,12 @@ def parts(request):
     for x in query_set:
         if search_target[TYPE_LIST.index(str(x.Type))] == '0':
             continue
-        if x.IsPublic == 1:
+        if x.IsPublic == 1 or x.Username == request.user.username:
             parts.append({
                 'id': x.id, 
                 'name': "%s" % (x.Name),
                 'safety':safety[x.Safety],
             })
-        elif x.Username == request.user.username:
-            parts.append(
-                {
-                    'id': x.id, 
-                    'name': "%s (%s)" % (x.Name, x.Username),
-                    'safety':safety[x.Safety],
-                })
         if len(parts) > 50:
             break
 
@@ -468,8 +461,8 @@ def part(request):
             new_part = Parts.objects.create(
                 Username=username,
                 IsPublic=False,
-                Name=data['name'],
-                Description=data['description'],
+                Name=data['name'] + '(' + username + ')' ,
+                Description="Creator: {} \n".format(username) + data['description'],
                 Type=data['type'],
                 Role=role_dict[data['type']],
                 Sequence=data['sequence'],
@@ -493,7 +486,7 @@ def part(request):
             part = Parts.objects.get(pk=query_id)
             part_dict = {
                 'id': part.id,
-                'name': part.Name,
+                'name': part.Name.split('(')[0],    #Not return the username
                 'description': part.Description,
                 'type': part.Type,
                 'sequence': part.Sequence,
