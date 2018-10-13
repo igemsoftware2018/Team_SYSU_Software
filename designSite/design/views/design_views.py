@@ -1013,8 +1013,12 @@ def get_sbol_doc(request):
 
         # load components
         components = {}
+        com_set = set()
         for component in data['components']:
             temp = ComponentDefinition(component['name'])
+            if component['name'] in com_set:
+                continue
+            com_set.add(component['name'])
             temp.roles = roles[component['role']]
             temp.description = component['description']
             temp.sequence = Sequence(component['name'], component['sequence'])
@@ -1068,8 +1072,11 @@ def get_sbol_doc(request):
                 stimulator_participation.roles = SBO_STIMULATOR
                 stimulator_participation.participant = pro_fcs[stimulatorName].identity
 
-                other_participation = proInteraction.participations.create(
-                    otherName)
+                if otherName == stimulatorName:
+                    other_participation = stimulator_participation
+                else:
+                    other_participation = proInteraction.participations.create(
+                        otherName)
                 other_participation.roles = components[otherName].roles
                 other_participation.participant = pro_fcs[otherName].identity
 
@@ -1106,8 +1113,11 @@ def get_sbol_doc(request):
                 inhibitor_participation.roles = SBO_INHIBITOR
                 inhibitor_participation.participant = inh_fcs[inhibitorName].identity
 
-                other_participation = inhInteraction.participations.create(
-                    otherName)
+                if otherName == inhibitorName:
+                    other_participation = inhibitor_participation
+                else:
+                    other_participation = inhInteraction.participations.create(
+                        otherName)
                 other_participation.roles = components[otherName].roles
                 other_participation.participant = inh_fcs[otherName].identity
 
