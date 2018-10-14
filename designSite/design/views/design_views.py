@@ -959,7 +959,31 @@ def plasmid_data(request):
         return JsonResponse({'data': json.load(f)})
 
 # transform json data to sbol document
-
+def SBOL_preprocess(data):
+    def S(s):
+        return s.split('(')[0]
+    components = data['components']
+    for component in components:
+        component['id'] = S(component['id'])
+        component['name'] = S(component['name'])
+    lines = data['lines']
+    for line in lines:
+        line['name'] = S(line['name'])
+        line['structure'] = [S(name) for name in line['structure']]
+    for promo in data['promotions']:
+        promo['stimulator'] = S(promo['stimulator'])
+        promo['other'] = S(promo['other'])
+    for inhi in data['inhibitions']:
+        inhi['inhibitor'] = S(inhi['inhibitor'])
+        inhi['other'] = S(inhi['other'])
+    for com in data['combinations']:
+        com['reactants'] = [S(name) for name in com['reactants']]
+        com['production'] = S(com['production'])
+    for cir in data['circuit']:
+        cir['id'] = S(cir['id'])
+        cir['name'] = S(cir['name'])
+    return data
+    
 
 @csrf_exempt
 def get_sbol_doc(request):
@@ -1009,9 +1033,9 @@ def get_sbol_doc(request):
             'Protein stability element': 'http://identifiers.org/so/SO:0001955',
             'Restriction enzyme recognition site': 'http://identifiers.org/so/SO:0001687',
         }
-
         activity = Activity(data['circuit']['name'])
-        activity.displayId = data['circuit']['name']
+        #activity.displayId = data['circuit']['name']
+        activity.displayId = 'SYSU_Software'
         activity.description = data['circuit']['description']
         doc.addActivity(activity)
 
@@ -1019,6 +1043,7 @@ def get_sbol_doc(request):
         components = {}
         com_set = set()
         for component in data['components']:
+            logger.debug(component['name'])
             temp = ComponentDefinition(component['name'])
             if component['name'] in com_set:
                 continue
