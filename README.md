@@ -1,6 +1,6 @@
 <div align="center" >
 
-<img src="logo.png" style="width:50%">
+<img src="logo.png" style="width:300px">
 
 <h2>Welcome to CO-RAD!</h2>
 
@@ -15,15 +15,12 @@ CO-RAD is a *C*ollaborative *O*ptimization platform with functions of *R*ecommen
 - **Synchronization Sketchpad.** A fantastic remote cooperation platform.
 - **Management Studio.** Your reliable assistant for managing your synbio design!
 
-Powerful toolkit for synthetic biology! You can't miss it!
+Powerful toolkit for synthetic biology! Open your a web browser and type in `http://sysu-corad.com`, and start with CO-RAD public server!
 
-## Requirement
 
-Open your a web browser and type in `http://sysu-corad.com`, and start with CO-RAD!
+## Setup
 
 To set up your own server, please follow the installation guide below:
-
-### Setup
 
 #### Dependency
 
