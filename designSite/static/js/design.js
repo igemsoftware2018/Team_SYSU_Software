@@ -1284,7 +1284,7 @@ $('#search-parts-dropdown').dropdown({
                 })
                 return searchTarget;
             })();
-            return settings.urlData.query.length < 3 ? false : settings;
+            return settings.urlData.query.length < 2 ? false : settings;
         },
         onResponse: (response) => ({
             success: response.success === true,
@@ -1450,6 +1450,25 @@ $('#add-material-button').on('click', function () {
 $('#add-new-gene, #add-new-material')
     .on('click', function () {
         let data;
+        let gname = $('#gene-name').val();
+        let mname = $('#material-name').val();
+        let name;
+        if (addedPartType == 0) {
+            name = gname;
+        } else {
+            name = mname;
+        }
+        if (name.match('^[a-zA-Z0-9_]{2,}$') === null) {
+            $('#new-gene-modal, #new-material-modal').modal('hide');
+            $('.ui.dimmer:first .loader')
+                .text('ERROR! Part name should be alphanumeric and have at least 2 letter.');
+            $('.ui.dimmer:first').dimmer('show');
+            //alert('Part name should be alphanumeric and have at least 2 letter.');
+            setTimeout(() => {
+                $('.ui.dimmer:first').dimmer('hide');
+            }, 2000);
+            return;
+        }
         if (addedPartType == 0)
             data = {
                 name: $('#gene-name').val(),

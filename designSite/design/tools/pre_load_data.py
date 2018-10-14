@@ -583,6 +583,8 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
         Circuit.objects.all().delete()
         print("Delete all circuits")
 
+    print("here")
+
     new_part_count = 0
     new_circuit_count = 0
     sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
@@ -607,12 +609,9 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                             print(teamName + ' ID:' + str(teamID) + ' Not found!')
                             continue
                         try:
-                            circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
+                            circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "", Chassis=sample_chassis)
                         except:
                             circuit = Circuit.objects.get(Name = teamName + str(teamID))
-                        try:
-                            circuit.Chassis = Chassis.objects.get(name__icontains = team.Chassis)
-                        except:
                             circuit.Chassis = sample_chassis
                         circuit.save()
                         new_circuit_count += 1
@@ -623,10 +622,10 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                         except Papers.DoesNotExist:
                             print(DOI + ' Not found!')
                         try:
-                            circuit = Circuit.objects.create(Name = DOI, Description = "")
+                            circuit = Circuit.objects.create(Name = DOI, Description = "", Chassis = sample_chassis)
                         except:
                             circuit = Circuit.objects.get(Name = DOI)
-                        circuit.Chassis = sample_chassis
+                            circuit.Chassis = sample_chassis
                         circuit.save()
                         new_circuit_count += 1
 
@@ -820,12 +819,13 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
 
     print('Total new part: ' + str(new_part_count))
     print('Total new circuit' + str(new_circuit_count))
+    print("Loading new circuit done.")
 
 def load_2017_circuits(file):
     new_part_count = 0
     new_circuit_count = 0
     sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
-    
+    circuit = None
     try:
         f = xlrd.open_workbook(file)
         for sheet in f.sheets():
@@ -841,12 +841,9 @@ def load_2017_circuits(file):
                 continue
             teamName = team.Teamname
             try:
-                circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
+                circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "", Chassis=sample_chassis)
             except:
                 circuit = Circuit.objects.get(Name = teamName + str(teamID), Description = "")
-            try:
-                circuit.Chassis = Chassis.objects.get(name = team.Chassis)
-            except:
                 circuit.Chassis = sample_chassis
             circuit.save()
             new_circuit_count += 1
@@ -1135,8 +1132,10 @@ def final():
     for i in Works.objects.filter(Year__lte = 2008):
         i.delete()
 
-    for work in Works.objects.filter(Circuit = None):
+    for work in Works.objects.filter(Circuit = None, Year__lte = 2016):
         parts = work.Use_parts.split(';')
+        if len(parts) == 0:
+            continue
         circuit = Circuit.objects.create(
                 Name = work.Teamname + str(work.TeamID),
                 Description = '')
@@ -1153,6 +1152,31 @@ def final():
         work.Circuit = circuit
         work.save()
 
+
+def load_2017_TeamImg():
+    try:
+        for work in Works.objects.filter(Year=2017):
+            teamname = work.Teamname
+            path = os.path.join("static", "img", "Team_img", "2017", teamname)
+            print(path)
+            work = Works.objects.get(Teamname = teamname, Year = 2017)
+            work.Img.all().delete()
+            for dirpath, dirnames, filenames in os.walk(path):
+                for filename in filenames:
+                    if 'logo' != filename.split('.')[0]:
+                        print("\\" + path + "\\" + filename)
+                        img = TeamImg(
+                            Name =  teamname + '_' + filename,
+                            URL = "\\" + path + "\\" + filename,
+                        )
+                        img.save()
+                        work.Img.add(img)
+            work.save()
+    except:
+        print("Error occurs when load 2017 images.")
+                
+
+
 #load works data
 def load_2017_works(works_floder_path):
     errors = 0
@@ -1168,8 +1192,15 @@ def load_2017_works(works_floder_path):
         for row in csv_reader:
             try:
                 row[1] = row[1].strip()
-                    
-                print(row[1])
+                logoURL = os.path.join("static", "img", "Team_img", "none.jpg")
+                urlPath = os.path.join("static", "img", "Team_img", "2017", row[1])
+                for dirpath,dirnames,filenames in os.walk(urlPath):
+                    for filename in filenames:
+                        if 'logo' == filename.split('.')[0]:
+                            logoURL = os.path.join(urlPath, filename)
+                if "none" not in logoURL:
+                    logoURL = '\\' + logoURL
+                
                 works.append(Works(
                     TeamID = int(row[0]),
                     Teamname = row[1],
@@ -1186,8 +1217,10 @@ def load_2017_works(works_floder_path):
                     Use_parts = "None",
                     Title = row[13],
                     Description = row[14],
-                    SimpleDescription = row[14]
+                    SimpleDescription = row[14],
+                    logo = logoURL,
                 ))
+                
             except Exception as err1:
                     errors += 1
                     print(err1)
@@ -1201,22 +1234,24 @@ def load_2017_works(works_floder_path):
     print('Error: {0:6d}'.format(errors))
     # load_Team_description(works_floder_path)
     # load_Team_IEF(works_floder_path)
-    # load_TeamImg(works_floder_path)
-    # load_Team_logo(works_floder_path)
+    load_2017_TeamImg()
+
+
+
 
 def pre_load_data(currentpath, Imgpath):
     # load_parts(os.path.join(currentpath, 'parts'))
     # load_chassis(os.path.join(currentpath, 'chassis'))
-    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
-    # load_works(os.path.join(currentpath, 'works'))
+    load_works(os.path.join(currentpath, 'works'))
     load_2017_works(os.path.join(currentpath, 'works'))
     # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
     # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
     # load_papers(os.path.join(currentpath, 'papers'))
-    # load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
+    load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
     load_2017_circuits(os.path.join(currentpath, 'works/circuits/2017.xlsx'))
     # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
     # load_additional(os.path.join(currentpath, 'additional'))
-    # final()
+    final()

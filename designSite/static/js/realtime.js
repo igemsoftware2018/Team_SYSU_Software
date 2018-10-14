@@ -9,29 +9,29 @@ $bi_user_write.hide();
 
 $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
 $('#realtime-button')
-.on('click', function() {
-    isRealtimeReading = !isRealtimeReading;
-    if (isRealtimeReading) {
-        $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
+    .on('click', function() {
+        isRealtimeReading = !isRealtimeReading;
+        if (isRealtimeReading) {
+            $('#canvas').css('background', 'rgba(248, 231, 233, 0.7)');
 
-        //for live canvas
-        $('#live-canvas').removeClass('draw');
-        $('#live-canvas').removeClass('erase');
-        unloadLiveCanvasDraw();
-        initLiveCanvasShow();
+            //for live canvas
+            $('#live-canvas').removeClass('draw');
+            $('#live-canvas').removeClass('erase');
+            unloadLiveCanvasDraw();
+            initLiveCanvasShow();
 
-        $bi_user_read.toggle();
-        $bi_user_write.toggle();
-    } else {
-        $('#canvas').css('background', '');
+            $bi_user_read.show();
+            $bi_user_write.hide();
+        } else {
+            $('#canvas').css('background', '');
 
-        //for live canvas
+            //for live canvas
             $('#live-canvas').addClass('draw');
             unloadLiveCanvasShow()
             initLiveCanvasDraw();
+            $bi_user_read.toggle();
+            $bi_user_write.toggle();
         }
-        $bi_user_read.toggle();
-        $bi_user_write.toggle();
     })
     .popup({
         content: 'click me to toggle following or not.'
