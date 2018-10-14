@@ -583,6 +583,8 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
         Circuit.objects.all().delete()
         print("Delete all circuits")
 
+    print("here")
+
     new_part_count = 0
     new_circuit_count = 0
     sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
@@ -606,11 +608,11 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                         except Works.DoesNotExist:
                             print(teamName + ' ID:' + str(teamID) + ' Not found!')
                             continue
-                        # try:
-                        #     circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
-                        # except:
-                        #     circuit = Circuit.objects.get(Name = teamName + str(teamID))
-                        circuit.Chassis = sample_chassis
+                        try:
+                            circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "", Chassis=sample_chassis)
+                        except:
+                            circuit = Circuit.objects.get(Name = teamName + str(teamID))
+                            circuit.Chassis = sample_chassis
                         circuit.save()
                         new_circuit_count += 1
                     else:
@@ -620,10 +622,10 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
                         except Papers.DoesNotExist:
                             print(DOI + ' Not found!')
                         try:
-                            circuit = Circuit.objects.create(Name = DOI, Description = "")
+                            circuit = Circuit.objects.create(Name = DOI, Description = "", Chassis = sample_chassis)
                         except:
                             circuit = Circuit.objects.get(Name = DOI)
-                        circuit.Chassis = sample_chassis
+                            circuit.Chassis = sample_chassis
                         circuit.save()
                         new_circuit_count += 1
 
@@ -817,12 +819,13 @@ def load_circuits(circuits_floder_path, is_work = True, delete = False):
 
     print('Total new part: ' + str(new_part_count))
     print('Total new circuit' + str(new_circuit_count))
+    print("Loading new circuit done.")
 
 def load_2017_circuits(file):
     new_part_count = 0
     new_circuit_count = 0
     sample_chassis = Chassis.objects.get(name = "Pichia pastoris ")
-    
+    circuit = None
     try:
         f = xlrd.open_workbook(file)
         for sheet in f.sheets():
@@ -838,10 +841,10 @@ def load_2017_circuits(file):
                 continue
             teamName = team.Teamname
             try:
-                circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "")
+                circuit = Circuit.objects.create(Name = teamName + str(teamID), Description = "", Chassis=sample_chassis)
             except:
                 circuit = Circuit.objects.get(Name = teamName + str(teamID), Description = "")
-            circuit.Chassis = sample_chassis
+                circuit.Chassis = sample_chassis
             circuit.save()
             new_circuit_count += 1
             team.Circuit = circuit
@@ -1237,18 +1240,18 @@ def load_2017_works(works_floder_path):
 
 
 def pre_load_data(currentpath, Imgpath):
-    load_parts(os.path.join(currentpath, 'parts'))
-    load_chassis(os.path.join(currentpath, 'chassis'))
-    # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
-    load_partsParameter(os.path.join(currentpath, 'partsParameter'))
+    # load_parts(os.path.join(currentpath, 'parts'))
+    # load_chassis(os.path.join(currentpath, 'chassis'))
+    # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
+    # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
     load_works(os.path.join(currentpath, 'works'))
     load_2017_works(os.path.join(currentpath, 'works'))
-    load_Trelation(os.path.join(currentpath, 'TeamRelation'))
-    load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
-    load_papers(os.path.join(currentpath, 'papers'))
+    # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
+    # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
+    # load_papers(os.path.join(currentpath, 'papers'))
     load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
     load_2017_circuits(os.path.join(currentpath, 'works/circuits/2017.xlsx'))
-    load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    #load_circuits(os.path.join(currentpath, 'works/circuits2'))
-    load_additional(os.path.join(currentpath, 'additional'))
+    # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
+    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    # load_additional(os.path.join(currentpath, 'additional'))
     final()

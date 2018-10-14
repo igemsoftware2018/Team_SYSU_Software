@@ -1,3 +1,63 @@
+<div align="center" >
+
+<img src="logo.png" style="width:50%">
+
+<h2>Welcome to CO-RAD!</h2>
+
+</div>
+
+## Introduction
+CO-RAD is a *C*ollaborative *O*ptimization platform with functions of *R*ecommendation，*A*nalysis and *D*esign. Here are the functions in CO-RAD:
+
+- **Novel Numerical Simulation.** Helpful tool for prediction on the behavior of genetic circuits. 
+- **Search & Recommendation System.** The source of your inspiration for synbio design.
+- **Circuit Designer.** Visual toolkit for circuit construction.
+- **Synchronization Sketchpad.** A fantastic remote cooperation platform.
+- **Management Studio.** Your reliable assistant for managing your synbio design!
+
+Powerful toolkit for synthetic biology! You can't miss it!
+
+## Requirement
+
+Open your a web browser and type in `http://sysu-corad.com`, and start with CO-RAD!
+
+To set up your own server, please follow the installation guide below:
+
+### Installation
+
+#### Dependency
+
+To run CO-RAD, you should get prepared on your server as follow:
+1. Make sure your server has over `8GB` memory available, while `16GB` is recommended. This is crucial for our search system.
+2. `Python>= 3.6`, with main following packages installed:
+- `Django>= 2.0`
+- `Numpy`
+- `pySBOL==2.3.0.`, please install via `pip`.
+- `Tensorflow`, wait for update.
+3. Supportive data. Click [here](#) to download, and save it at `some path`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# Previous readme info
+
 # Designer
 
 ## 术语约定
