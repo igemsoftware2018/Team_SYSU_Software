@@ -1,6 +1,6 @@
 <div align="center" >
 
-<img src="logo.png" style="width:50%">
+<img src="logo.png" style="width:10%">
 
 <h2>Welcome to CO-RAD!</h2>
 
