@@ -2088,10 +2088,20 @@ var simulationTemplate = `
                     <input class="simulation-amount" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
                     <div class="ui basic label">mol</div>
                 </div>
-                <br />
+                <p class="simulation-notice">K:xxxxxx</p>
                 <div class="ui fluid right labeled input kinput">
                     <label for="amount" class="ui basic label">K</label>
                     <input class="simulation-k" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
+                </div>
+                <p class="simulation-notice">N:xxxxxx</p>
+                <div class="ui fluid right labeled input ninput">
+                    <label for="amount" class="ui basic label">N</label>
+                    <input class="simulation-n" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
+                </div>
+                <p class="simulation-notice">D:xxxxxx</p>
+                <div class="ui fluid right labeled input kinput">
+                    <label for="amount" class="ui basic label">D</label>
+                    <input class="simulation-d" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
                 </div>
             </div>
         </div>
@@ -2112,91 +2122,95 @@ function generateSimulationForm(partList) {
     $('#simulation-amount-inputs').html("");
     for(let part of partList) {
         let tmpTemplate = simulationTemplate;
-        tmpTemplate = tmpTemplate.replace("{{type}}", part.part.type);
-        tmpTemplate = tmpTemplate.replace("{{name}}", part.part.name);
-        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
-        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
-        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
-        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
-        tmpTemplate = tmpTemplate.replace("{{cid}}", part.part.cid);
+        tmpTemplate = tmpTemplate.replace("{{type}}", part.type);
+        tmpTemplate = tmpTemplate.replace("{{name}}", part.name);
+        while (tmpTemplate.indexOf("{{cid}}") != -1)
+            tmpTemplate = tmpTemplate.replace("{{cid}}", part.cid);
         $('#simulation-amount-inputs').append(tmpTemplate);
     }
 }
 
 function getUsedInDevice(part, devices, partMapping) {
-    let resultList = [];
-    for(let device of devices) {
-        if (device.subparts.indexOf(part.cid) != -1) {
-            for(let subpart of device.subparts) {
-                if (resultList.indexOf(subpart) === -1 
-                    && subpart != part.cid
-                    && geneTypeList.indexOf(partMapping[subpart].part.type) === -1) 
-                        resultList.push(subpart);
-            }
+    for(let i in devices) {
+        if (devices[i].subparts.indexOf(part.cid) != -1) {
+            return i;
         }
     }
-    return resultList;
+    return -1;
 }
 
-function getSimulationLines() {
+function getSimulationLines(simulationParts) {
     
     partMapping = {};
     let simulationLines = design.design.lines;
     let simulationDevices = design.design.devices;
-    let simulationParts = design.design.parts;
     let resultLines = []
     for(let part of simulationParts) {
         partMapping[part.cid] = {
-            "part" : part
+            "part" : part,
+            "line" : {
+                // "from" : [],
+                "to" : []
+            }
         };
     }
+    
     for (let part of simulationParts) {
-        partMapping[part.cid]["related"] = getUsedInDevice(part, simulationDevices, partMapping);
+        partMapping[part.cid]['related'] = getUsedInDevice(part, simulationDevices, partMapping);
     }
     for(let line of simulationLines) {
-        let newLine = {}
-        if (geneTypeList.indexOf(partMapping[line.start].part.type) != -1) {
-            if (partMapping[line.start].related.length > 0) {
-                newLine.start = partMapping[line.start].related;
-            } else {
-                continue;
+        partMapping[line.start].line.to.push({
+            "id" : line.end,
+            "type" : line.type
+        });
+        // partMapping[line.end].line.from.push({
+        //     "id": line.start,
+        //     "type": line.type
+        // });
+    }
+    for(let line of simulationLines) {
+        if (SDinDesign.isGene(partMapping[line.start].part.type)) continue;
+        if (SDinDesign.isGene(partMapping[line.end].part.type)) {
+            if (partMapping[line.end].related != -1) {
+                for (let id of simulationDevices[partMapping[line.end].related].subparts) {
+                    for (let to of partMapping[id].line.to) {
+                        if (!SDinDesign.isGene(partMapping[to.id].part.type)) {
+                            let finalType = undefined;
+                            if (line.type == to.type) {
+                                finalType = "stimulation";
+                            } else {
+                                finalType = "inhibition";
+                            }
+                            resultLines.push({
+                                "start": line.start,
+                                "end": line.end,
+                                "type": finalType
+                            });
+                        }
+                    }
+                    
+                }
             }
         } else {
-            newLine.start = partMapping[line.start].related;
-            newLine.start.push(line.start);
+            resultLines.push({
+                "start" : line.start,
+                "end" : line.end,
+                "type" : line.type
+            });
         }
-        if (geneTypeList.indexOf(partMapping[line.end].part.type) != -1) {
-            if (partMapping[line.end].related.length > 0) {
-                newLine.end = partMapping[line.end].related;
-            } else {
-                continue;
-            }
-        } else {
-            newLine.end = partMapping[line.end].related;
-            newLine.end.push(line.end);
-        }
-        newLine.type = line.type;
-        resultLines.push(newLine);
     }
     return resultLines;
 }
 
 function runSimulation() {
-    let resultLines = getSimulationLines();
+    let simulationParts = design.design.parts;
+    let resultLines = getSimulationLines(simulationParts);
     let partList = [];
     let usedPart = [];
-    for (let line of resultLines) {
-        for (let start of line.start) {
-            if(usedPart.indexOf(start) == -1) {
-                usedPart.push(start);
-                partList.push(partMapping[start]);
-            }
-        }
-        for (let end of line.end) {
-            if (usedPart.indexOf(end) == -1) {
-                usedPart.push(end);
-                partList.push(partMapping[end]);
-            }
+    for (let part of simulationParts) {
+        if (partMapping[part.cid].related == -1 && !SDinDesign.isGene(part.type)) {
+            partList.push(part);
+            usedPart.push(part.cid);
         }
     }
     generateSimulationForm(partList);
@@ -2211,6 +2225,8 @@ function submitSimulation() {
     let submitData = {
         "parts": {},
         "ks": {},
+        "ns": {},
+        "ds":{},
         "lines": simulationSubmitLines,
         "time": $('#' + simulationType + '-time').val(),
         "target": currentTarget,
@@ -2233,6 +2249,24 @@ function submitSimulation() {
             $(this).parent().addClass('error');
         } else {
             submitData['ks'][$(this).attr('data-id')] = $(this).val();
+            $(this).parent().removeClass('error');
+        }
+    });
+    $('.simulation-n').each(function () {
+        if (!checkRate($(this).val())) {
+            checkFlag = false;
+            $(this).parent().addClass('error');
+        } else {
+            submitData['ns'][$(this).attr('data-id')] = $(this).val();
+            $(this).parent().removeClass('error');
+        }
+    });
+    $('.simulation-d').each(function () {
+        if (!checkRate($(this).val())) {
+            checkFlag = false;
+            $(this).parent().addClass('error');
+        } else {
+            submitData['ds'][$(this).attr('data-id')] = $(this).val();
             $(this).parent().removeClass('error');
         }
     });
@@ -2291,13 +2325,13 @@ var currentTarget = "None";
 $("#simulation-btn").on('click', function () {
     simulationType = "simulation";
     $('.target-selector').hide();
-    $('.kinput').hide();
+    // $('.kinput').hide();
 });
 
 $("#optimization-btn").on('click', function () {
     simulationType = "optimization";
     $('.target-selector').show();
-    $('.kinput').show();
+    // $('.kinput').show();
 });
 $("#close-chart").on('click', function () {
     $("#simulation-chart").modal("hide")

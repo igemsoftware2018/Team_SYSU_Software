@@ -612,3 +612,9 @@ div h5,
   height: 400px;
   background-color: #FFF;
 }
+
+.simulation-notice {
+  color: #FFFFFF !important;
+  line-height: 15px;
+  margin: 5px !important;
+}

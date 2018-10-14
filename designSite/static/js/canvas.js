@@ -686,6 +686,7 @@ class SDinDesign {
             device.parts.splice(device.parts.findIndex((p) => p === part), 1);
             if (device.parts.length === 0)
                 this.deleteDevice(device);
+
         }
         this.redrawDesign();
     }
