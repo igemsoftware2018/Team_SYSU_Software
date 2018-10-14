@@ -68,7 +68,7 @@ class Works(models.Model):
     Keywords = models.CharField(max_length = 200, default = "" )
     Chassis = models.CharField(max_length = 100, default = "Pichia pastoris ")
     IEF = models.FloatField(default=0.0) # IEF is the score of the project
-    Circuit = models.ForeignKey('Circuit', on_delete = models.CASCADE, null = True)
+    Circuit = models.ForeignKey('Circuit', on_delete = models.CASCADE, null = True, default=None)
     ReadCount = models.IntegerField(default = 0)
     """
     if there aren't Img existing, then use DefaultImg

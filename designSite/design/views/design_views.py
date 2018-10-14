@@ -390,7 +390,7 @@ def parts(request):
         if x.IsPublic == 1 or x.Username == request.user.username:
             parts.append({
                 'id': x.id, 
-                'name': "%s" % (x.Name),
+                'name': "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1]),
                 'safety':safety[x.Safety],
             })
         if len(parts) > 50:
@@ -461,7 +461,7 @@ def part(request):
             new_part = Parts.objects.create(
                 Username=username,
                 IsPublic=False,
-                Name=data['name'] + '(' + username + ')' ,
+                Name=data['name'] + '_' + username,
                 Description="Creator: {} \n".format(username) + data['description'],
                 Type=data['type'],
                 Role=role_dict[data['type']],
@@ -486,7 +486,7 @@ def part(request):
             part = Parts.objects.get(pk=query_id)
             part_dict = {
                 'id': part.id,
-                'name': part.Name.split('(')[0],    #Not return the username
+                'name': ''.join(part.Name.split('_')[:-1]),    #Not return the username
                 'description': part.Description,
                 'type': part.Type,
                 'sequence': part.Sequence,
