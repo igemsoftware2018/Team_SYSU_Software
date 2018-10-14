@@ -23,7 +23,7 @@ Open your a web browser and type in `http://sysu-corad.com`, and start with CO-R
 
 To set up your own server, please follow the installation guide below:
 
-### Installation
+### Setup
 
 #### Dependency
 
@@ -31,104 +31,43 @@ To run CO-RAD, you should get prepared on your server as follow:
 1. Make sure your server has over `8GB` memory available, while `16GB` is recommended. This is crucial for our search system.
 2. `Python>= 3.6`, with main following packages installed:
 - `Django>= 2.0`
-- `Numpy`
-- `pySBOL==2.3.0.`, please install via `pip`.
-- `Tensorflow`, wait for update.
+- `pySBOL==2.3.0.`
+- `tensorflow==1.11.0`
+- `Numpy`, `xlrd`, `pandas`, `sklearn`
+Details for these packages are listed below.
+
 3. Supportive data. Click [here](#) to download, and save it at `some path`.
 
+#### Installation
 
+- **Get Repo**
+Clone the repository from github. With `git` install, you can type `git clone https://github.com/igemsoftware2018/SYSU-Software-2018` in your terminal. Or you can visit [our repository](github.com/igemsoftware2018/SYSU-Software-2018) and download the source file, unzip it and copy it to your custom directory.
 
+- **Installation**
+The main installation process is packed into scripts. Run `setup.sh` (`setup.bat` for Windows) for installation. It may take several minutes to load ocean of data to the database. After finishing, simply run `runserver.sh`(`runserver.bat` on windows) to let CO-RAD get started to run! 
 
+## Library
 
+#### Backend
 
+- Python 3: https://www.python.org/
+- Django: https://www.djangoproject.com/
+- xlrd: https://github.com/python-excel/xlrd
+- pySBOL: https://github.com/SynBioDex/pySBOL
+- pandas: https://pandas.pydata.org/
+- scikit-learn: http://scikit-learn.org/stable/
+- NumPy: http://www.numpy.org/
+- SciPy: https://www.scipy.org/
 
+#### Frontend
 
-
-
-
-
-
-
-
-
-
-
-
-
----
-# Previous readme info
-
-# Designer
-
-## 术语约定
-
-Circuit - 指通路信息。（一个SBOL文档可以描述一个Circuit）
-Protocol - 描述某一个Circuit的实验过程。
-Design - 记录一个Circuit和其对应的Protocol的信息。
-Document - 一系列具有父子关系（历史继承关系）的Design。
-
-## 关于分享功能
-
-### url
-
-url有以下两种形式  
-第一种形如  
-```url
-/design/{{design-id}}
-```
-它是在用户点击了主页的通路存档后，跳转到链接。  
-第二种形如  
-``` url
-/design/share/{{design-id}}
-```
-它是在用户创建了一个分享后，分享对应的链接。  
-
-### 关于part
-
-part 分成公有和私有
-
-### 关于Document
-
-事实上这是一个不需要被实现的概念。把Design的`name`字段作为Document的id，在处理时我们认为拥有同一个`Name`的Design是归属于同一个`Document`的。同时，一个`Document`只有一个`Master`，即建立这个Document（或者说建立这个Document的第一个Design）的用户名。此外，一个Document共享一个`EditableGroup`，其中记录着可以编辑该Document下所有Design的用户。
-
-### 关于Design
-
-Design由唯一id号确认。访问Design的url约定为:`homepage/circuit/{id}`
-
-## 值得大家知道的新特性
-
-### Logger
-
-**tips** 遇到`xxx file not found`的报错时，只需要把该文件创建好即可。所有的log文件都在`gitignore`里，目的是防止大家的log之间出现conflict.
-现在所有的Python后端都可以很方便地输出Logger调试信息。
-具体用法如下。
-``` python
-import logging
-logger = logging.getLogger(__name__)
-# 以上两行放在文件的开头。常用的文件里，已经设置好了，不用再设置了
-
-logger.error('hello world')
-```
-以上代码的输出信息是
-``` shell
-ERROR:design.views: hello (2018-08-31 13:54:21; design_views.py:414)
-```
-会自动带上日期、文件名、行号等信息。
-
-一共有5种debug方式
-- logger.debug(): Low level system information for debugging purposes
-- logger.info(): General system information
-- logger.warning(): Information describing a minor problem that has occurred.
-- logger.error(): Information describing a major problem that has occurred.
-- logger.critical(): Information describing a critical problem that has occurred.
-按照认为的程度使用就可以了。
-logger的方式从上到下是越来越重要的关系。可以设置filter来隔离调低等级的log，保留高等级的log。
-
-## Import data
-
-```shell
-cd designSite
-python manage.py makemigrations design
-python manage.py migrate
-python manage.py shell < init.py
-```
+- Semantic UI: https://semantic-ui.com/
+- jQuery: https://jquery.com/
+- jQuery UI: http://jqueryui.com/
+- jQuery Mousewheel: https://github.com/jquery/jquery-mousewheel
+- jsPlumb: https://jsplumbtoolkit.com/
+- eCharts: https://ecomfe.github.io/echarts-doc/public/en/index.html
+- D3.js: https://d3js.org/
+- AngularJS: https://angularjs.org/
+- Angular Plasmid: http://angularplasmid.vixis.com/
+- html2canvas: https://html2canvas.hertzen.com/
