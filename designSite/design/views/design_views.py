@@ -390,7 +390,7 @@ def parts(request):
 
         
         if x.IsPublic == 1 or x.Username == request.user.username:
-            if x.Useranme == "Unknown":
+            if x.Username == "Unknown":
                 name = x.Name
             else:
                 name = "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1])
