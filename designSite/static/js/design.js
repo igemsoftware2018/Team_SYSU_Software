@@ -2126,6 +2126,19 @@ var simulationTemplate = `
         </div>
 `;
 
+var newKsTemplate = `
+    <div class="item">
+        <div class="ui tiny image"><img src="/static/img/design/{{type}}.png" /></div>
+        <div class="subcontent">
+            <div class="ui header">
+              {{name}}
+            </div>
+            <div class="ui header">
+              Optimized K:{{ks}}
+            </div>
+        </div>
+`;
+
 var partMapping = {};
 var simulationSubmitLines = [];
 
@@ -2314,7 +2327,24 @@ function submitSimulation() {
 }
 
 function showSimulationChart(data) {
-    $("#simulation-chart").modal("show")
+    // $("#simulation-modal").modal("hide");
+    $('#new-ks-container').html("");
+    for (let id in data.new_ks) {
+        let tmpTemplate = newKsTemplate;
+        tmpTemplate = tmpTemplate.replace("{{type}}", partMapping[data.parts[id]].part.type);
+        tmpTemplate = tmpTemplate.replace("{{name}}", partMapping[data.parts[id]].part.name);
+        tmpTemplate = tmpTemplate.replace("{{ks}}", data.new_ks[id]);
+        $('#new-ks-container').append(tmpTemplate);
+    }
+    for (let id in data.data) {
+        data.data[id].name = partMapping[data.data[id].name].part.name;
+        data.parts[id] = data.data[id].name;
+    }
+    $("#simulation-chart")
+    .modal({
+        allowMultiple: true
+    })
+    .modal("show");
     var simulationChart = echarts.init($('#chart-container')[0]);
     let option = {
         tooltip: {
@@ -2346,7 +2376,6 @@ function showSimulationChart(data) {
     };
 
     simulationChart.setOption(option);
-
 }
 
 var simulationType = "optimization";
