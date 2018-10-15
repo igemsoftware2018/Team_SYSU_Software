@@ -2202,7 +2202,7 @@ function getSimulationLines(simulationParts) {
                             }
                             resultLines.push({
                                 "start": line.start,
-                                "end": to.cid,
+                                "end": to.id,
                                 "type": finalType
                             });
                         }
