@@ -387,10 +387,16 @@ def parts(request):
     for x in query_set:
         if search_target[TYPE_LIST.index(str(x.Type))] == '0':
             continue
+
+        
         if x.IsPublic == 1 or x.Username == request.user.username:
+            if x.Username == "Unknown":
+                name = x.Name
+            else:
+                name = "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1])
             parts.append({
                 'id': x.id, 
-                'name': "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1]),
+                'name': name,
                 'safety':safety[x.Safety],
             })
         if len(parts) > 50:
@@ -856,17 +862,27 @@ def get_saves(request):
 
 
 def sim_and_opt(request):
+    
     """
     {
-        "parts":{"19516":"3","19518":"2"},
-        "ks":{"19516":"0","19518":"0"},
-        "lines":[{"start":[19518],"end":[19516],"type":"stimulation"}],
-        "time":"1",
-        "target":"None",
-        "targetAmount":"0",
-        "type":"simulation"
+        data: 
+            {"parts":
+                {"19529":"0","19530":"0","19531":"0"},
+            "ks":
+                {"19529":"0","19530":"0","19531":"0"},
+            "ns":
+                {"19529":"0","19530":"0","19531":"0"},
+            "ds":
+                {"19529":"0","19530":"0","19531":"0"},
+            "lines":
+                [{"start":19529,"end":19530,"type":"stimulation"},{"start":19529,"end":19532,"type":"stimulation"}],
+            "time":"0",
+            "target":"None",
+            "targetAmount":"0",
+            "type":"simulation"}
     }
     """
+
     if request.method == 'POST':
 
         data = json.loads(request.POST['data'])
@@ -877,7 +893,11 @@ def sim_and_opt(request):
         material_id = []
         init_amount = []
         ks = data['ks']
-        k_value = []
+        ds = data['ds']
+        ns = data['ns']
+        k_value = [] 
+        d_value = [] 
+        n_value = [] 
         targetAmount = float(data['targetAmount'])
         flag = data['type']
 
@@ -889,7 +909,9 @@ def sim_and_opt(request):
 
         for i in material_id:
             k_value.append(float(ks[str(i)]))
-            
+            d_value.append(float(ds[str(i)]))
+            n_value.append(float(ns[str(i)]))
+
 
         matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
         
@@ -905,16 +927,13 @@ def sim_and_opt(request):
                     else:
                         raise("Type error")
         
-
-        d = [1 for _ in range(num_of_material)] # stimulation efficiency
-        n = [1 for _ in range(num_of_material)] # Reaction efficiency
         eval_t = float(data['time']) # reaction duration
 
         data = {
             'matrix': matrix,
             'initial_value': init_amount,
-            'd': d,
-            'n': n,
+            'd': d_value,
+            'n': n_value,
         }
         k_op = None
         if flag == 'simulation':
