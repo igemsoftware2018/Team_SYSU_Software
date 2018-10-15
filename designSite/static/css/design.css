@@ -618,3 +618,7 @@ div h5,
   line-height: 15px;
   margin: 5px !important;
 }
+
+label {
+  color: white !important;
+}
