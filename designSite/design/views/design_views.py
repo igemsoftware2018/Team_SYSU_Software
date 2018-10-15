@@ -390,7 +390,7 @@ def parts(request):
 
         
         if x.IsPublic == 1 or x.Username == request.user.username:
-            if x.Useranme == "Unknown":
+            if x.Username == "Unknown":
                 name = x.Name
             else:
                 name = "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1])
@@ -490,9 +490,13 @@ def part(request):
         try:
             query_id = request.GET.get('id')
             part = Parts.objects.get(pk=query_id)
+            if part.Username == "Unknown":
+                partName = part.Name
+            else:
+                partName = "{}({})".format(''.join(part.Name.split('_')[:-1]), part.Name.split('_')[-1])
             part_dict = {
                 'id': part.id,
-                'name': ''.join(part.Name.split('_')[:-1]),    #Not return the username
+                'name': partName,    #Not return the username
                 'description': part.Description,
                 'type': part.Type,
                 'sequence': part.Sequence,
@@ -904,8 +908,8 @@ def sim_and_opt(request):
         for (k, v) in material_amount.items():
             material_id.append(int(k))
             init_amount.append(int(v))
-
-        target = material_id.index(int(data['target']))
+        if data['target'] != "None":
+            target = material_id.index(int(data['target']))
 
         for i in material_id:
             k_value.append(float(ks[str(i)]))
@@ -916,16 +920,14 @@ def sim_and_opt(request):
         matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
         
         for line in lines:
-            starts = line['start']
-            ends = line['end']
-            for i in starts:
-                for j in ends:
-                    if line['type'] == 'stimulation':
-                        matrix[material_id.index(j)][material_id.index(i)] = 1 
-                    elif line['type'] == 'inhibition':
-                        matrix[material_id.index(j)][material_id.index(i)] = -1
-                    else:
-                        raise("Type error")
+            start = line['start']
+            end = line['end']
+            if line['type'] == 'stimulation':
+                matrix[material_id.index(end)][material_id.index(start)] = 1
+            elif line['type'] == 'inhibition':
+                matrix[material_id.index(end)][material_id.index(start)] = -1
+            else:
+                return JsonResponse({'success':-1})
         
         eval_t = float(data['time']) # reaction duration
 

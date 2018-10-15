@@ -2202,7 +2202,7 @@ function getSimulationLines(simulationParts) {
                             }
                             resultLines.push({
                                 "start": line.start,
-                                "end": line.end,
+                                "end": to.id,
                                 "type": finalType
                             });
                         }
@@ -2290,14 +2290,25 @@ function submitSimulation() {
         }
     });
     if (checkFlag) {
-        $.post({
+        $design_msg_modal.modal('show');
+        $design_msg_body.text('Generating simulation result.');
+        $.ajax({
             url: `/api/simulation`,
+            method: "POST",
             data: {
                 'data': JSON.stringify(submitData),
                 csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function (data) {
+                $design_msg_modal.modal('hide');
+                showSimulationChart(data);
+            },
+            error: function() {
+                $design_msg_body.text('ERROR. Invaild design or value.');
+                setTimeout(() => {
+                    $design_msg_modal.modal('hide');
+                }, 1000);
             }
-        }, (data) => {
-            showSimulationChart(data);
         });
     }
 }
