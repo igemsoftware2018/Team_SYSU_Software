@@ -493,7 +493,7 @@ def part(request):
             if part.Username == "Unknown":
                 partName = part.Name
             else:
-                partName = "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1])
+                partName = "{}({})".format(''.join(part.Name.split('_')[:-1]), part.Name.split('_')[-1])
             part_dict = {
                 'id': part.id,
                 'name': partName,    #Not return the username
@@ -908,8 +908,8 @@ def sim_and_opt(request):
         for (k, v) in material_amount.items():
             material_id.append(int(k))
             init_amount.append(int(v))
-
-        target = material_id.index(int(data['target']))
+        if data['target'] != "None":
+            target = material_id.index(int(data['target']))
 
         for i in material_id:
             k_value.append(float(ks[str(i)]))
