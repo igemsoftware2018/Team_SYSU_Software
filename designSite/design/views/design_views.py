@@ -490,9 +490,13 @@ def part(request):
         try:
             query_id = request.GET.get('id')
             part = Parts.objects.get(pk=query_id)
+            if part.Username == "Unknown":
+                partName = part.Name
+            else:
+                partName = "{}({})".format(''.join(x.Name.split('_')[:-1]), x.Name.split('_')[-1])
             part_dict = {
                 'id': part.id,
-                'name': ''.join(part.Name.split('_')[:-1]),    #Not return the username
+                'name': partName,    #Not return the username
                 'description': part.Description,
                 'type': part.Type,
                 'sequence': part.Sequence,
