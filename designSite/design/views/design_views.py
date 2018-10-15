@@ -920,16 +920,14 @@ def sim_and_opt(request):
         matrix = [[0 for i in range(len(material_amount))] for j in range(len(material_amount))]
         
         for line in lines:
-            starts = line['start']
-            ends = line['end']
-            for i in starts:
-                for j in ends:
-                    if line['type'] == 'stimulation':
-                        matrix[material_id.index(j)][material_id.index(i)] = 1 
-                    elif line['type'] == 'inhibition':
-                        matrix[material_id.index(j)][material_id.index(i)] = -1
-                    else:
-                        raise("Type error")
+            start = line['start']
+            end = line['end']
+            if line['type'] == 'stimulation':
+                matrix[material_id.index(end)][material_id.index(start)] = 1
+            elif line['type'] == 'inhibition':
+                matrix[material_id.index(end)][material_id.index(start)] = -1
+            else:
+                return JsonResponse({'success':-1})
         
         eval_t = float(data['time']) # reaction duration
 
