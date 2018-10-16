@@ -8,8 +8,7 @@
 }
 
 .logo {
-  height: 150px;
-  width: 300px !important;
+  min-width: 150px;
   margin-top: 10px;
   margin-left: 100px;
 }
@@ -100,8 +99,10 @@
 }
 
 .button-container {
-  height: 776px;
-  width: 340px;
+  margin-top: 6.1rem;
+  margin-left: 0.1rem;
+  height: 55rem;
+  width: 20.7rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
