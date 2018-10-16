@@ -1054,9 +1054,10 @@ def get_sbol_doc(request):
             'Protein stability element': 'http://identifiers.org/so/SO:0001955',
             'Restriction enzyme recognition site': 'http://identifiers.org/so/SO:0001687',
         }
-        activity = Activity(data['circuit']['name'])
-        #activity.displayId = data['circuit']['name']
-        activity.displayId = 'SYSU_Software'
+        # activity = Activity(data['circuit']['name'])
+        # activity.displayId = data['circuit']['name']
+        # activity.displayId = 'SYSU_Software'
+        activity = Activity('SYSU_Software')
         activity.description = data['circuit']['description']
         doc.addActivity(activity)
 
