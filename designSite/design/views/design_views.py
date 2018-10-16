@@ -907,7 +907,7 @@ def sim_and_opt(request):
 
         for (k, v) in material_amount.items():
             material_id.append(int(k))
-            init_amount.append(int(v))
+            init_amount.append(float(v))
         if data['target'] != "None":
             target = material_id.index(int(data['target']))
 
