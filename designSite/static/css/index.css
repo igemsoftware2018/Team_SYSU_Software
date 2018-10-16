@@ -100,8 +100,9 @@
 }
 
 .button-container {
-  height: 776px;
-  width: 340px;
+  margin-top: 11rem;
+  height: 50rem;
+  width: 21rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
