@@ -20,9 +20,8 @@ from django.http import (HttpRequest, HttpResponse, HttpResponseForbidden,
                          HttpResponseNotFound, JsonResponse, QueryDict)
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-
+from opt_sim_module.optimize import optimization
 from opt_sim_module.solve import solve_ode
-from opt_sim_module.optimize import optimization 
 
 logger = logging.getLogger(__name__)
 
@@ -911,6 +910,8 @@ def sim_and_opt(request):
         if data['target'] != "None":
             target = material_id.index(int(data['target']))
 
+
+
         for i in material_id:
             k_value.append(float(ks[str(i)]))
             d_value.append(float(ds[str(i)]))
@@ -937,6 +938,8 @@ def sim_and_opt(request):
             'd': d_value,
             'n': n_value,
         }
+        print(material_id)
+        print(data)
         k_op = None
         if flag == 'simulation':
             t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix

@@ -54,7 +54,7 @@ def optimization(data, t, target, k, ith_protein):
 		nowBestChrom = Genetic.findBest(pop)
 		bestChrom = Genetic.compareChrom(nowBestChrom, bestChrom)
 		#输出当前最佳适应度
-		print(pop[bestChrom[0]].chrom, pop[bestChrom[0]].fitness)
+		# print(pop[bestChrom[0]].chrom, pop[bestChrom[0]].fitness)
 		worseChrom = Genetic.findWorse(pop)
 		pop[worseChrom[0]].chrom = pop[bestChrom[0]].chrom.copy()
 		pop[worseChrom[0]].fitness = pop[bestChrom[0]].fitness
