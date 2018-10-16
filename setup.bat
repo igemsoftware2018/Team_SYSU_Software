@@ -1,8 +1,9 @@
-@echo Seting up S-din...
+@echo Seting up CO-RAD...
 @cd igem2018
 @RD /S /Q  search\migrations
 @RD /S /Q  design\migrations
 @RD /S /Q  account\migrations
+@MD logs
 @python3 manage.py makemigrations sdin
 @IF %ERRORLEVEL% NEQ 0 goto error
 @python3 manage.py migrate
