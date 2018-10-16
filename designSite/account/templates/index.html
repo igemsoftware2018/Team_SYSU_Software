@@ -13,13 +13,13 @@
 
 <body>
   {% if user.is_authenticated %}
-  <div class="ui large top fixed menu">
+  <div class="ui large top menu">
     <a class="item" href="/">
       <img class="logo" src="/static/img/logo.png">
     </a>
     <div class="right item">
       <h5>Welcome, <a href="/account"><span class="username">{{ user.username }}</span></a> !</h5>
-      <a id="logout" class="ui button"><img src="/static/img/index/log_out.png"></a>
+      <a id="logout" class="ui button">Log Out</a>
     </div>
   </div>
 
@@ -53,9 +53,7 @@
     </div>
   </div>
 
-  <div class="page">
-    <h1 class="app-name">CO-RAD</h1>
-  </div>
+  <div class="page"></div>
   {% endif %}
 </body>
 
