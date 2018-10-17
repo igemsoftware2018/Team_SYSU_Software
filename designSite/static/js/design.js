@@ -2111,22 +2111,22 @@ var simulationTemplate = `
                 <div class="ui fluid right labeled input">
                     <label for="amount" class="ui basic label">Amount</label>
                     <input class="simulation-amount" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
-                    <div class="ui basic label">mol</div>
+                    <div class="ui basic label">μmol</div>
                 </div>
-                <p class="simulation-notice">K:xxxxxx</p>
+                <p class="simulation-notice">K: Kinetic Parameter</p>
                 <div class="ui fluid right labeled input kinput">
                     <label for="amount" class="ui basic label">K</label>
-                    <input class="simulation-k" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
+                    <input class="simulation-k" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Kinetic parameter of substance..." value="0">
                 </div>
-                <p class="simulation-notice">N:xxxxxx</p>
+                <p class="simulation-notice">N: Repression Rate</p>
                 <div class="ui fluid right labeled input ninput">
                     <label for="amount" class="ui basic label">N</label>
-                    <input class="simulation-n" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
+                    <input class="simulation-n" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Repression rate of substance..." value="0">
                 </div>
-                <p class="simulation-notice">D:xxxxxx</p>
+                <p class="simulation-notice">D: Degradation Rate</p>
                 <div class="ui fluid right labeled input kinput">
                     <label for="amount" class="ui basic label">D</label>
-                    <input class="simulation-d" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..." value="0">
+                    <input class="simulation-d" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Degradation rate of substance..." value="0">
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@ from design.models.bio import *
 from design.models.user import *
 from design.tools.biode import CIR2ODE as cir2
 
-from search.nn_search.nn_search import recommend_team
+# from search.nn_search.nn_search import recommend_team
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ def search(request):
         if search.nn_search_flag >= 0:
             #TODO: I change here.
             try:
-                nn_search_result = recommend_team(keys[0])
+                # nn_search_result = recommend_team(keys[0])
                 search.nn_search_flag = 1   # nn_search module is initialized successfully
                 logging.info("Search module activated!")
             except:
