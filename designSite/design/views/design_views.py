@@ -930,7 +930,7 @@ def sim_and_opt(request):
             else:
                 return JsonResponse({'success':-1})
         
-        eval_t = float(data['time']) # reaction duration
+        evol_t = float(data['time']) # reaction duration
 
         data = {
             'matrix': matrix,
@@ -942,11 +942,11 @@ def sim_and_opt(request):
         print(data)
         k_op = None
         if flag == 'simulation':
-            t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
+            t, y = solve_ode(data, k_value, evol_t)   # y will be num_material * 1000 matrix
         else:
-            print(data, eval_t, targetAmount, k_value, target)
-            k_op = optimization(data, eval_t, targetAmount, k_value, target)
-            t, y = solve_ode(data, k_op, eval_t)
+            print(data, evol_t, targetAmount, k_value, target)
+            k_op = optimization(data, targetAmount, k_value, evol_t, target)
+            t, y = solve_ode(data, k_op, evol_t)
 
         t = []
         y_np = np.array(y)
@@ -957,7 +957,7 @@ def sim_and_opt(request):
             "new_ks": k_op,
             "data":[],
             "parts": material_id,
-            "xAxis": list(np.linspace(0, eval_t, 100)),
+            "xAxis": list(np.linspace(0, evol_t, 100)),
         }
         for i in range(num_of_material):
             result['data'].append({
