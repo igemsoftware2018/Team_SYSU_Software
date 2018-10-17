@@ -11,27 +11,28 @@ def solve_ode(data, k, evol_t):
 
 	def fvdp(y,t):
 		Dy = []
-		if len(data['matrix']) == 1:
-			dy = k[0] - data['d'][0] * y[0]
-			Dy.append(dy)
-		else:
-			for i in range(n):
-				inhibition = 1.0
-				promotion = 0.0
-
-				#inhitbition & promotion
-				for j in range(n):
-					if data['matrix'][i][j] == 1:
-						promotion += y[j]
-					elif data['matrix'][i][j] == 0:
-						continue
-					else:
-						inhibition *= (1.0/(1 + y[j]**data['n'][j]))
-				dy = k[i] * (promotion * inhibition) - data['d'][i] * y[i]
+		for i in range(n):
+			inhibition = 1.0
+			promotion = 0.0
+			dy = 0.0
+			#inhitbition & promotion
+			for j in range(n):
+				if data['matrix'][i][j] == 1:
+					promotion += y[j]
+				elif data['matrix'][i][j] == 0:
+					continue
+				else:
+					inhibition *= (1.0/(1 + y[j]**data['n'][j]))
+			if (promotion == 0 and inhibition == 1):
+				dy = k[i] - data['d'][i] * y[i]
+			elif (promotion == 0):
+				dy = k[i] * (inhibition) - data['d'][i] * y[i]
+			else:
+				dy = k[i] * (promotion*inhibition) - data['d'][i] * y[i]
 
 				#combine
 
-				Dy.append(dy)
+			Dy.append(dy)
 
 		return np.array(Dy)
 

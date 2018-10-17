@@ -80,3 +80,5 @@ def compareChrom(nowbestChrom, bestChrom):
 
 
 
+
+
