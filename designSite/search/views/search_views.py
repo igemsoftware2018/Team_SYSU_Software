@@ -1,36 +1,34 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import os
-from django.shortcuts import render, redirect
-from django.http import HttpRequest
 
 import json
-from django.http import HttpResponse, JsonResponse, HttpResponseNotFound,\
-    HttpResponseForbidden
+import logging
+import os
+import re
+import traceback
+
 from django.contrib import messages
-
-# from design.models import *
-from design.models.bio import *
-from design.models.user import *
-from django.db.models import Q
-
-from design.tools.biode import CIR2ODE as cir2
-
 from django.contrib.auth.decorators import login_required
-
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.db.models import Q
+from django.http import (HttpRequest, HttpResponse, HttpResponseForbidden,
+                         HttpResponseNotFound, JsonResponse)
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-import re
+from design.models.bio import *
+from design.models.user import *
+from design.tools.biode import CIR2ODE as cir2
 
-import traceback
-import logging
+from search.nn_search.nn_search import recommend_team
+
 logger = logging.getLogger(__name__)
 
 # Create your views here.
 
 @login_required
+
+
 def search(request):
 
     def update(w_dict, key, w):
@@ -59,6 +57,10 @@ def search(request):
     logging.info(keys)
     w_dict = {}
     if search_type == 'project':
+        # try:
+        nn_search_result = recommend_team(keys[0])
+        # except:
+        #     logging.info("Unable to load nn search module.")
         for key in keys:
             if key.isdigit():    # May be year
                 q_on_Year = Works.objects.filter(Year__exact=int(key))
@@ -186,14 +188,6 @@ def search(request):
             })
     # logging.info(context)
     return render(request, 'search_result.html', context)
-    
-        
-        
-            
-        
-
-
-    # return render(request, 'search.html')
 
 
 @login_required

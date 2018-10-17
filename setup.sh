@@ -4,6 +4,7 @@ cd igem2018
 rm -rf design/migrations/*
 rm -rf search/migrations/*
 rm -rf account/migrations/*
+mkdir logs
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py shell < init.py

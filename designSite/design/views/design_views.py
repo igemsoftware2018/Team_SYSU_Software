@@ -20,9 +20,8 @@ from django.http import (HttpRequest, HttpResponse, HttpResponseForbidden,
                          HttpResponseNotFound, JsonResponse, QueryDict)
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-
+from opt_sim_module.optimize import optimization
 from opt_sim_module.solve import solve_ode
-from opt_sim_module.optimize import optimization 
 
 logger = logging.getLogger(__name__)
 
@@ -907,9 +906,11 @@ def sim_and_opt(request):
 
         for (k, v) in material_amount.items():
             material_id.append(int(k))
-            init_amount.append(int(v))
+            init_amount.append(float(v))
         if data['target'] != "None":
             target = material_id.index(int(data['target']))
+
+
 
         for i in material_id:
             k_value.append(float(ks[str(i)]))
@@ -929,7 +930,7 @@ def sim_and_opt(request):
             else:
                 return JsonResponse({'success':-1})
         
-        eval_t = float(data['time']) # reaction duration
+        evol_t = float(data['time']) # reaction duration
 
         data = {
             'matrix': matrix,
@@ -937,13 +938,15 @@ def sim_and_opt(request):
             'd': d_value,
             'n': n_value,
         }
+        print(material_id)
+        print(data)
         k_op = None
         if flag == 'simulation':
-            t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
+            t, y = solve_ode(data, k_value, evol_t)   # y will be num_material * 1000 matrix
         else:
-            print(data, eval_t, targetAmount, k_value, target)
-            k_op = optimization(data, eval_t, targetAmount, k_value, target)
-            t, y = solve_ode(data, k_op, eval_t)
+            print(data, evol_t, targetAmount, k_value, target)
+            k_op = optimization(data, targetAmount, k_value, evol_t, target)
+            t, y = solve_ode(data, k_op, evol_t)
 
         t = []
         y_np = np.array(y)
@@ -954,7 +957,7 @@ def sim_and_opt(request):
             "new_ks": k_op,
             "data":[],
             "parts": material_id,
-            "xAxis": list(np.linspace(0, eval_t, 100)),
+            "xAxis": list(np.linspace(0, evol_t, 100)),
         }
         for i in range(num_of_material):
             result['data'].append({
@@ -1054,9 +1057,10 @@ def get_sbol_doc(request):
             'Protein stability element': 'http://identifiers.org/so/SO:0001955',
             'Restriction enzyme recognition site': 'http://identifiers.org/so/SO:0001687',
         }
-        activity = Activity(data['circuit']['name'])
-        #activity.displayId = data['circuit']['name']
-        activity.displayId = 'SYSU_Software'
+        # activity = Activity(data['circuit']['name'])
+        # activity.displayId = data['circuit']['name']
+        # activity.displayId = 'SYSU_Software'
+        activity = Activity('SYSU_Software')
         activity.description = data['circuit']['description']
         doc.addActivity(activity)
 
