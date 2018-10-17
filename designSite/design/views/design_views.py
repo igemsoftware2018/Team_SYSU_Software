@@ -826,14 +826,29 @@ def circuit(request):
                 for i in data['combines'][x]:
                     cd.Sons.add(cids[i])
                 cd.save()
+            # now update authority if necessary. for example, `A` save a circuit shared by `B`.
+            logger.debug('should I update authority?')
+            if not new and request.user != old_circuit.Author:
+                logger.debug('save new version and circuit not own by "me"')
+                auth_query = Authorities.objects.filter(Circuit__Name=name)
+                logger.debug('revalent auth query %s', auth_query)
+                if auth_query:
+                    Authorities.objects.create(
+                        User=request.user,
+                        Circuit=circuit,
+                        Authority='write'
+                    )
+                logger.debug('insert new write authority')
             return JsonResponse({
                 'status': 1,
                 'circuit_id': circuit.id})
+        
         except:
             traceback.print_exc()
             return JsonResponse({
                 'status': 0
             })
+
     else:
         return JsonResponse({
             'status': 0})

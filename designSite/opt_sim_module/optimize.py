@@ -4,7 +4,7 @@ import numpy as np
 import math
 from opt_sim_module.solve import *
 
-def optimization(data, target, k, evol_t,ith_protein):
+def optimization(data, target, k, evol_t, ith_protein):
 	class Chrom:
 		chrom = []
 		fitness = 0.0
