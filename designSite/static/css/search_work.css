@@ -249,3 +249,13 @@ html {
   overflow: scroll;
   overflow-x: hidden;
 }
+
+#img-viewer>.content {
+  text-align: center;
+}
+
+#img-viewer>.content>img {
+  margin: 0 auto;
+  max-height: 400px;
+  max-width: 600px;
+}
