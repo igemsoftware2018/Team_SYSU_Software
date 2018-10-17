@@ -956,12 +956,16 @@ def sim_and_opt(request):
         print(material_id)
         print(data)
         k_op = None
-        if flag == 'simulation':
-            t, y = solve_ode(data, k_value, evol_t)   # y will be num_material * 1000 matrix
-        else:
-            print(data, evol_t, targetAmount, k_value, target)
-            k_op = optimization(data, targetAmount, k_value, evol_t, target)
-            t, y = solve_ode(data, k_op, evol_t)
+        try:
+            if flag == 'simulation':
+                t, y = solve_ode(data, k_value, evol_t)   # y will be num_material * 1000 matrix
+            else:
+                print(data, evol_t, targetAmount, k_value, target)
+                k_op = optimization(data, targetAmount, k_value, evol_t, target)
+                t, y = solve_ode(data, k_op, evol_t)
+        except:
+            logging.info("Error while computing ode...")
+            return JsonResponse({'success':-1})
         print("New ks:", k_op)
         t = []
         y_np = np.array(y)
@@ -969,7 +973,7 @@ def sim_and_opt(request):
             t.append(y_np[:,i])
             t[-1] = t[-1][::10] # only return 100 values
 
-        # Original Data:
+        # All Data:
         # result = {
         #     "new_ks": k_op,
         #     "data":[],
@@ -985,7 +989,7 @@ def sim_and_opt(request):
         #         'smooth': True,
         #     })
 
-        # Fake Data:
+        # Target data
         print(target)
         result = {
             "data": [{

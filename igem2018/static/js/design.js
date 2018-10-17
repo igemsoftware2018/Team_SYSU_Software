@@ -2335,6 +2335,13 @@ function submitSimulation() {
 }
 
 function showSimulationChart(data) {
+    if (data.success == -1) {
+        $design_msg_body.text('ERROR. Server raised an unexpected error.');
+        setTimeout(() => {
+            $design_msg_modal.modal('hide');
+        }, 1000);
+        return;
+    }
     // $("#simulation-modal").modal("hide");
     $('#new-ks-container').html("");
     for (let id in data.new_ks) {
