@@ -57,10 +57,15 @@ def search(request):
     logging.info(keys)
     w_dict = {}
     if search_type == 'project':
-        # try:
-        nn_search_result = recommend_team(keys[0])
-        # except:
-        #     logging.info("Unable to load nn search module.")
+        if search.nn_search_flag >= 0:
+            #TODO: I change here.
+            try:
+                nn_search_result = recommend_team(keys[0])
+                search.nn_search_flag = 1   # nn_search module is initialized successfully
+                logging.info("Search module activated!")
+            except:
+                logging.info("Unable to load nn search module.")
+                search.nn_search_flag = -1  ## nn_search module failed
         for key in keys:
             if key.isdigit():    # May be year
                 q_on_Year = Works.objects.filter(Year__exact=int(key))
@@ -188,6 +193,7 @@ def search(request):
             })
     # logging.info(context)
     return render(request, 'search_result.html', context)
+search.nn_search_flag = 0
 
 
 @login_required

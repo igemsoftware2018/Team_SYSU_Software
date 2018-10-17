@@ -1,16 +1,28 @@
-@font-face{
+@font-face {
   font-family: 'Avenir';
-  src : url('https://fonts.google.com/?query=Avenir');
+  src: url('https://fonts.google.com/?query=Avenir');
 }
 
 .body {
   size: 100%;
 }
 
+.ui.large.top.menu {
+  margin: 0;
+}
+
 .logo {
   min-width: 150px;
   margin-top: 10px;
   margin-left: 100px;
+}
+
+.ui.large.top.menu>a {
+  margin: 2px
+}
+.ui.large.top.menu>a:hover {
+  background: #A7DABC;
+  box-shadow: 2px 2px 2px #000000;
 }
 
 #signin {
@@ -49,25 +61,38 @@
 
 #signup:hover,
 #signin:hover {
-  background: grey;
+  background: #A7DABC;
+  box-shadow: 2px 2px 2px #000000;
 }
 
 #logout {
   background: #ffffff;
+  color: #3050a8;
+  border: 4px solid #3050a8;
+  border-radius: 0%;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 20px;
 }
 
-#logout>img {
+/* #logout>img {
   height: 50px;
 }
 
 #logout>img:hover {
+  background: #A7DABC;
+  box-shadow: 2px 2px 2px #000000;
+} */
+
+#logout:hover {
+  background: #A7DABC;
   box-shadow: 2px 2px 2px #000000;
 }
 
 .page,
 .page-two {
   height: 100%;
-  background-image: url(../img/index/background_not_center.jpg);
+  background-image: url(../img/index/background_word.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -81,6 +106,7 @@
 }
 
 .page-two {
+  height: auto;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -99,10 +125,9 @@
 }
 
 .button-container {
-  margin-top: 6.1rem;
   margin-left: 0.1rem;
   height: 55rem;
-  width: 20.7rem;
+  width: 25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -125,15 +150,14 @@
 #design-button>img,
 #search-button>img,
 #index-button>img {
-  height: 120px;
-  width: 100px;
+  max-height: 120px;
 }
 
 #design-button>p,
 #search-button>p,
 #index-button>p {
-  margin-top: 45px;
-  margin-left: 15px;
+  margin-top: 2.5rem;
+  margin-left: 1rem;
   font-family: Avenir;
   font-size: 30px;
 }
@@ -147,6 +171,13 @@
 
 /* hide scroller bar */
 ::-webkit-scrollbar {
-  width: 0px;  /* remove scrollbar space */
+  width: 0px;
+  /* remove scrollbar space */
   /* background: transparent;  optional: just make scrollbar invisible */
+}
+
+.right-blank {
+  width: 100%;
+  background: url(../img/index/index_login2.jpg);
+  background-size: cover;
 }

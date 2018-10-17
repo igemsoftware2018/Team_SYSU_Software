@@ -816,8 +816,12 @@ $('#save-circuit, #save-as-new-circuit').on('click', () => {
         }, 3000);
 
         // Redirect to the new design
-        if (v.status === 1)
-            window.location.replace(`/design/${v.circuit_id}`);
+        if (v.status === 1) {
+            let url = window.location.href.split('/');
+            url[url.length-1] = `${v.circuit_id}`;
+            console.log(`${v.circuit_id}`)
+            window.location.replace(url.join('/'));
+        }
     });
 });
 

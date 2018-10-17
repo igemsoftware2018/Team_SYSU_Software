@@ -1129,13 +1129,15 @@ def load_chassis(path):
 
 
 def final():
+    print("Finalizing...")
     for i in Works.objects.filter(Year__lte = 2008):
         i.delete()
 
-    for work in Works.objects.filter(Circuit = None, Year__lte = 2016):
-        parts = work.Use_parts.split(';')
-        if len(parts) == 0:
+
+    for work in Works.objects.filter(Circuit = None):
+        if len(work.Use_parts) == 0:    # No parts info
             continue
+        parts = work.Use_parts.split(';')
         circuit = Circuit.objects.create(
                 Name = work.Teamname + str(work.TeamID),
                 Description = '')
@@ -1244,14 +1246,14 @@ def pre_load_data(currentpath, Imgpath):
     # load_chassis(os.path.join(currentpath, 'chassis'))
     # # load_partsInteration(os.path.join(currentpath, 'partsinteract'))
     # load_partsParameter(os.path.join(currentpath, 'partsParameter'))
-    load_works(os.path.join(currentpath, 'works'))
-    load_2017_works(os.path.join(currentpath, 'works'))
+    # load_works(os.path.join(currentpath, 'works'))
+    # load_2017_works(os.path.join(currentpath, 'works'))
     # load_Trelation(os.path.join(currentpath, 'TeamRelation'))
     # load_Teamkeyword(os.path.join(currentpath, 'TeamKeyword'))
     # load_papers(os.path.join(currentpath, 'papers'))
-    load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
-    load_2017_circuits(os.path.join(currentpath, 'works/circuits/2017.xlsx'))
+    # load_circuits(os.path.join(currentpath, 'works/circuits'), delete=True)
+    # load_2017_circuits(os.path.join(currentpath, 'works/circuits/2017.xlsx'))
     # load_circuits(os.path.join(currentpath, 'papers/circuits'), is_work = False)
-    # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
+    # # #load_circuits(os.path.join(currentpath, 'works/circuits2'))
     # load_additional(os.path.join(currentpath, 'additional'))
     final()

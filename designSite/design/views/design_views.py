@@ -826,14 +826,29 @@ def circuit(request):
                 for i in data['combines'][x]:
                     cd.Sons.add(cids[i])
                 cd.save()
+            # now update authority if necessary. for example, `A` save a circuit shared by `B`.
+            logger.debug('should I update authority?')
+            if not new and request.user != old_circuit.Author:
+                logger.debug('save new version and circuit not own by "me"')
+                auth_query = Authorities.objects.filter(Circuit__Name=name)
+                logger.debug('revalent auth query %s', auth_query)
+                if auth_query:
+                    Authorities.objects.create(
+                        User=request.user,
+                        Circuit=circuit,
+                        Authority='write'
+                    )
+                logger.debug('insert new write authority')
             return JsonResponse({
                 'status': 1,
                 'circuit_id': circuit.id})
+        
         except:
             traceback.print_exc()
             return JsonResponse({
                 'status': 0
             })
+
     else:
         return JsonResponse({
             'status': 0})
@@ -930,7 +945,7 @@ def sim_and_opt(request):
             else:
                 return JsonResponse({'success':-1})
         
-        eval_t = float(data['time']) # reaction duration
+        evol_t = float(data['time']) # reaction duration
 
         data = {
             'matrix': matrix,
@@ -942,11 +957,11 @@ def sim_and_opt(request):
         print(data)
         k_op = None
         if flag == 'simulation':
-            t, y = solve_ode(data, k_value, eval_t)   # y will be num_material * 1000 matrix
+            t, y = solve_ode(data, k_value, evol_t)   # y will be num_material * 1000 matrix
         else:
-            print(data, eval_t, targetAmount, k_value, target)
-            k_op = optimization(data, eval_t, targetAmount, k_value, target)
-            t, y = solve_ode(data, k_op, eval_t)
+            print(data, evol_t, targetAmount, k_value, target)
+            k_op = optimization(data, targetAmount, k_value, evol_t, target)
+            t, y = solve_ode(data, k_op, evol_t)
 
         t = []
         y_np = np.array(y)
@@ -957,7 +972,7 @@ def sim_and_opt(request):
             "new_ks": k_op,
             "data":[],
             "parts": material_id,
-            "xAxis": list(np.linspace(0, eval_t, 100)),
+            "xAxis": list(np.linspace(0, evol_t, 100)),
         }
         for i in range(num_of_material):
             result['data'].append({

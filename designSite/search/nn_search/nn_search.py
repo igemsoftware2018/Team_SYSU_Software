@@ -10,8 +10,9 @@ from sklearn.neighbors import BallTree
 currentPath = os.path.dirname(os.path.realpath(__file__))
 wordVecFile = os.path.join(currentPath, 'wordVectors.bin')
 keyword_matrix_2018_filename = os.path.join(currentPath, "keyword_matrix_2018.csv")
-checkPointPath = os.path.join(currentPath, 'checkpoint_dir1')
+checkPointPath = os.path.join(currentPath, 'checkpoint')
 team_features_filename = os.path.join(currentPath, 'team_features.csv')
+checkPointData = os.path.join(checkPointPath, 'model.meta')
 
 class Word2Vec(object):
     def __init__(self, fname=wordVecFile):
@@ -54,7 +55,7 @@ def recommend_team(word,k=10):
     res = []
     with tf.Session() as sess:
         #load the model
-        saver = tf.train.import_meta_graph(wordVecFile)
+        saver = tf.train.import_meta_graph(checkPointData)
         saver.restore(sess, tf.train.latest_checkpoint(checkPointPath))
         graph = tf.get_default_graph()
         y = graph.get_tensor_by_name("net_output:0")

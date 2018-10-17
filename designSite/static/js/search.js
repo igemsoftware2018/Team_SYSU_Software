@@ -47,3 +47,8 @@ $("#search").on("click", function () {
 $("img").each(function() {
   console.log($(this).attr('src'));
 })
+
+$('.work-img').on('click', function () { 
+  $('#img-viewer>.content>img').attr('src', $(this).attr('src'));
+  $('#img-viewer').modal('show');
+});
