@@ -6,3 +6,4 @@ designSite/static/js/tmp.json
 /**/logs/*.log
 /**/logs/*
 .DS_Store
+/**/*.bin
