@@ -962,26 +962,45 @@ def sim_and_opt(request):
             print(data, evol_t, targetAmount, k_value, target)
             k_op = optimization(data, targetAmount, k_value, evol_t, target)
             t, y = solve_ode(data, k_op, evol_t)
-
+        print("New ks:", k_op)
         t = []
         y_np = np.array(y)
         for i in range(num_of_material):
             t.append(y_np[:,i])
             t[-1] = t[-1][::10] # only return 100 values
+
+        # Original Data:
+        # result = {
+        #     "new_ks": k_op,
+        #     "data":[],
+        #     "parts": material_id,
+        #     "xAxis": list(np.linspace(0, evol_t, 100)),
+        # }
+        # for i in range(num_of_material):
+        #     result['data'].append({
+        #         'name': material_id[i],
+        #         'type': 'line', # requirement of echarts
+        #         'data': list(t[i]),
+        #         'showSymbol': False,
+        #         'smooth': True,
+        #     })
+
+        # Fake Data:
+        print(target)
         result = {
-            "new_ks": k_op,
-            "data":[],
-            "parts": material_id,
-            "xAxis": list(np.linspace(0, evol_t, 100)),
-        }
-        for i in range(num_of_material):
-            result['data'].append({
-                'name': material_id[i],
-                'type': 'line', # requirement of echarts
-                'data': list(t[i]),
+            "data": [{
+                'name': material_id[target],
+                'type': 'line',
+                'data': list(t[target]),
                 'showSymbol': False,
                 'smooth': True,
-            })
+            }],
+            "parts": [material_id[target]],
+            "xAxis": [round(i,3) for i in list(np.linspace(0, evol_t, 100))],
+        }
+        if flag == 'optimization':
+            result["new_ks"] = [k_op[target]]
+
         return JsonResponse(result)
             
     
