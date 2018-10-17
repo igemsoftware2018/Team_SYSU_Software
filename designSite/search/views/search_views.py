@@ -57,10 +57,10 @@ def search(request):
     logging.info(keys)
     w_dict = {}
     if search_type == 'project':
-        # try:
-        nn_search_result = recommend_team(keys[0])
-        # except:
-        #     logging.info("Unable to load nn search module.")
+        try:
+            nn_search_result = recommend_team(keys[0])
+        except:
+            logging.info("Unable to load nn search module.")
         for key in keys:
             if key.isdigit():    # May be year
                 q_on_Year = Works.objects.filter(Year__exact=int(key))
