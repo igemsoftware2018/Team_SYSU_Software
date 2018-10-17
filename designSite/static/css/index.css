@@ -1,6 +1,6 @@
-@font-face{
+@font-face {
   font-family: 'Avenir';
-  src : url('https://fonts.google.com/?query=Avenir');
+  src: url('https://fonts.google.com/?query=Avenir');
 }
 
 .body {
@@ -15,6 +15,14 @@
   min-width: 150px;
   margin-top: 10px;
   margin-left: 100px;
+}
+
+.ui.large.top.menu>a {
+  margin: 2px
+}
+.ui.large.top.menu>a:hover {
+  background: #A7DABC;
+  box-shadow: 2px 2px 2px #000000;
 }
 
 #signin {
@@ -98,6 +106,7 @@
 }
 
 .page-two {
+  height: auto;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -118,7 +127,7 @@
 .button-container {
   margin-left: 0.1rem;
   height: 55rem;
-  width: 20.7rem;
+  width: 25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -162,6 +171,13 @@
 
 /* hide scroller bar */
 ::-webkit-scrollbar {
-  width: 0px;  /* remove scrollbar space */
+  width: 0px;
+  /* remove scrollbar space */
   /* background: transparent;  optional: just make scrollbar invisible */
+}
+
+.right-blank {
+  width: 100%;
+  background: url(../img/index/index_login2.jpg);
+  background-size: cover;
 }
