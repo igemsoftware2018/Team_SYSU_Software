@@ -550,7 +550,7 @@
 
   <!-- Simulation result modal -->
   <div id="simulation-modal" class="ui tiny modal">
-    <div class="header">Simulation</div>
+    <div class="header"><span class="simulation-caption">Optimization</span></div>
     <div class="scrolling content">
       <div class="ui divider"></div>
       <div class="ui tabular menu" id="simulation-tab">
@@ -571,6 +571,11 @@
                     <label for="amount" class="ui basic label">s</label>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="subcontent">
+                <div class="ui header">Target:[<span class="optimization-target">None</span>]</div>
               </div>
             </div>
           </div>
@@ -594,7 +599,7 @@
             </div>
             <div class="item">
               <div class="subcontent">
-                <div class="ui header">Target:[<span id="optimization-target">None</span>]</div>
+                <div class="ui header">Target:[<span class="optimization-target">None</span>]</div>
                 <div class="field">
                   <div class="ui fluidui labeled labeled input">
                     <input id="target-amount" type="text" id="amount_{{cid}}" data-id="{{cid}}" placeholder="Amount of substance..."
@@ -615,14 +620,14 @@
     <div class="actions">
       <div class="ui two bottom attached big buttons">
         <div id="cancel-simulation" class="ui white cancel button">Cancel</div>
-        <div id="show-simulation" class="ui blue button">Run Simulation</div>
+        <div id="show-simulation" class="ui blue button">Run <span class="simulation-caption">Optimization</span></div>
       </div>
     </div>
   </div>
   
   <!-- simulation chart -->
   <div id="simulation-chart" class="ui small modal">
-    <div class="header">Simulation Result</div>
+    <div class="header"><span class="simulation-caption">Optimization</span> Result</div>
     <div class="scrolling content">
       <div class="chart-container" id="chart-container"></div>
       <div class="ui divider"></div>
