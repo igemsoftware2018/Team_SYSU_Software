@@ -818,9 +818,11 @@ $('#save-circuit, #save-as-new-circuit').on('click', () => {
         // Redirect to the new design
         if (v.status === 1) {
             let url = window.location.href.split('/');
-            url[url.length-1] = `${v.circuit_id}`;
-            console.log(`${v.circuit_id}`)
-            window.location.replace(url.join('/'));
+            if (url.indexOf('share') !== -1) {
+                window.location.replace(`/design/share/${v.circuit_id}`);
+            } else {
+                window.location.replace(`/design/${v.circuit_id}`);
+            }
         }
     });
 });
@@ -2252,7 +2254,9 @@ function runSimulation() {
     generateSimulationForm(partList);
     $('.target-selector').on('click', function () {
         currentTarget = $(this).attr('data-id');
-        $('#optimization-target').html(partMapping[currentTarget].part.name);
+        $('.optimization-target').html(partMapping[currentTarget].part.name);
+        $('.target-selector').removeClass('negative');
+        $(this).addClass('negative');
     });
     simulationSubmitLines = resultLines;
 }
@@ -2387,13 +2391,15 @@ var currentTarget = "None";
 
 $("#simulation-btn").on('click', function () {
     simulationType = "simulation";
-    $('.target-selector').hide();
+    // $('.target-selector').hide();
+    $('.simulation-caption').html("Simulation");
     // $('.kinput').hide();
 });
 
 $("#optimization-btn").on('click', function () {
     simulationType = "optimization";
-    $('.target-selector').show();
+    // $('.target-selector').show();
+    $('.simulation-caption').html("Optimization");
     // $('.kinput').show();
 });
 $("#close-chart").on('click', function () {
