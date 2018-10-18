@@ -33,7 +33,7 @@ To run CO-RAD, you should get prepared on your server as follow:
 - `Numpy`, `xlrd`, `pandas`, `sklearn`
 Details for these packages are listed below.
 
-3. Supportive data. Click [here](#) to download, and save it at `some path`.
+3. (Not required) To activate the search engine based on neutral network, please make sure you have enough available memory (>8GB). Then click [here](http://sysu-corad.com:8080/wordVectors.zip) to download the supportive data, unzip and save it at the `[ProjectDirectory]\igem2018\search\nn_search`, where `[ProjectDirectory]` is the path of this project.
 
 #### Installation
 
