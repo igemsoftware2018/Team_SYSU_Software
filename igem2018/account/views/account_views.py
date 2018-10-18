@@ -44,13 +44,17 @@ def personal_index(request):
         Author=user).order_by('-Update_time')
     authority_query = Authorities.objects.filter(User=user)
 
-    parts = [{
-        'ID': x.id,
-        'Name': x.Name,
-        'Role': x.Role,
-        'Type': x.Type,
-        'Description': x.Description
-    } for x in part_query]
+    parts = []
+    for x in part_query:
+        part_name = ''.join(x.Name.split('_')[:-1])
+        print(part_name)
+        parts.append({
+            'ID': x.id,
+            'Name': part_name,
+            'Role': x.Role,
+            'Type': x.Type,
+            'Description': x.Description
+        })
 
     circuits = []
     distinct = []
@@ -98,7 +102,6 @@ def personal_index(request):
                 'LastEditor': item.Editor.username,
                 'LastUpdateTime': item.Update_time
             })
-
     return render(request, 'personal_index.html', {
         'parts': parts,
         'circuits': circuits,
